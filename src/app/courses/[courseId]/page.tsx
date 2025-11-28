@@ -66,6 +66,7 @@ export default function CourseDetail() {
   const [availableTokenPackages, setAvailableTokenPackages] = useState<StudentTokenPackage[]>([]);
   const [selectedTokenPackage, setSelectedTokenPackage] = useState<StudentTokenPackage | null>(null);
   const [showTokenSelector, setShowTokenSelector] = useState(false);
+  const [showBookingOptions, setShowBookingOptions] = useState(false);
 
   useEffect(() => {
     loadCourseData();
@@ -319,21 +320,32 @@ export default function CourseDetail() {
     // If user has subscription, book directly with subscription
     if (bookingType === 'subscription' && userSubscription) {
       bookWithSubscription();
-    } else if (bookingType === 'tokens') {
-      // Show token selector if multiple packages available
+      return;
+    }
+
+    // If user has tokens, show token selector
+    if (bookingType === 'tokens' && availableTokenPackages.length > 0) {
       if (availableTokenPackages.length > 1) {
         setShowTokenSelector(true);
       } else if (availableTokenPackages.length === 1) {
-        // Use the only available package
         bookWithTokens(availableTokenPackages[0]);
-      } else {
-        // No token packages available, show card selection step first
-        setShowCardSelectionStep(true);
       }
-    } else {
-      // Show card selection step first for pay-per-session
-      setShowCardSelectionStep(true);
+      return;
     }
+
+    // User doesn't have subscription - show booking options modal
+    setShowBookingOptions(true);
+  };
+
+  const handleFinalizeReservation = () => {
+    setShowBookingOptions(false);
+    // Show card selection step first for pay-per-session
+    setShowCardSelectionStep(true);
+  };
+
+  const handleGoToOffers = () => {
+    setShowBookingOptions(false);
+    router.push('/offers');
   };
 
   const handleCardSelectionNext = (giftCardCode?: string, discountCardCode?: string) => {
@@ -1174,6 +1186,77 @@ export default function CourseDetail() {
           courseName={course.title}
           sessionsRequired={course.sessions}
         />
+
+        {/* Booking Options Modal - For users without subscription */}
+        {showBookingOptions && course && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={(e) => e.target === e.currentTarget && setShowBookingOptions(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-gray-900 rounded-xl w-full max-w-md border border-gray-700 shadow-2xl"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-700">
+                <div>
+                  <h2 className="text-xl font-bold text-white">{t('Book Course')}</h2>
+                  <p className="text-gray-400 text-sm mt-1">
+                    {t('Choose how you want to proceed')}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowBookingOptions(false)}
+                  className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+                >
+                  <FiArrowLeft className="text-gray-400" size={20} />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 space-y-4">
+                <div className="bg-gradient-to-r from-[#D91CD2]/10 to-[#7000FF]/10 border border-[#D91CD2]/30 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold text-white mb-2">{course.title}</h3>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-400">{t('Price')}:</span>
+                    <span className="text-white font-semibold">CHF {course.totalPrice}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm mt-1">
+                    <span className="text-gray-400">{t('Sessions')}:</span>
+                    <span className="text-white font-semibold">{course.sessions}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <button
+                    onClick={handleGoToOffers}
+                    className="w-full bg-gradient-to-r from-[#D91CD2] to-[#7000FF] text-white font-semibold py-3 px-4 rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center space-x-2"
+                  >
+                    <FiCheckCircle size={20} />
+                    <span>{t('Offers')}</span>
+                  </button>
+
+                  <button
+                    onClick={handleFinalizeReservation}
+                    className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
+                  >
+                    <FiArrowRight size={20} />
+                    <span>{t('Finalize your reservation')}</span>
+                  </button>
+                </div>
+
+                <p className="text-gray-400 text-xs text-center mt-4">
+                  {t('Subscribe to get access to multiple courses, or proceed with a one-time payment for this course.')}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
       </div>
 
       {/* Video Modal */}

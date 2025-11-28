@@ -13,7 +13,8 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'en',
+    fallbackLng: 'fr',
+    lng: 'fr', // Set French as default language
     debug: true,
     interpolation: { escapeValue: false },
     resources: {
