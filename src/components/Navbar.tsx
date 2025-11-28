@@ -93,6 +93,9 @@ const Navbar = () => {
             <Link href="/" className="text-white hover:text-[#D91CD2] transition-colors text-sm">
               {t('home')}
             </Link>
+            <Link href="/offers" className="text-white hover:text-[#D91CD2] transition-colors text-sm">
+              {t('Offers', 'Offers')}
+            </Link>
             <Link href="/courses" className="text-white hover:text-[#D91CD2] transition-colors text-sm">
               {t('courses')}
             </Link>
@@ -240,6 +243,7 @@ const Navbar = () => {
           <div className="container mx-auto py-3 px-6 flex flex-col space-y-3">
             {/* Essentials */}
             <Link href="/" className="block w-full text-white py-2 text-sm" onClick={toggleMenu}>{t('home')}</Link>
+            <Link href="/offers" className="block w-full text-white py-2 text-sm" onClick={toggleMenu}>{t('Offers', 'Offers')}</Link>
             <Link href="/courses" className="block w-full text-white py-2 text-sm" onClick={toggleMenu}>{t('courses')}</Link>
             <Link href="/shop" className="block w-full text-white py-2 text-sm" onClick={toggleMenu}>{t('shop', 'Shop')}</Link>
             <Link href="/dashboard" className="block w-full text-white py-2 text-sm" onClick={toggleMenu}>{t('dashboard', 'Dashboard')}</Link>

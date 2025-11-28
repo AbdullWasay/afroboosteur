@@ -1,0 +1,3 @@
+{
+  "/api/discount-cards/[coachId]/route": "app/api/discount-cards/[coachId]/route.js"
+}

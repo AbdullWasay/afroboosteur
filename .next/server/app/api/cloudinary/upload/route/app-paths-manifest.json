@@ -1,0 +1,3 @@
+{
+  "/api/cloudinary/upload/route": "app/api/cloudinary/upload/route.js"
+}

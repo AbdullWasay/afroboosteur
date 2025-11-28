@@ -28,8 +28,8 @@ import CourseBoost from '@/components/CourseBoost';
 import CommunityChat from '@/components/CommunityChat';
 import VideoModal from '@/components/VideoModal';
 import TokenSelectionModal from '@/components/TokenSelectionModal';
-import { PaymentDetails, UserSubscription, GiftCard, DiscountCard } from '@/types';
-import { bookingService, transactionService, notificationService, giftCardService } from '@/lib/database';
+import { PaymentDetails, UserSubscription } from '@/types';
+import { bookingService, transactionService, notificationService } from '@/lib/database';
 import PaymentHandlerWithCredits from '@/components/PaymentHandlerWithCredits';
 import Toast from '@/components/Toast';
 import CardSelectionStep from '@/components/CardSelectionStep';
@@ -43,8 +43,6 @@ export default function CourseDetail() {
   const [course, setCourse] = useState<Course | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [schedules, setSchedules] = useState<CourseSchedule[]>([]);
-  const [giftCards, setGiftCards] = useState<GiftCard[]>([]);
-  const [discountCards, setDiscountCards] = useState<DiscountCard[]>([]);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showCardSelectionStep, setShowCardSelectionStep] = useState(false);
   const [selectedGiftCardCode, setSelectedGiftCardCode] = useState<string | undefined>();
@@ -68,8 +66,6 @@ export default function CourseDetail() {
   const [availableTokenPackages, setAvailableTokenPackages] = useState<StudentTokenPackage[]>([]);
   const [selectedTokenPackage, setSelectedTokenPackage] = useState<StudentTokenPackage | null>(null);
   const [showTokenSelector, setShowTokenSelector] = useState(false);
-  const [showAllGiftCards, setShowAllGiftCards] = useState(false);
-  const [showAllDiscountCards, setShowAllDiscountCards] = useState(false);
 
   useEffect(() => {
     loadCourseData();
@@ -86,12 +82,6 @@ export default function CourseDetail() {
     }
   }, [user, course]);
 
-  // Reload cards when selected cards change to hide them from the list
-  useEffect(() => {
-    if (course && user) {
-      loadCourseData();
-    }
-  }, [selectedGiftCardCode, selectedDiscountCardCode]);
 
   // Initialize tab from URL parameters and handle auto-booking
   useEffect(() => {
@@ -202,93 +192,6 @@ export default function CourseDetail() {
       setReviews(reviewsData);
       setSchedules(courseSchedules);
 
-      // Load gift cards from the course's coach
-      if (courseData?.coachId && user?.email) {
-        try {
-          const coachGiftCards = await giftCardService.getByIssuer(courseData.coachId, 'coach');
-          // Filter for active cards that:
-          // 1. Are assigned to the current user (usedBy === user.email)
-          // 2. OR are not yet assigned to anyone (usedBy is undefined/null) and not fully used
-          const availableCards = coachGiftCards.filter(card => {
-            if (!card.isActive || card.remainingAmount <= 0) return false;
-
-            // Hide card if it's currently selected in checkout
-            if (selectedGiftCardCode && card.cardCode === selectedGiftCardCode) return false;
-
-            // Show cards assigned to this user
-            if (card.usedBy === user.email) return true;
-
-            // Show unassigned cards that haven't been used yet
-            if (!card.usedBy && !card.isUsed) return true;
-
-            return false;
-          });
-          setGiftCards(availableCards);
-        } catch (error) {
-          console.error('Error loading gift cards:', error);
-        }
-      }
-
-      // Load discount cards for this course
-      if (courseData?.coachId && courseId) {
-        try {
-          const response = await fetch(`/api/discount-cards/${courseData.coachId}`);
-          if (response.ok) {
-            const data = await response.json();
-            const cards = data.discountCards || [];
-
-            // Filter for cards that apply to this course or this user
-            const applicableCards = cards.filter((card: DiscountCard) => {
-              if (!card.isActive) return false;
-
-              // Hide card if it's currently selected in checkout
-              if (selectedDiscountCardCode && card.code === selectedDiscountCardCode) return false;
-
-              // Check expiration
-              const expiryDate =
-                card.expiryDate instanceof Date
-                  ? card.expiryDate
-                  : card.expiryDate && typeof (card.expiryDate as any).toDate === 'function'
-                    ? (card.expiryDate as any).toDate()
-                    : new Date(card.expiryDate as any);
-              if (expiryDate < new Date()) return false;
-
-              // Check usage limit - hide if limit is reached
-              const anyCard = card as any;
-              const usageCount =
-                typeof anyCard.usageCount === 'number'
-                  ? anyCard.usageCount
-                  : typeof anyCard.timesUsed === 'number'
-                    ? anyCard.timesUsed
-                    : 0;
-
-              const usageLimit =
-                typeof anyCard.usageLimit === 'number'
-                  ? anyCard.usageLimit
-                  : typeof anyCard.maxUsage === 'number'
-                    ? anyCard.maxUsage
-                    : -1;
-
-              // If usage limit is set (not -1 or undefined) and reached, hide the card
-              if (usageLimit !== -1 && usageLimit !== undefined && usageLimit !== null && usageCount >= usageLimit) {
-                return false;
-              }
-
-              // Show course-specific cards for this course
-              if (card.cardType === 'course' && card.courseId === courseId) return true;
-
-              // Show student-specific cards for this user
-              if (card.cardType === 'student' && user?.email && card.userEmail === user.email) return true;
-
-              return false;
-            });
-
-            setDiscountCards(applicableCards);
-          }
-        } catch (error) {
-          console.error('Error loading discount cards:', error);
-        }
-      }
     } catch (error) {
       console.error('Error loading course data:', error);
     } finally {
@@ -323,22 +226,73 @@ export default function CourseDetail() {
         meta.content = content;
       };
 
+      // Ensure image URL is absolute and optimize for social sharing
+      const getOptimizedImageUrl = (imageUrl: string) => {
+        if (!imageUrl) return '';
+        
+        let absoluteUrl = '';
+        
+        // If already absolute URL, use as is
+        if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+          absoluteUrl = imageUrl;
+        }
+        // If relative URL, make it absolute
+        else if (imageUrl.startsWith('/')) {
+          absoluteUrl = `${window.location.origin}${imageUrl}`;
+        }
+        // If Cloudinary URL without protocol, add https
+        else if (imageUrl.includes('cloudinary.com')) {
+          absoluteUrl = imageUrl.startsWith('//') ? `https:${imageUrl}` : `https://${imageUrl}`;
+        }
+        // Default: prepend origin
+        else {
+          absoluteUrl = `${window.location.origin}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+        }
+
+        // Optimize Cloudinary URL for social sharing (1200x630 is optimal for Open Graph)
+        if (absoluteUrl.includes('cloudinary.com') && !absoluteUrl.includes('/w_')) {
+          // Check if URL already has transformations by looking for multiple '/upload/' occurrences
+          const uploadIndex = absoluteUrl.indexOf('/upload/');
+          const hasTransformations = uploadIndex !== -1 && absoluteUrl.indexOf('/upload/', uploadIndex + 1) !== -1;
+          
+          if (!hasTransformations) {
+            // Add transformation parameters for optimal social sharing
+            absoluteUrl = absoluteUrl.replace('/upload/', '/upload/w_1200,h_630,c_fill,f_auto,q_auto/');
+          } else {
+            // If transformations exist, ensure proper dimensions
+            if (!absoluteUrl.includes('w_1200') && !absoluteUrl.includes('w_')) {
+              absoluteUrl = absoluteUrl.replace('/upload/', '/upload/w_1200,h_630,c_fill,f_auto,q_auto/');
+            }
+          }
+        }
+
+        return absoluteUrl;
+      };
+
+      const optimizedImageUrl = getOptimizedImageUrl(course.imageUrl);
+      const currentUrl = window.location.href;
+
       // Update meta tags
       updateNameMetaTag('description', course.description);
 
-      // Open Graph
+      // Open Graph tags for better social media sharing (WhatsApp, Facebook, etc.)
       updateMetaTag('og:type', 'website');
-      updateMetaTag('og:url', window.location.href);
+      updateMetaTag('og:url', currentUrl);
       updateMetaTag('og:title', `${course.title} - Afroboost Dance`);
       updateMetaTag('og:description', course.description);
-      updateMetaTag('og:image', course.imageUrl);
+      updateMetaTag('og:image', optimizedImageUrl);
+      updateMetaTag('og:image:secure_url', optimizedImageUrl);
+      updateMetaTag('og:image:type', 'image/jpeg');
+      updateMetaTag('og:image:width', '1200');
+      updateMetaTag('og:image:height', '630');
+      updateMetaTag('og:site_name', 'Afroboost Dance');
 
-      // Twitter
+      // Twitter Card tags
       updateMetaTag('twitter:card', 'summary_large_image');
-      updateMetaTag('twitter:url', window.location.href);
+      updateMetaTag('twitter:url', currentUrl);
       updateMetaTag('twitter:title', `${course.title} - Afroboost Dance`);
       updateMetaTag('twitter:description', course.description);
-      updateMetaTag('twitter:image', course.imageUrl);
+      updateMetaTag('twitter:image', optimizedImageUrl);
     }
   }, [course]);
 
@@ -900,189 +854,6 @@ export default function CourseDetail() {
                 </div>
               )}
 
-              {/* Gift Cards Section */}
-              {giftCards.length > 0 && user && (
-                <div className="p-3 sm:p-4 bg-gray-900/70 rounded-lg border border-gray-800">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-sm sm:text-base flex items-center">
-                      <span className="mr-2">🎁</span>
-                      {t('Available Gift Cards')}
-                    </h3>
-                    {giftCards.length > 3 && (
-                      <button
-                        onClick={() => setShowAllGiftCards(!showAllGiftCards)}
-                        className="text-xs sm:text-sm text-[#D91CD2] hover:text-[#7000FF] transition-colors"
-                      >
-                        {showAllGiftCards ? t('Show Less') : `${t('Show All')} (${giftCards.length})`}
-                      </button>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    {(showAllGiftCards ? giftCards : giftCards.slice(0, 3)).map((card) => {
-                      // Safe date conversion
-                      let expirationDate: Date;
-                      try {
-                        if (!card.expirationDate) {
-                          expirationDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000); // Default to 1 year from now
-                        } else if (card.expirationDate instanceof Date) {
-                          expirationDate = card.expirationDate;
-                        } else if (typeof card.expirationDate === 'object' && 'toDate' in card.expirationDate) {
-                          expirationDate = (card.expirationDate as any).toDate();
-                        } else if (typeof card.expirationDate === 'string') {
-                          expirationDate = new Date(card.expirationDate);
-                        } else {
-                          expirationDate = new Date(card.expirationDate);
-                        }
-                      } catch (error) {
-                        console.error('Error parsing expiration date:', error);
-                        expirationDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
-                      }
-
-                      const isExpired = expirationDate < new Date();
-
-                      const isAssignedToUser = card.usedBy === user?.email;
-
-                      return (
-                        <div
-                          key={card.id}
-                          className={`p-3 rounded-lg border ${
-                            isExpired
-                              ? 'bg-gray-800/50 border-gray-700 opacity-60'
-                              : 'bg-gradient-to-r from-[#D91CD2]/10 to-[#7000FF]/10 border-[#D91CD2]/30'
-                          }`}
-                        >
-                          <div className="flex justify-between items-start">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <p className="font-medium text-sm sm:text-base">
-                                  {card.description || t('Gift Card')}
-                                </p>
-                                {isAssignedToUser && (
-                                  <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded-full">
-                                    {t('Your Card')}
-                                  </span>
-                                )}
-                              </div>
-                              <p className="text-xs sm:text-sm text-gray-400 mt-1">
-                                {t('Value')}: <span className="text-[#D91CD2] font-semibold">
-                                  {card.currency} {card.remainingAmount.toFixed(2)}
-                                </span>
-                                {card.remainingAmount < card.amount && (
-                                  <span className="text-gray-500 ml-1">
-                                    ({t('of')} {card.currency} {card.amount.toFixed(2)})
-                                  </span>
-                                )}
-                              </p>
-                              <p className="text-xs text-gray-500 mt-1">
-                                {isExpired
-                                  ? `${t('Expired')}: ${expirationDate.toLocaleDateString()}`
-                                  : `${t('Expires')}: ${expirationDate.toLocaleDateString()}`
-                                }
-                              </p>
-                              {!isAssignedToUser && !card.usedBy && (
-                                <p className="text-xs text-yellow-400 mt-1">
-                                  ⚠️ {t('First use will assign this card to you')}
-                                </p>
-                              )}
-                            </div>
-                            <div className="ml-2">
-                              {!isExpired && (
-                                <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">
-                                  {t('Active')}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <p className="text-xs text-gray-400 mt-3">
-                    💡 {t('Use these gift cards during checkout to get discounts on this course')}
-                  </p>
-                </div>
-              )}
-
-              {/* Discount Cards Section */}
-              {discountCards.length > 0 && (
-                <div className="p-3 sm:p-4 bg-gray-900/70 rounded-lg border border-gray-800">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-sm sm:text-base flex items-center">
-                      <span className="mr-2">🎫</span>
-                      {t('Available Discount Cards')}
-                    </h3>
-                    {discountCards.length > 3 && (
-                      <button
-                        onClick={() => setShowAllDiscountCards(!showAllDiscountCards)}
-                        className="text-xs sm:text-sm text-[#D91CD2] hover:text-[#7000FF] transition-colors"
-                      >
-                        {showAllDiscountCards ? t('Show Less') : `${t('Show All')} (${discountCards.length})`}
-                      </button>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    {(showAllDiscountCards ? discountCards : discountCards.slice(0, 3)).map((card) => {
-                      const anyCard = card as any;
-                      const expiryDate =
-                        anyCard.expiryDate instanceof Date
-                          ? anyCard.expiryDate
-                          : anyCard.expiryDate && typeof anyCard.expiryDate.toDate === 'function'
-                            ? anyCard.expiryDate.toDate()
-                            : new Date(anyCard.expiryDate as any);
-                      const isExpired = expiryDate < new Date();
-
-                      return (
-                        <div
-                          key={card.id}
-                          className={`p-3 rounded-lg border ${
-                            isExpired
-                              ? 'bg-gray-800/50 border-gray-700 opacity-60'
-                              : 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/30'
-                          }`}
-                        >
-                          <div className="flex justify-between items-start">
-                            <div className="flex-1">
-                              <p className="font-medium text-sm sm:text-base">
-                                {card.discountPercentage}% {t('Discount')}
-                              </p>
-                              <p className="text-xs sm:text-sm text-gray-400 mt-1">
-                                {card.cardType === 'student'
-                                  ? `${t('Personal discount card')}`
-                                  : `${t('Course discount')}: ${course?.title}`
-                                }
-                              </p>
-                              {card.description && (
-                                <p className="text-xs text-gray-500 mt-1">
-                                  {card.description}
-                                </p>
-                              )}
-                              <p className="text-xs text-gray-500 mt-1">
-                                {isExpired
-                                  ? `${t('Expired')}: ${expiryDate.toLocaleDateString()}`
-                                  : `${t('Expires')}: ${expiryDate.toLocaleDateString()}`
-                                }
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                {t('Code')}: <span className="font-mono text-purple-400">{card.code}</span>
-                              </p>
-                            </div>
-                            <div className="ml-2">
-                              {!isExpired && (
-                                <span className="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded-full">
-                                  {t('Active')}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <p className="text-xs text-gray-400 mt-3">
-                    💡 {t('Use discount code during checkout to save on this course')}
-                  </p>
-                </div>
-              )}
 
               {/* Action Buttons */}
               <div className="space-y-3 sm:space-y-4">

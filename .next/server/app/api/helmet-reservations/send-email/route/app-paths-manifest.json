@@ -1,0 +1,3 @@
+{
+  "/api/helmet-reservations/send-email/route": "app/api/helmet-reservations/send-email/route.js"
+}

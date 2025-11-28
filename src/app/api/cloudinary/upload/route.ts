@@ -1,10 +1,23 @@
 import { NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
 
+// Validate environment variables
+const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const apiKey = process.env.CLOUDINARY_API_KEY;
+const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+if (!cloudName || !apiKey || !apiSecret) {
+  console.error('Missing Cloudinary environment variables:', {
+    cloudName: !!cloudName,
+    apiKey: !!apiKey,
+    apiSecret: !!apiSecret,
+  });
+}
+
 cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-  api_secret: process.env.NEXT_CLOUDINARY_API_SECRET,
+  cloud_name: cloudName,
+  api_key: apiKey,
+  api_secret: apiSecret,
   secure: true,
 });
 
@@ -26,9 +39,17 @@ interface CloudinaryUploadResult {
 
 export async function POST(request: Request) {
   try {
+    // Check if Cloudinary is properly configured
+    if (!cloudName || !apiKey || !apiSecret) {
+      return NextResponse.json(
+        { error: 'Cloudinary is not properly configured. Please check environment variables.' },
+        { status: 500 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    
+
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
@@ -59,8 +80,10 @@ export async function POST(request: Request) {
     return NextResponse.json(result);
   } catch (error: any) {
     console.error('Error uploading to Cloudinary:', error);
-    window.alert('Error uploading image: ' + (error.message || 'Unknown error'));
-    return NextResponse.json({ error: error.message || 'Error uploading image' }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message || 'Error uploading image' },
+      { status: 500 }
+    );
   }
 }
 

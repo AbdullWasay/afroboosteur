@@ -1,0 +1,31 @@
+{
+  "pages": {
+    "/courses/page": [
+      "static/chunks/[root-of-the-server]__7a6fc6a2._.css",
+      "static/chunks/_a9132587._.js",
+      "static/chunks/src_cb6eb61a._.js",
+      "static/chunks/public_locales_d35972af._.js",
+      "static/chunks/node_modules_next_9c3cc6c8._.js",
+      "static/chunks/node_modules_framer-motion_dist_es_1315c24f._.js",
+      "static/chunks/node_modules_motion-dom_dist_es_fa3ea29e._.js",
+      "static/chunks/node_modules_react-icons_fi_index_mjs_9cbf4bb1._.js",
+      "static/chunks/node_modules_react-icons_fa_index_mjs_d2e2d7f5._.js",
+      "static/chunks/node_modules_react-icons_si_index_mjs_4ff16b17._.js",
+      "static/chunks/node_modules_react-icons_lib_74ccc930._.js",
+      "static/chunks/node_modules_@firebase_auth_dist_esm2017_2a0ab8af._.js",
+      "static/chunks/node_modules_@firebase_firestore_dist_index_esm2017_c2fcaa2e.js",
+      "static/chunks/node_modules_f772aace._.js",
+      "static/chunks/src_app_layout_tsx_007ca514._.js",
+      "static/chunks/src_863e2880._.js",
+      "static/chunks/node_modules_b920db15._.js",
+      "static/chunks/src_app_courses_page_tsx_f6f84b56._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_17e42fcf._.js",
+      "static/chunks/node_modules_next_dist_compiled_2ce9398a._.js",
+      "static/chunks/node_modules_next_dist_client_8f19e6fb._.js",
+      "static/chunks/node_modules_next_dist_0eb1e458._.js",
+      "static/chunks/node_modules_@swc_helpers_cjs_00636ac3._.js",
+      "static/chunks/_e69f0d32._.js",
+      "static/chunks/_a894171a._.js"
+    ]
+  }
+}
