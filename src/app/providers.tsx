@@ -16,7 +16,7 @@ interface AppContextType {
 }
 
 export const AppContext = createContext<AppContextType>({
-  language: 'en',
+  language: 'fr',
   setLanguage: () => {},
 });
 
@@ -24,7 +24,7 @@ export const AppContext = createContext<AppContextType>({
 
 
 export function Providers({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>('fr');
   const { user } = useAuth();
 
   // Load language preference from database when user logs in

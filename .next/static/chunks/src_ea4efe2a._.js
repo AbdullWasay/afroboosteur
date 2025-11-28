@@ -5899,7 +5899,7 @@ function OffersPage() {
     };
     const handleShareWhatsApp = (offer)=>{
         const url = getOfferUrl(offer);
-        const shareText = `${offer.title} - ${offer.description || ''}\n\nStarting at CHF ${(getSelectedOption(offer)?.price || offer.price).toFixed(0)}\n\nCheck out this amazing offer!`;
+        const shareText = `${offer.title} - ${offer.description || ''}\n\n${t('Starting at')} CHF ${(getSelectedOption(offer)?.price || offer.price).toFixed(0)}\n\n${t('Check out this amazing offer!')}`;
         const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${url}`)}`;
         window.open(whatsappUrl, '_blank');
     };
