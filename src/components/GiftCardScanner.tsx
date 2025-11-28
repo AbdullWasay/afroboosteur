@@ -48,8 +48,6 @@ export default function GiftCardScanner({
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [cameraError, setCameraError] = useState<string>('');
   const [detectedCode, setDetectedCode] = useState<string>('');
-  const [availableCards, setAvailableCards] = useState<any[]>([]);
-  const [isLoadingCards, setIsLoadingCards] = useState(true);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -57,34 +55,6 @@ export default function GiftCardScanner({
   const streamRef = useRef<MediaStream | null>(null);
   const scanIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load available gift cards for the user
-  useEffect(() => {
-    const loadAvailableCards = async () => {
-      if (!customerId || !businessId) {
-        setIsLoadingCards(false);
-        return;
-      }
-
-      try {
-        const response = await fetch(`/api/gift-cards/user-cards?userId=${customerId}&businessId=${businessId}`);
-        if (response.ok) {
-          const data = await response.json();
-          // Filter cards that are active, not expired, and have remaining amount
-          const validCards = (data.giftCards || []).filter((card: any) => {
-            const isExpired = new Date(card.expirationDate) < new Date();
-            return card.isActive && !isExpired && card.remainingAmount > 0;
-          });
-          setAvailableCards(validCards);
-        }
-      } catch (error) {
-        console.error('Error loading available gift cards:', error);
-      } finally {
-        setIsLoadingCards(false);
-      }
-    };
-
-    loadAvailableCards();
-  }, [customerId, businessId]);
 
   // Cleanup function
   const cleanup = useCallback(() => {
@@ -440,51 +410,6 @@ export default function GiftCardScanner({
             )}
           </div>
 
-          {/* Available Gift Cards */}
-          {!isLoadingCards && availableCards.length > 0 && (
-            <div className="mb-6">
-              <h4 className="text-white font-medium mb-3 flex items-center">
-                <FiCheckCircle className="text-green-400 mr-2" size={18} />
-                {t('Your Available Gift Cards')}
-              </h4>
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                {availableCards.map((card) => (
-                  <div
-                    key={card.id}
-                    className="bg-gray-800/50 border border-gray-700 rounded-lg p-3 flex items-center justify-between hover:border-purple-500 transition-colors"
-                  >
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-1">
-                        <span className="text-white font-medium">{card.cardCode}</span>
-                        <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-400 rounded">
-                          {t('Active')}
-                        </span>
-                      </div>
-                      <div className="text-sm text-gray-400">
-                        {t('Balance')}: {card.remainingAmount} CHF
-                        {card.description && ` • ${card.description}`}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {t('Expires')}: {new Date(card.expirationDate).toLocaleDateString()}
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => validateGiftCard(card.cardCode)}
-                      disabled={isValidating}
-                      className="ml-3 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg text-sm font-medium hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {t('Apply')}
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-3 pt-3 border-t border-gray-700">
-                <p className="text-sm text-gray-400 text-center">
-                  {t('Or scan/enter a different gift card below')}
-                </p>
-              </div>
-            </div>
-          )}
 
           {/* Method Selection */}
           <div className="grid grid-cols-3 gap-2 mb-6">

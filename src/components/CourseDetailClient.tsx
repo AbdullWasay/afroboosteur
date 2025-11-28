@@ -20,8 +20,8 @@ import {
 } from 'react-icons/fi';
 
 import { useAuth } from '@/lib/auth';
-import { Course, Review, StudentTokenPackage, CourseSchedule } from '@/types';
-import { courseService, reviewService, userSubscriptionService, studentTokenPackageService, userService, coachReferralActivityService, coachReferralStatsService, scheduleService } from '@/lib/database';
+import { Course, Review, StudentTokenPackage, CourseSchedule, HelmetReservation } from '@/types';
+import { courseService, reviewService, userSubscriptionService, studentTokenPackageService, userService, coachReferralActivityService, coachReferralStatsService, scheduleService, helmetReservationService } from '@/lib/database';
 import PaymentModal from '@/components/PaymentModal';
 import ReviewSystem from '@/components/ReviewSystem';
 import CourseBoost from '@/components/CourseBoost';
@@ -34,12 +34,12 @@ import PaymentHandlerWithCredits from '@/components/PaymentHandlerWithCredits';
 import Toast from '@/components/Toast';
 import CardSelectionStep from '@/components/CardSelectionStep';
 
-export default function CourseDetail() {
+export default function CourseDetailClient() {
   const params = useParams();
   const router = useRouter();
   const { user, updateUserProfile } = useAuth();
-  const {t} = useTranslation();
-  
+  const { t } = useTranslation();
+
   const [course, setCourse] = useState<Course | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [schedules, setSchedules] = useState<CourseSchedule[]>([]);
@@ -66,12 +66,13 @@ export default function CourseDetail() {
   const [availableTokenPackages, setAvailableTokenPackages] = useState<StudentTokenPackage[]>([]);
   const [selectedTokenPackage, setSelectedTokenPackage] = useState<StudentTokenPackage | null>(null);
   const [showTokenSelector, setShowTokenSelector] = useState(false);
+  const [userReservations, setUserReservations] = useState<HelmetReservation[]>([]);
 
   useEffect(() => {
     loadCourseData();
     // If you need to check if courseContent is an array, do so without assignment
-   
-    
+
+
   }, [params?.courseId]);
 
   useEffect(() => {
@@ -79,125 +80,9 @@ export default function CourseDetail() {
       checkUserCourseStatus();
       loadUserSubscription();
       loadUserTokenPackages();
+      loadUserReservations();
     }
   }, [user, course]);
-
-
-  // Initialize tab from URL parameters and handle auto-booking
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const tabParam = urlParams.get('tab');
-    const bookParam = urlParams.get('book');
-
-    if (tabParam === 'chat') {
-      setActiveTab('chat');
-    }
-
-    // Auto-open booking modal if book=true parameter is present
-    if (bookParam === 'true' && user && course) {
-      // Small delay to ensure course data is loaded
-      setTimeout(() => {
-        setShowCardSelectionStep(true);
-      }, 500);
-
-      // Remove the book parameter from URL to prevent re-triggering
-      const newUrl = new URL(window.location.href);
-      newUrl.searchParams.delete('book');
-      window.history.replaceState({}, '', newUrl.toString());
-    }
-  }, [user, course]);
-
-  const loadUserSubscription = async () => {
-    if (!user?.id) return;
-    try {
-      const subscription = await userSubscriptionService.getActiveByUserId(user.id);
-      setUserSubscription(subscription);
-      // Default to subscription booking if user has active subscription
-      if (subscription) {
-        setBookingType('subscription');
-      } else {
-        setBookingType('pay_per_session');
-      }
-    } catch (error) {
-      console.error('Error loading user subscription:', error);
-    }
-  };
-
-  const loadUserTokenPackages = async () => {
-    if (!user?.id || !course?.coachId) return;
-    try {
-      const tokenPackages = await studentTokenPackageService.getByStudentAndCoach(user.id, course.coachId);
-      setAvailableTokenPackages(tokenPackages);
-      
-      // If user has valid token packages but no subscription, suggest tokens
-      if (tokenPackages.length > 0 && !userSubscription) {
-        setBookingType('tokens');
-      }
-    } catch (error) {
-      console.error('Error loading user token packages:', error);
-    }
-  };
-
-  const checkUserCourseStatus = async () => {
-    if (!user || !course) return;
-    
-    try {
-      // Check if user has completed this course
-      const userBookings = await bookingService.getByStudent(user.id);
-      const completedBooking = userBookings.find(
-        booking => booking.courseId === course.id && booking.status === 'completed'
-      );
-      
-      if (completedBooking) {
-        setHasCompletedCourse(true);
-        
-        // Check if user hasn't reviewed yet
-        const userReviews = await reviewService.getByUser(user.id);
-        const hasReviewed = userReviews.some((review: { courseId: string; }) => review.courseId === course.id);
-        
-        // If user completed course but hasn't reviewed, switch to reviews tab
-        if (!hasReviewed) {
-          setActiveTab('reviews');
-        }
-      }
-    } catch (error) {
-      console.error('Error checking course status:', error);
-    }
-  };
-
-  const loadCourseData = async () => {
-    if (!params?.courseId) {
-      console.error('No courseId provided');
-      return;
-    }
-
-    const courseId = params?.courseId as string;
-    console.log('Loading course data for ID:', courseId);
-
-    try {
-      setIsLoading(true);
-      const [courseData, reviewsData, schedulesData] = await Promise.all([
-        courseService.getById(courseId),
-        reviewService.getByCourse(courseId),
-        scheduleService.getAll()
-      ]);
-
-      console.log('Course data loaded:', courseData ? 'Found' : 'Not found');
-      console.log('Reviews loaded:', reviewsData.length);
-
-      // Filter schedules for this course
-      const courseSchedules = schedulesData.filter(s => s.courseId === courseId);
-
-      setCourse(courseData);
-      setReviews(reviewsData);
-      setSchedules(courseSchedules);
-
-    } catch (error) {
-      console.error('Error loading course data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   // Update meta tags for social sharing
   useEffect(() => {
@@ -296,6 +181,133 @@ export default function CourseDetail() {
     }
   }, [course]);
 
+
+  // Initialize tab from URL parameters and handle auto-booking
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get('tab');
+    const bookParam = urlParams.get('book');
+
+    if (tabParam === 'chat') {
+      setActiveTab('chat');
+    }
+
+    // Auto-open booking modal if book=true parameter is present
+    if (bookParam === 'true' && user && course) {
+      // Small delay to ensure course data is loaded
+      setTimeout(() => {
+        setShowCardSelectionStep(true);
+      }, 500);
+
+      // Remove the book parameter from URL to prevent re-triggering
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete('book');
+      window.history.replaceState({}, '', newUrl.toString());
+    }
+  }, [user, course]);
+
+  const loadUserSubscription = async () => {
+    if (!user?.id) return;
+    try {
+      const subscription = await userSubscriptionService.getActiveByUserId(user.id);
+      setUserSubscription(subscription);
+      // Default to subscription booking if user has active subscription
+      if (subscription) {
+        setBookingType('subscription');
+      } else {
+        setBookingType('pay_per_session');
+      }
+    } catch (error) {
+      console.error('Error loading user subscription:', error);
+    }
+  };
+
+  const loadUserTokenPackages = async () => {
+    if (!user?.id || !course?.coachId) return;
+    try {
+      const tokenPackages = await studentTokenPackageService.getByStudentAndCoach(user.id, course.coachId);
+      setAvailableTokenPackages(tokenPackages);
+
+      // If user has valid token packages but no subscription, suggest tokens
+      if (tokenPackages.length > 0 && !userSubscription) {
+        setBookingType('tokens');
+      }
+    } catch (error) {
+      console.error('Error loading user token packages:', error);
+    }
+  };
+
+  const loadUserReservations = async () => {
+    if (!user?.id) return;
+    try {
+      const reservations = await helmetReservationService.getByUserId(user.id);
+      setUserReservations(reservations);
+    } catch (error) {
+      console.error('Error loading user reservations:', error);
+    }
+  };
+
+  const checkUserCourseStatus = async () => {
+    if (!user || !course) return;
+
+    try {
+      // Check if user has completed this course
+      const userBookings = await bookingService.getByStudent(user.id);
+      const completedBooking = userBookings.find(
+        booking => booking.courseId === course.id && booking.status === 'completed'
+      );
+
+      if (completedBooking) {
+        setHasCompletedCourse(true);
+
+        // Check if user hasn't reviewed yet
+        const userReviews = await reviewService.getByUser(user.id);
+        const hasReviewed = userReviews.some((review: { courseId: string; }) => review.courseId === course.id);
+
+        // If user completed course but hasn't reviewed, switch to reviews tab
+        if (!hasReviewed) {
+          setActiveTab('reviews');
+        }
+      }
+    } catch (error) {
+      console.error('Error checking course status:', error);
+    }
+  };
+
+  const loadCourseData = async () => {
+    if (!params?.courseId) {
+      console.error('No courseId provided');
+      return;
+    }
+
+    const courseId = params?.courseId as string;
+    console.log('Loading course data for ID:', courseId);
+
+    try {
+      setIsLoading(true);
+      const [courseData, reviewsData, schedulesData] = await Promise.all([
+        courseService.getById(courseId),
+        reviewService.getByCourse(courseId),
+        scheduleService.getAll()
+      ]);
+
+      console.log('Course data loaded:', courseData ? 'Found' : 'Not found');
+      console.log('Reviews loaded:', reviewsData.length);
+
+      // Filter schedules for this course
+      const courseSchedules = schedulesData.filter(s => s.courseId === courseId);
+
+      setCourse(courseData);
+      setReviews(reviewsData);
+      setSchedules(courseSchedules);
+
+    } catch (error) {
+      console.error('Error loading course data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
     // Update URL parameters to help with footer detection
@@ -380,7 +392,7 @@ export default function CourseDetail() {
       await loadCourseData();
       await loadUserTokenPackages();
       setShowTokenSelector(false);
-      
+
     } catch (error) {
       console.error('Token booking error:', error);
       alert(error instanceof Error ? error.message : 'Failed to book course with tokens');
@@ -428,7 +440,7 @@ export default function CourseDetail() {
       // Reload data
       await loadCourseData();
       await loadUserSubscription();
-      
+
     } catch (error) {
       console.error('Subscription booking error:', error);
       alert(error instanceof Error ? error.message : 'Failed to book course with subscription');
@@ -446,7 +458,7 @@ export default function CourseDetail() {
         // Pay with credits
         const newCredits = user.credits - course.totalPrice;
         await updateUserProfile({ credits: newCredits });
-        
+
         // Record transaction
         await transactionService.create({
           userId: user.id,
@@ -458,7 +470,7 @@ export default function CourseDetail() {
       } else {
         // Simulate card payment
         await new Promise(resolve => setTimeout(resolve, 2000));
-        
+
         // Record transaction
         await transactionService.create({
           userId: user.id,
@@ -506,7 +518,7 @@ export default function CourseDetail() {
       // Reload course data
       await loadCourseData();
       setShowPaymentModal(false);
-      
+
       return true;
     } catch (error) {
       console.error('Booking error:', error);
@@ -690,7 +702,7 @@ export default function CourseDetail() {
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path d="M8 5v14l11-7z"/>
+                  <path d="M8 5v14l11-7z" />
                 </svg>
               </div>
               <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 bg-black/80 text-white px-3 sm:px-4 py-2 rounded-full text-sm sm:text-base font-medium backdrop-blur-sm">
@@ -704,11 +716,10 @@ export default function CourseDetail() {
               BOOSTED
             </div>
           )}
-          <div className={`absolute top-3 sm:top-4 right-3 sm:right-4 px-3 sm:px-4 py-1.5 sm:py-2 rounded text-sm sm:text-base font-medium ${
-            course.difficulty === 'Beginner' ? 'bg-green-500 text-white' :
+          <div className={`absolute top-3 sm:top-4 right-3 sm:right-4 px-3 sm:px-4 py-1.5 sm:py-2 rounded text-sm sm:text-base font-medium ${course.difficulty === 'Beginner' ? 'bg-green-500 text-white' :
             course.difficulty === 'Intermediate' ? 'bg-yellow-500 text-black' :
-            'bg-red-500 text-white'
-          }`}>
+              'bg-red-500 text-white'
+            }`}>
             {t(`${course.difficulty}`)}
           </div>
         </div>
@@ -824,6 +835,14 @@ export default function CourseDetail() {
                           {/* Helmet Reservation Button */}
                           <button
                             onClick={async () => {
+                              // Check if already reserved
+                              const isReserved = userReservations.some(r => r.scheduleId === schedule.id && r.status !== 'cancelled');
+
+                              if (isReserved) {
+                                showToast(t('You have already reserved a helmet for this session'), 'info');
+                                return;
+                              }
+
                               try {
                                 const response = await fetch('/api/helmet-reservations/create', {
                                   method: 'POST',
@@ -833,6 +852,20 @@ export default function CourseDetail() {
                                 const data = await response.json();
                                 if (response.ok) {
                                   showToast(t('Helmet Reserved!'), 'success');
+
+                                  // Immediately update the UI by adding the new reservation to state
+                                  const newReservation = {
+                                    id: data.id || 'temp-' + Date.now(),
+                                    scheduleId: schedule.id,
+                                    userId: user.id,
+                                    status: 'booked',
+                                    createdAt: new Date(),
+                                    updatedAt: new Date()
+                                  };
+                                  setUserReservations(prev => [...prev, newReservation as any]);
+
+                                  // Then reload data in background
+                                  loadUserReservations();
                                   loadCourseData();
                                 } else {
                                   showToast(data.error || t('Failed to reserve helmet'), 'error');
@@ -842,10 +875,18 @@ export default function CourseDetail() {
                                 showToast(t('Failed to reserve helmet'), 'error');
                               }
                             }}
-                            className="w-full btn-primary text-xs sm:text-sm py-2 flex items-center justify-center space-x-2 mt-2"
+                            className={`w-full text-xs sm:text-sm py-2 flex items-center justify-center space-x-2 mt-2 rounded-lg font-semibold transition-colors ${userReservations.some(r => r.scheduleId === schedule.id && r.status !== 'cancelled')
+                              ? 'bg-green-600 text-white cursor-default'
+                              : 'btn-primary'
+                              }`}
+                            disabled={userReservations.some(r => r.scheduleId === schedule.id && r.status !== 'cancelled')}
                           >
                             <FiCheckCircle size={14} />
-                            <span>{t('Reserve Helmet')}</span>
+                            <span>
+                              {userReservations.some(r => r.scheduleId === schedule.id && r.status !== 'cancelled')
+                                ? t('Helmet Reserved')
+                                : t('Reserve Helmet')}
+                            </span>
                           </button>
                         </div>
                       );
@@ -884,13 +925,12 @@ export default function CourseDetail() {
                       {userSubscription && (
                         <button
                           onClick={() => setBookingType('subscription')}
-                          className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${
-                            bookingType === 'subscription'
-                              ? 'bg-[#D91CD2] text-white'
-                              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                          }`}
+                          className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${bookingType === 'subscription'
+                            ? 'bg-[#D91CD2] text-white'
+                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            }`}
                           disabled={
-                            userSubscription.planType === 'session_pack' && 
+                            userSubscription.planType === 'session_pack' &&
                             (!userSubscription.remainingSessions || userSubscription.remainingSessions <= 0)
                           }
                         >
@@ -902,15 +942,14 @@ export default function CourseDetail() {
                           )}
                         </button>
                       )}
-                      
+
                       {availableTokenPackages.length > 0 && (
                         <button
                           onClick={() => setBookingType('tokens')}
-                          className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${
-                            bookingType === 'tokens'
-                              ? 'bg-[#D91CD2] text-white'
-                              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                          }`}
+                          className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${bookingType === 'tokens'
+                            ? 'bg-[#D91CD2] text-white'
+                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            }`}
                           disabled={availableTokenPackages.every(pkg => pkg.remainingTokens < course.sessions)}
                         >
                           <span className="block font-medium">{t('Use Tokens')}</span>
@@ -922,11 +961,10 @@ export default function CourseDetail() {
 
                       <button
                         onClick={() => setBookingType('pay_per_session')}
-                        className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${
-                          bookingType === 'pay_per_session'
-                            ? 'bg-[#D91CD2] text-white'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                        }`}
+                        className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${bookingType === 'pay_per_session'
+                          ? 'bg-[#D91CD2] text-white'
+                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                          }`}
                       >
                         <span className="block font-medium">{t('Pay Per Session')}</span>
                         <span className="block text-xs sm:text-sm opacity-75 mt-1">
@@ -941,13 +979,13 @@ export default function CourseDetail() {
                   onClick={handleBookCourse}
                   disabled={
                     course.currentStudents >= course.maxStudents ||
-                    (bookingType === 'subscription' && userSubscription?.planType === 'session_pack' && 
-                     (!userSubscription.remainingSessions || userSubscription.remainingSessions <= 0)) ||
+                    (bookingType === 'subscription' && userSubscription?.planType === 'session_pack' &&
+                      (!userSubscription.remainingSessions || userSubscription.remainingSessions <= 0)) ||
                     (bookingType === 'tokens' && availableTokenPackages.every(pkg => pkg.remainingTokens < course.sessions))
                   }
                   className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed py-3 sm:py-4 text-sm sm:text-base font-medium"
                 >
-                  {course.currentStudents >= course.maxStudents 
+                  {course.currentStudents >= course.maxStudents
                     ? t('Fully Booked')
                     : bookingType === 'subscription' && userSubscription
                       ? userSubscription.planType === 'session_pack'
@@ -959,10 +997,10 @@ export default function CourseDetail() {
                   }
                 </button>
 
-                
+
                 {/* Course Boost (only for course owner) */}
-                <CourseBoost 
-                  course={course} 
+                <CourseBoost
+                  course={course}
                   onBoostSuccess={loadCourseData}
                 />
 
@@ -1001,50 +1039,50 @@ export default function CourseDetail() {
 
         {/* Tabs */}
         <div className="flex flex-wrap mb-8 border-b border-gray-800">
-            {[
+          {[
             { id: 'overview', label: 'Overview' },
-            { 
-              id: 'reviews', 
+            {
+              id: 'reviews',
               label: `Reviews (${course.totalReviews})`,
               notification: hasCompletedCourse && !reviews.some(r => r.studentId === user?.id)
             },
-            { 
-              id: 'chat', 
+            {
+              id: 'chat',
               label: (
-              <span className="flex items-center gap-2">
-                <FiMessageCircle className="inline-block" />
-                Community Chat
-              </span>
+                <span className="flex items-center gap-2">
+                  <FiMessageCircle className="inline-block" />
+                  Community Chat
+                </span>
               ),
               isSpecial: true,
               isGroupChat: true
             }
-            ].map(tab => (
+          ].map(tab => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
               className={`px-3 py-1 border-b-2 transition-all duration-300 relative font-medium text-xs sm:text-sm
               ${activeTab === tab.id
-              ? 'border-[#D91CD2] text-[#D91CD2] scale-105'
-              : 'border-transparent text-gray-400 hover:text-white'}
+                  ? 'border-[#D91CD2] text-[#D91CD2] scale-105'
+                  : 'border-transparent text-gray-400 hover:text-white'}
               ${tab.isSpecial ? 'bg-gradient-to-r from-[#D91CD2]/10 to-[#7000FF]/10 rounded-t-md' : ''}
-              ${tab.isGroupChat 
-              ? 'bg-[#7B1FA2] hover:bg-[#D91CD2] text-white font-semibold px-4 py-0 mb-1 rounded-md shadow border-2 border-[#D91CD2] hover:border-[#7B1FA2]' 
-              : ''
-              }
+              ${tab.isGroupChat
+                  ? 'bg-[#7B1FA2] hover:bg-[#D91CD2] text-white font-semibold px-4 py-0 mb-1 rounded-md shadow border-2 border-[#D91CD2] hover:border-[#7B1FA2]'
+                  : ''
+                }
               `}
             >
               {tab.isSpecial && (
-              <div className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-[#D91CD2] to-[#7000FF] rounded-full animate-pulse"></div>
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-[#D91CD2] to-[#7000FF] rounded-full animate-pulse"></div>
               )}
               {tab.label}
               {tab.notification && (
-              <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               )}
             </button>
-            ))}
+          ))}
         </div>
-          
+
         {/* Tab Content */}
         {activeTab === 'overview' && (
           <motion.div
@@ -1057,12 +1095,12 @@ export default function CourseDetail() {
               <ul className="space-y-2 text-gray-300">
                 {course.courseContent && typeof course.courseContent === 'object' && Object.keys(course.courseContent).length > 0 ? (
                   Object.entries(course.courseContent).map(([key, value]: [string, string], idx: number) => (
-                  <li key={idx}>• {value}</li>
+                    <li key={idx}>• {value}</li>
                   ))
                 ) : (
                   <li>{t('No course content available.')}</li>
                 )}
-                </ul>
+              </ul>
             </div>
 
             <div className="bg-gray-900 p-6 rounded-lg">
@@ -1097,7 +1135,7 @@ export default function CourseDetail() {
                 Note: You can only leave a review after completing the course, and you can only review each course once.
               </p>
             </div>
-            
+
             <ReviewSystem
               courseId={course.id}
               onReviewSubmitted={loadCourseData}

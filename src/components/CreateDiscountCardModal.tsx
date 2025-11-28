@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
   FiX,
@@ -11,12 +11,13 @@ import {
   FiHash,
   FiLoader,
   FiCheckCircle,
-  FiBook
+  FiBook,
+  FiSearch
 } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import QRCode from 'qrcode';
-import { courseService } from '@/lib/database';
-import { Course } from '@/types';
+import { courseService, directMessageService } from '@/lib/database';
+import { Course, User } from '@/types';
 
 interface CreateDiscountCardModalProps {
   onClose: () => void;
@@ -52,6 +53,12 @@ export default function CreateDiscountCardModal({
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
   const [previewQR, setPreviewQR] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   // Load coach's courses
   useEffect(() => {
@@ -77,15 +84,91 @@ export default function CreateDiscountCardModal({
     }));
   }, []);
 
+  // Handle click outside to close search results
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSearchResults(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Search users by name
+  const searchUsers = async (term: string) => {
+    if (!term || term.length < 2) {
+      setSearchResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    try {
+      setIsSearching(true);
+      // Use directMessageService.searchUsers which searches by firstName and lastName
+      // We'll pass coachId as currentUserId to exclude the coach from results (optional)
+      const results = await directMessageService.searchUsers(term, coachId, 10);
+      setSearchResults(results);
+      setShowSearchResults(true);
+    } catch (error) {
+      console.error('Error searching users:', error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Handle search input change
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    if (value.length >= 2) {
+      searchUsers(value);
+    } else {
+      setSearchResults([]);
+      setShowSearchResults(false);
+    }
+  };
+
+  // Handle user selection
+  const handleUserSelect = (user: User) => {
+    setSelectedUser(user);
+    setFormData(prev => ({ ...prev, memberEmail: user.email }));
+    setSearchTerm(`${user.firstName} ${user.lastName}`);
+    setShowSearchResults(false);
+    setSearchResults([]);
+    
+    // Clear error for memberEmail
+    if (errors.memberEmail) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.memberEmail;
+        return newErrors;
+      });
+    }
+    
+    // Generate preview QR
+    generatePreviewQR();
+  };
+
+  // Clear selected user
+  const handleClearUser = () => {
+    setSelectedUser(null);
+    setFormData(prev => ({ ...prev, memberEmail: '' }));
+    setSearchTerm('');
+    setSearchResults([]);
+    setShowSearchResults(false);
+  };
+
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {};
 
     // Validate based on active tab
     if (activeTab === 'student') {
-      if (!formData.memberEmail) {
-        newErrors.memberEmail = t('Member email is required');
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.memberEmail)) {
-        newErrors.memberEmail = t('Please enter a valid email address');
+      if (!selectedUser || !formData.memberEmail) {
+        newErrors.memberEmail = t('Please select a student');
       }
     } else {
       if (!formData.courseId) {
@@ -236,24 +319,101 @@ export default function CreateDiscountCardModal({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Left Column - Form */}
             <div className="space-y-4">
-              {/* Student Email (only for student tab) */}
+              {/* Student Search (only for student tab) */}
               {activeTab === 'student' && (
-                <div>
+                <div ref={searchRef} className="relative">
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     <FiUser className="inline mr-2" size={16} />
-                    {t('Student Email')} *
+                    {t('Select Student')} *
                   </label>
-                  <input
-                    type="email"
-                    value={formData.memberEmail}
-                    onChange={(e) => handleInputChange('memberEmail', e.target.value)}
-                  placeholder={t('Enter student email address')}
-                  className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 ${
-                    errors.memberEmail ? 'border-red-500' : 'border-gray-600'
-                  }`}
-                />
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <FiSearch className="text-gray-400" size={16} />
+                    </div>
+                    <input
+                      type="text"
+                      value={searchTerm}
+                      onChange={(e) => handleSearchChange(e.target.value)}
+                      placeholder={t('Search by student name...')}
+                      className={`w-full pl-10 pr-10 py-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 ${
+                        errors.memberEmail ? 'border-red-500' : 'border-gray-600'
+                      }`}
+                      disabled={!!selectedUser}
+                    />
+                    {selectedUser && (
+                      <button
+                        type="button"
+                        onClick={handleClearUser}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      >
+                        <FiX className="text-gray-400 hover:text-white" size={16} />
+                      </button>
+                    )}
+                  </div>
+                  
+                  {/* Search Results Dropdown */}
+                  {showSearchResults && searchResults.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                      {isSearching && (
+                        <div className="p-3 text-center text-gray-400">
+                          <FiLoader className="animate-spin inline mr-2" size={16} />
+                          {t('Searching...')}
+                        </div>
+                      )}
+                      {!isSearching && searchResults.map((user) => (
+                        <button
+                          key={user.id}
+                          type="button"
+                          onClick={() => handleUserSelect(user)}
+                          className="w-full text-left px-4 py-3 hover:bg-gray-700 transition-colors border-b border-gray-700 last:border-b-0"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-white font-medium">
+                                {user.firstName} {user.lastName}
+                              </p>
+                              <p className="text-gray-400 text-sm">{user.email}</p>
+                            </div>
+                            {user.role && (
+                              <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded">
+                                {user.role}
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Selected User Display */}
+                  {selectedUser && (
+                    <div className="mt-2 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-white font-medium">
+                            {selectedUser.firstName} {selectedUser.lastName}
+                          </p>
+                          <p className="text-gray-400 text-sm">{selectedUser.email}</p>
+                        </div>
+                        <FiCheckCircle className="text-purple-400" size={20} />
+                      </div>
+                    </div>
+                  )}
+                  
                   {errors.memberEmail && (
                     <p className="text-red-400 text-sm mt-1">{errors.memberEmail}</p>
+                  )}
+                  
+                  {searchTerm.length > 0 && searchTerm.length < 2 && (
+                    <p className="text-gray-400 text-xs mt-1">
+                      {t('Type at least 2 characters to search')}
+                    </p>
+                  )}
+                  
+                  {showSearchResults && !isSearching && searchResults.length === 0 && searchTerm.length >= 2 && (
+                    <p className="text-gray-400 text-xs mt-1">
+                      {t('No users found')}
+                    </p>
                   )}
                 </div>
               )}
@@ -417,7 +577,9 @@ export default function CreateDiscountCardModal({
                     <span className="text-gray-400">{t('For')}:</span>
                     <span className="text-white">
                       {activeTab === 'student'
-                        ? (formData.memberEmail || t('Not specified'))
+                        ? (selectedUser 
+                            ? `${selectedUser.firstName} ${selectedUser.lastName}` 
+                            : (formData.memberEmail || t('Not specified')))
                         : (courses.find(c => c.id === formData.courseId)?.title || t('Not specified'))
                       }
                     </span>

@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import PaymentHandlerWithCredits from './PaymentHandlerWithCredits';
+import DiscountCardScanner from './DiscountCardScanner';
 import { useAuth } from '@/lib/auth';
 import { offerService, offerPurchaseService, notificationService, transactionService, buildDefaultOffers } from '@/lib/database';
 import { Offer, OfferOption } from '@/types';
@@ -34,6 +35,8 @@ export default function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [activePurchase, setActivePurchase] = useState<PurchaseContext | null>(null);
   const [showPayment, setShowPayment] = useState(false);
+  const [showDiscountCardScanner, setShowDiscountCardScanner] = useState(false);
+  const [selectedDiscountCardCode, setSelectedDiscountCardCode] = useState<string | undefined>();
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(0);
 
@@ -179,18 +182,76 @@ export default function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
     }
     const option = getSelectedOption(offer);
     const amount = option ? option.price : offer.price;
-    setActivePurchase({ offer, option, amount });
-    // Close popup before opening payment
-    onClose();
-    // Small delay to ensure popup closes smoothly
-    setTimeout(() => {
-      setShowPayment(true);
-    }, 300);
+    
+    // Check if it's the second offer (subscription) and selected option contains "with discount" (not "without discount")
+    const isSecondOffer = activeTab === 1;
+    const optionLabel = option?.label?.toLowerCase() || '';
+    
+    // Only show discount scanner if option explicitly contains "with discount" or "with a discount"
+    // Exclude "without discount" or "without a discount" options
+    const hasWithDiscountOption = (
+      optionLabel.includes('with discount') || 
+      optionLabel.includes('with a discount') ||
+      optionLabel.includes('with discount card') ||
+      optionLabel.includes('with a discount card')
+    ) && !optionLabel.includes('without');
+    
+    // If it's the second offer with "with discount" option, show discount card scanner first
+    if (isSecondOffer && hasWithDiscountOption) {
+      setActivePurchase({ offer, option, amount });
+      // Close popup before opening discount scanner
+      onClose();
+      // Small delay to ensure popup closes smoothly
+      setTimeout(() => {
+        setShowDiscountCardScanner(true);
+      }, 300);
+    } else {
+      // Normal flow - go directly to payment
+      setActivePurchase({ offer, option, amount });
+      // Close popup before opening payment
+      onClose();
+      // Small delay to ensure popup closes smoothly
+      setTimeout(() => {
+        setShowPayment(true);
+      }, 300);
+    }
   };
 
   const closePayment = () => {
     setShowPayment(false);
     setActivePurchase(null);
+    setSelectedDiscountCardCode(undefined);
+  };
+
+  const handleDiscountCardValidation = (result: {
+    valid: boolean;
+    discountPercentage: number;
+    cardCode: string;
+    memberName: string;
+    coachId: string;
+    expirationDate: string;
+    description: string;
+    discountAmount?: number;
+    finalAmount?: number;
+    error?: string;
+  }) => {
+    setShowDiscountCardScanner(false);
+    if (result.valid) {
+      setSelectedDiscountCardCode(result.cardCode);
+      setError(null);
+      // After successful discount card scan, proceed to payment
+      if (activePurchase) {
+        setTimeout(() => {
+          setShowPayment(true);
+        }, 300);
+      }
+    } else {
+      // If validation fails, clear the purchase context and show error
+      setError(result.error || 'Invalid discount card');
+      setActivePurchase(null);
+      setSelectedDiscountCardCode(undefined);
+      // The discount scanner will close, and user can try again from the popup
+    }
   };
 
   const handleOfferPaymentSuccess = async (paymentId: string, method: 'stripe' | 'paypal' | 'twint' | 'credits' | 'gift-card' | 'discount-card') => {
@@ -527,6 +588,22 @@ export default function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
         )}
       </AnimatePresence>
 
+      {/* Discount Card Scanner - Only for second offer with discount option */}
+      {showDiscountCardScanner && user && activePurchase && (
+        <DiscountCardScanner
+          onValidation={handleDiscountCardValidation}
+          onClose={() => {
+            setShowDiscountCardScanner(false);
+            setActivePurchase(null);
+            setSelectedDiscountCardCode(undefined);
+          }}
+          customerId={user.id}
+          customerName={`${user.firstName} ${user.lastName}`}
+          coachId={activePurchase.offer.coachId}
+          orderAmount={activePurchase.amount}
+        />
+      )}
+
       {activePurchase && user && (
         <PaymentHandlerWithCredits
           isOpen={showPayment}
@@ -548,6 +625,7 @@ export default function WelcomePopup({ isOpen, onClose }: WelcomePopupProps) {
           businessId={activePurchase.offer.coachId}
           coachId={activePurchase.offer.coachId}
           allowedPaymentMethods={mapAllowedPaymentMethods(activePurchase.offer, activePurchase.option)}
+          preAppliedDiscountCardCode={selectedDiscountCardCode}
         />
       )}
     </>
