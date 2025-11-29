@@ -1,0 +1,3 @@
+{
+  "/api/helmet-reservations/user/[userId]/route": "app/api/helmet-reservations/user/[userId]/route.js"
+}

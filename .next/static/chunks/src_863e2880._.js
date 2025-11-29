@@ -3694,7 +3694,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center justify-between text-sm mt-2",
+                                    className: "flex items-start justify-between text-xs sm:text-sm mt-2",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: "text-gray-400",
@@ -3722,7 +3722,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                     columnNumber: 13
                                 }, this),
                                 coachId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center space-x-2 text-sm mt-2",
+                                    className: "flex items-start space-x-2 text-xs sm:text-sm mt-2",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiAlertCircle"], {
                                             className: "text-yellow-400",
@@ -3733,7 +3733,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "text-yellow-300",
+                                            className: "text-yellow-300 break-words leading-snug pr-1",
                                             children: t('Only discount cards from this coach will be accepted')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
@@ -3880,7 +3880,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "grid grid-cols-3 gap-2 mb-6",
+                            className: "flex flex-col sm:grid sm:grid-cols-3 gap-2 mb-6",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>{
@@ -3888,7 +3888,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                         setUseManualEntry(false);
                                         setUseCameraScanner(false);
                                     },
-                                    className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${!useManualEntry && !useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                    className: `py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${!useManualEntry && !useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                     children: t('Upload Image')
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
@@ -3903,21 +3903,21 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                         setUseCameraScanner(true);
                                         await startCamera();
                                     },
-                                    className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                    className: `py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiCamera"], {
                                             className: "inline mr-1",
                                             size: 14
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 506,
+                                            lineNumber: 504,
                                             columnNumber: 15
                                         }, this),
                                         t('Scan QR')
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 492,
+                                    lineNumber: 491,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3926,11 +3926,11 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                         setUseManualEntry(true);
                                         setUseCameraScanner(false);
                                     },
-                                    className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${useManualEntry ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                    className: `py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${useManualEntry ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                     children: t('Manual Entry')
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 509,
+                                    lineNumber: 507,
                                     columnNumber: 13
                                 }, this)
                             ]
@@ -3953,7 +3953,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                             autoPlay: true
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 530,
+                                            lineNumber: 527,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("canvas", {
@@ -3961,7 +3961,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                             className: "hidden"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 537,
+                                            lineNumber: 534,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3977,7 +3977,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                                 children: isCameraActive ? t('Point camera at discount card QR code') : t('Starting camera...')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 543,
+                                                                lineNumber: 540,
                                                                 columnNumber: 23
                                                             }, this),
                                                             detectedCode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3985,18 +3985,18 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                                 children: t('QR Code detected!')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 550,
+                                                                lineNumber: 547,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                        lineNumber: 542,
+                                                        lineNumber: 539,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 541,
+                                                    lineNumber: 538,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4008,51 +4008,51 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                                 className: "w-6 h-6 border-t-2 border-l-2 border-purple-400 absolute top-2 left-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 560,
+                                                                lineNumber: 557,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "w-6 h-6 border-t-2 border-r-2 border-purple-400 absolute top-2 right-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 561,
+                                                                lineNumber: 558,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "w-6 h-6 border-b-2 border-l-2 border-purple-400 absolute bottom-2 left-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 562,
+                                                                lineNumber: 559,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "w-6 h-6 border-b-2 border-r-2 border-purple-400 absolute bottom-2 right-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 563,
+                                                                lineNumber: 560,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                        lineNumber: 559,
+                                                        lineNumber: 556,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 558,
+                                                    lineNumber: 555,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 540,
+                                            lineNumber: 537,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 529,
+                                    lineNumber: 526,
                                     columnNumber: 15
                                 }, this),
                                 cameraError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4064,7 +4064,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 size: 16
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 572,
+                                                lineNumber: 569,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4072,18 +4072,18 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 children: cameraError
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 573,
+                                                lineNumber: 570,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                        lineNumber: 571,
+                                        lineNumber: 568,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 570,
+                                    lineNumber: 567,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4097,20 +4097,20 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                     size: 18
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 583,
+                                                    lineNumber: 580,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('Stop Camera')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 584,
+                                                    lineNumber: 581,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 579,
+                                            lineNumber: 576,
                                             columnNumber: 17
                                         }, this),
                                         !cameraError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4122,32 +4122,32 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                     size: 18
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 592,
+                                                    lineNumber: 589,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: isCameraActive && !cameraError ? t('Camera Active') : t('Start Camera')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 593,
+                                                    lineNumber: 590,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 587,
+                                            lineNumber: 584,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 578,
+                                    lineNumber: 575,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                            lineNumber: 528,
+                            lineNumber: 525,
                             columnNumber: 13
                         }, this) : !useManualEntry ? /* QR Code Upload */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "space-y-4",
@@ -4168,12 +4168,12 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                     className: "w-full h-full object-contain"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 608,
+                                                    lineNumber: 605,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 607,
+                                                lineNumber: 604,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4181,13 +4181,13 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 children: t('QR code image selected. Click validate to continue.')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 616,
+                                                lineNumber: 613,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                        lineNumber: 606,
+                                        lineNumber: 603,
                                         columnNumber: 19
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "space-y-4",
@@ -4196,7 +4196,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 className: "text-4xl text-gray-400 mx-auto"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 622,
+                                                lineNumber: 619,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4206,7 +4206,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                         children: t('Upload Discount Card QR Code')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                        lineNumber: 624,
+                                                        lineNumber: 621,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4214,24 +4214,24 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                         children: t('Click to select a PNG/JPG image containing the discount card QR code')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                        lineNumber: 625,
+                                                        lineNumber: 622,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 623,
+                                                lineNumber: 620,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                        lineNumber: 621,
+                                        lineNumber: 618,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 601,
+                                    lineNumber: 598,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4242,7 +4242,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                     className: "hidden"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 633,
+                                    lineNumber: 630,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4255,14 +4255,14 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 className: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 648,
+                                                lineNumber: 645,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: t('Validating...')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 649,
+                                                lineNumber: 646,
                                                 columnNumber: 21
                                             }, this)
                                         ]
@@ -4272,27 +4272,27 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 size: 18
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 653,
+                                                lineNumber: 650,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: t('Validate Discount Card')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 654,
+                                                lineNumber: 651,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 641,
+                                    lineNumber: 638,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                            lineNumber: 600,
+                            lineNumber: 597,
                             columnNumber: 13
                         }, this) : /* Manual Code Entry */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "space-y-4",
@@ -4304,7 +4304,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                             children: t('Discount Card Code')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 663,
+                                            lineNumber: 660,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4315,13 +4315,13 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                             className: "w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 666,
+                                            lineNumber: 663,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 662,
+                                    lineNumber: 659,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4334,14 +4334,14 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 className: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 682,
+                                                lineNumber: 679,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: t('Validating...')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 683,
+                                                lineNumber: 680,
                                                 columnNumber: 21
                                             }, this)
                                         ]
@@ -4351,27 +4351,27 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 size: 18
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 687,
+                                                lineNumber: 684,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: t('Validate Discount Card')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 688,
+                                                lineNumber: 685,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 675,
+                                    lineNumber: 672,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                            lineNumber: 661,
+                            lineNumber: 658,
                             columnNumber: 13
                         }, this),
                         isValidating && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -4390,7 +4390,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                         size: 24
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                        lineNumber: 703,
+                                        lineNumber: 700,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4398,18 +4398,18 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                         children: t('Validating discount card...')
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                        lineNumber: 704,
+                                        lineNumber: 701,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                lineNumber: 702,
+                                lineNumber: 699,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                            lineNumber: 697,
+                            lineNumber: 694,
                             columnNumber: 13
                         }, this)
                     ]
@@ -6795,7 +6795,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/CourseCalendar.tsx",
                                     lineNumber: 706,
-                                    columnNumber: 11
+                                    columnNumber: 13
                                 }, this),
                                 showManagement && user?.role === 'coach' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>{
@@ -6809,26 +6809,26 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
                                             lineNumber: 716,
-                                            columnNumber: 15
+                                            columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: t('scheduleCourse')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
                                             lineNumber: 717,
-                                            columnNumber: 15
+                                            columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CourseCalendar.tsx",
                                     lineNumber: 709,
-                                    columnNumber: 13
+                                    columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/CourseCalendar.tsx",
                             lineNumber: 705,
-                            columnNumber: 9
+                            columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "space-y-4",
@@ -6845,12 +6845,12 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
                                                     lineNumber: 728,
-                                                    columnNumber: 17
+                                                    columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
                                                 lineNumber: 727,
-                                                columnNumber: 15
+                                                columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                 type: "text",
@@ -6861,18 +6861,18 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
                                                 lineNumber: 730,
-                                                columnNumber: 15
+                                                columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
                                         lineNumber: 726,
-                                        columnNumber: 13
+                                        columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/CourseCalendar.tsx",
                                     lineNumber: 725,
-                                    columnNumber: 11
+                                    columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3 sm:items-center",
@@ -6891,33 +6891,33 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                             size: 16
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 754,
-                                                            columnNumber: 38
+                                                            lineNumber: 753,
+                                                            columnNumber: 40
                                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiCalendar"], {
                                                             size: 16
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 754,
-                                                            columnNumber: 61
+                                                            lineNumber: 753,
+                                                            columnNumber: 63
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "truncate",
                                                             children: t(mode)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 755,
-                                                            columnNumber: 19
+                                                            lineNumber: 754,
+                                                            columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, mode, true, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
                                                     lineNumber: 745,
-                                                    columnNumber: 17
+                                                    columnNumber: 19
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
                                             lineNumber: 743,
-                                            columnNumber: 13
+                                            columnNumber: 15
                                         }, this),
                                         (viewMode === 'month' || viewMode === 'week') && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "flex bg-black/40 rounded-lg p-1 min-w-0",
@@ -6930,22 +6930,22 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                             size: 16
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 771,
-                                                            columnNumber: 19
+                                                            lineNumber: 769,
+                                                            columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "hidden sm:inline",
                                                             children: t('grid')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 772,
-                                                            columnNumber: 19
+                                                            lineNumber: 770,
+                                                            columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 763,
-                                                    columnNumber: 17
+                                                    lineNumber: 762,
+                                                    columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                     onClick: ()=>setCalendarView('timeline'),
@@ -6955,34 +6955,34 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                             size: 16
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 782,
-                                                            columnNumber: 19
+                                                            lineNumber: 779,
+                                                            columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "hidden sm:inline",
                                                             children: t('timeline')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 783,
-                                                            columnNumber: 19
+                                                            lineNumber: 780,
+                                                            columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 774,
-                                                    columnNumber: 17
+                                                    lineNumber: 772,
+                                                    columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 762,
-                                            columnNumber: 15
+                                            lineNumber: 761,
+                                            columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CourseCalendar.tsx",
                                     lineNumber: 741,
-                                    columnNumber: 11
+                                    columnNumber: 13
                                 }, this),
                                 showManagement && user?.role === 'coach' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3 sm:items-center",
@@ -6995,15 +6995,15 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 800,
-                                                    columnNumber: 17
+                                                    lineNumber: 796,
+                                                    columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('bulkSelect')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 801,
-                                                    columnNumber: 17
+                                                    lineNumber: 797,
+                                                    columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: [
@@ -7013,14 +7013,14 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 802,
-                                                    columnNumber: 17
+                                                    lineNumber: 798,
+                                                    columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 792,
-                                            columnNumber: 15
+                                            lineNumber: 789,
+                                            columnNumber: 17
                                         }, this),
                                         bulkMode && selectedScheduleIds.size > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                             onClick: handleBulkDelete,
@@ -7030,15 +7030,15 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 810,
-                                                    columnNumber: 19
+                                                    lineNumber: 806,
+                                                    columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('delete')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 811,
-                                                    columnNumber: 19
+                                                    lineNumber: 807,
+                                                    columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: [
@@ -7048,20 +7048,20 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 812,
-                                                    columnNumber: 19
+                                                    lineNumber: 808,
+                                                    columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 806,
-                                            columnNumber: 17
+                                            lineNumber: 802,
+                                            columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                    lineNumber: 791,
-                                    columnNumber: 13
+                                    lineNumber: 788,
+                                    columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3",
@@ -7076,38 +7076,38 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                     children: t('allLevels')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 825,
-                                                    columnNumber: 15
+                                                    lineNumber: 821,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "beginner",
                                                     children: t('beginner')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 826,
-                                                    columnNumber: 15
+                                                    lineNumber: 822,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "intermediate",
                                                     children: t('intermediate')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 827,
-                                                    columnNumber: 15
+                                                    lineNumber: 823,
+                                                    columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                     value: "advanced",
                                                     children: t('advanced')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 828,
-                                                    columnNumber: 15
+                                                    lineNumber: 824,
+                                                    columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 820,
-                                            columnNumber: 13
+                                            lineNumber: 816,
+                                            columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
                                             value: filterCategory,
@@ -7119,39 +7119,39 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                     children: t('allCategories')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 836,
-                                                    columnNumber: 15
+                                                    lineNumber: 832,
+                                                    columnNumber: 17
                                                 }, this),
                                                 categories.map((category)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                                         value: category,
                                                         children: category
                                                     }, category, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 838,
-                                                        columnNumber: 17
+                                                        lineNumber: 834,
+                                                        columnNumber: 19
                                                     }, this))
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 831,
-                                            columnNumber: 13
+                                            lineNumber: 827,
+                                            columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                    lineNumber: 819,
-                                    columnNumber: 11
+                                    lineNumber: 815,
+                                    columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/CourseCalendar.tsx",
                             lineNumber: 723,
-                            columnNumber: 9
+                            columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CalendarStats, {}, void 0, false, {
                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                            lineNumber: 845,
-                            columnNumber: 9
+                            lineNumber: 841,
+                            columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "flex items-center justify-between",
@@ -7163,21 +7163,21 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 853,
-                                        columnNumber: 13
+                                        lineNumber: 849,
+                                        columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                    lineNumber: 849,
-                                    columnNumber: 11
+                                    lineNumber: 845,
+                                    columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                     className: "text-base sm:text-lg font-semibold text-center px-4",
                                     children: getCalendarTitle()
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                    lineNumber: 856,
-                                    columnNumber: 11
+                                    lineNumber: 852,
+                                    columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>navigateDate('next'),
@@ -7186,19 +7186,19 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 862,
-                                        columnNumber: 13
+                                        lineNumber: 858,
+                                        columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                    lineNumber: 858,
-                                    columnNumber: 11
+                                    lineNumber: 854,
+                                    columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                            lineNumber: 848,
-                            columnNumber: 9
+                            lineNumber: 844,
+                            columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "space-y-4",
@@ -7234,13 +7234,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                     className: "w-4 h-4 sm:w-5 sm:h-5 text-[#D91CD2] bg-black/60 border-gray-600 rounded focus:ring-[#D91CD2] focus:ring-2"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 901,
-                                                    columnNumber: 29
+                                                    lineNumber: 894,
+                                                    columnNumber: 31
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 900,
-                                                columnNumber: 27
+                                                lineNumber: 893,
+                                                columnNumber: 29
                                             }, this),
                                             showManagement && user?.role === 'coach' && !bulkMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "absolute top-4 right-4 text-gray-500",
@@ -7248,13 +7248,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                     size: 20
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 913,
-                                                    columnNumber: 29
+                                                    lineNumber: 906,
+                                                    columnNumber: 31
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 912,
-                                                columnNumber: 27
+                                                lineNumber: 905,
+                                                columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "space-y-4 lg:space-y-0 lg:grid lg:grid-cols-4 lg:gap-6",
@@ -7268,8 +7268,8 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                 className: "w-full h-32 object-cover rounded-lg mb-4"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 920,
-                                                                columnNumber: 29
+                                                                lineNumber: 913,
+                                                                columnNumber: 31
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "flex flex-wrap items-center gap-2 mb-2",
@@ -7279,28 +7279,28 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                         children: schedule.level
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 926,
-                                                                        columnNumber: 31
+                                                                        lineNumber: 919,
+                                                                        columnNumber: 33
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                         className: "text-sm text-gray-400",
                                                                         children: course.category
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 929,
-                                                                        columnNumber: 31
+                                                                        lineNumber: 922,
+                                                                        columnNumber: 33
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 925,
-                                                                columnNumber: 29
+                                                                lineNumber: 918,
+                                                                columnNumber: 31
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 919,
-                                                        columnNumber: 27
+                                                        lineNumber: 912,
+                                                        columnNumber: 29
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "lg:col-span-2",
@@ -7310,16 +7310,16 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                 children: course.title
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 935,
-                                                                columnNumber: 29
+                                                                lineNumber: 928,
+                                                                columnNumber: 31
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                 className: "text-gray-300 mb-4 text-sm sm:text-base line-clamp-2",
                                                                 children: course.description
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 936,
-                                                                columnNumber: 29
+                                                                lineNumber: 929,
+                                                                columnNumber: 31
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 text-sm",
@@ -7331,22 +7331,22 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                 className: "mr-2 text-[#D91CD2] flex-shrink-0"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 940,
-                                                                                columnNumber: 33
+                                                                                lineNumber: 933,
+                                                                                columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                 className: "truncate",
                                                                                 children: formatDate(schedule.startTime)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 941,
-                                                                                columnNumber: 33
+                                                                                lineNumber: 934,
+                                                                                columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 939,
-                                                                        columnNumber: 31
+                                                                        lineNumber: 932,
+                                                                        columnNumber: 33
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         className: "flex items-center text-gray-400",
@@ -7355,8 +7355,8 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                 className: "mr-2 text-[#D91CD2] flex-shrink-0"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 944,
-                                                                                columnNumber: 33
+                                                                                lineNumber: 937,
+                                                                                columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                 className: "truncate",
@@ -7367,14 +7367,14 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 945,
-                                                                                columnNumber: 33
+                                                                                lineNumber: 938,
+                                                                                columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 943,
-                                                                        columnNumber: 31
+                                                                        lineNumber: 936,
+                                                                        columnNumber: 33
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         className: "flex items-center text-gray-400",
@@ -7383,8 +7383,8 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                 className: "mr-2 text-[#D91CD2] flex-shrink-0"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 948,
-                                                                                columnNumber: 33
+                                                                                lineNumber: 941,
+                                                                                columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                 className: "truncate",
@@ -7395,14 +7395,14 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 949,
-                                                                                columnNumber: 33
+                                                                                lineNumber: 942,
+                                                                                columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 947,
-                                                                        columnNumber: 31
+                                                                        lineNumber: 940,
+                                                                        columnNumber: 33
                                                                     }, this),
                                                                     schedule.location && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         className: "flex items-center text-gray-400",
@@ -7411,22 +7411,22 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                 className: "mr-2 text-[#D91CD2] flex-shrink-0"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 953,
-                                                                                columnNumber: 35
+                                                                                lineNumber: 946,
+                                                                                columnNumber: 37
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                 className: "truncate",
                                                                                 children: schedule.location
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 954,
-                                                                                columnNumber: 35
+                                                                                lineNumber: 947,
+                                                                                columnNumber: 37
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 952,
-                                                                        columnNumber: 33
+                                                                        lineNumber: 945,
+                                                                        columnNumber: 35
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         className: "flex items-center text-gray-400",
@@ -7435,8 +7435,8 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                 className: "mr-2 text-[#D91CD2] flex-shrink-0"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 958,
-                                                                                columnNumber: 33
+                                                                                lineNumber: 951,
+                                                                                columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                 className: "truncate",
@@ -7450,14 +7450,14 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 959,
-                                                                                columnNumber: 33
+                                                                                lineNumber: 952,
+                                                                                columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 957,
-                                                                        columnNumber: 31
+                                                                        lineNumber: 950,
+                                                                        columnNumber: 33
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         className: "flex items-center text-gray-400",
@@ -7466,8 +7466,8 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                 className: "mr-2 text-[#D91CD2] flex-shrink-0"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 962,
-                                                                                columnNumber: 33
+                                                                                lineNumber: 955,
+                                                                                columnNumber: 35
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                 className: "truncate",
@@ -7480,20 +7480,20 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 963,
-                                                                                columnNumber: 33
+                                                                                lineNumber: 956,
+                                                                                columnNumber: 35
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 961,
-                                                                        columnNumber: 31
+                                                                        lineNumber: 954,
+                                                                        columnNumber: 33
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 938,
-                                                                columnNumber: 29
+                                                                lineNumber: 931,
+                                                                columnNumber: 31
                                                             }, this),
                                                             schedule.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "mt-4",
@@ -7502,19 +7502,19 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                     children: schedule.description
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                    lineNumber: 969,
-                                                                    columnNumber: 33
+                                                                    lineNumber: 962,
+                                                                    columnNumber: 35
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 968,
-                                                                columnNumber: 31
+                                                                lineNumber: 961,
+                                                                columnNumber: 33
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 934,
-                                                        columnNumber: 27
+                                                        lineNumber: 927,
+                                                        columnNumber: 29
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "lg:col-span-1 flex flex-col justify-between",
@@ -7530,22 +7530,22 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 977,
-                                                                        columnNumber: 31
+                                                                        lineNumber: 970,
+                                                                        columnNumber: 33
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         className: "text-sm text-gray-400",
                                                                         children: t('perSession')
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 980,
-                                                                        columnNumber: 31
+                                                                        lineNumber: 973,
+                                                                        columnNumber: 33
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 976,
-                                                                columnNumber: 29
+                                                                lineNumber: 969,
+                                                                columnNumber: 31
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "space-y-2",
@@ -7558,15 +7558,15 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                 size: 16
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 988,
-                                                                                columnNumber: 33
+                                                                                lineNumber: 981,
+                                                                                columnNumber: 35
                                                                             }, this),
                                                                             t('viewDetails')
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 984,
-                                                                        columnNumber: 31
+                                                                        lineNumber: 977,
+                                                                        columnNumber: 33
                                                                     }, this),
                                                                     onBookCourse && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                                         onClick: ()=>onBookCourse(course.id),
@@ -7574,8 +7574,8 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                         children: t('bookNow')
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 993,
-                                                                        columnNumber: 33
+                                                                        lineNumber: 986,
+                                                                        columnNumber: 35
                                                                     }, this),
                                                                     showManagement && user?.role === 'coach' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         className: "flex gap-2",
@@ -7589,22 +7589,22 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                         size: 16
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                        lineNumber: 1008,
-                                                                                        columnNumber: 37
+                                                                                        lineNumber: 1001,
+                                                                                        columnNumber: 39
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                         className: "text-xs hidden sm:inline",
                                                                                         children: t('edit')
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                        lineNumber: 1009,
-                                                                                        columnNumber: 37
+                                                                                        lineNumber: 1002,
+                                                                                        columnNumber: 39
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 1003,
-                                                                                columnNumber: 35
+                                                                                lineNumber: 996,
+                                                                                columnNumber: 37
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                                                 onClick: ()=>handleDeleteSchedule(schedule.id),
@@ -7615,22 +7615,22 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                         size: 16
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                        lineNumber: 1016,
-                                                                                        columnNumber: 37
+                                                                                        lineNumber: 1009,
+                                                                                        columnNumber: 39
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                         className: "text-xs hidden sm:inline",
                                                                                         children: t('delete')
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                        lineNumber: 1017,
-                                                                                        columnNumber: 37
+                                                                                        lineNumber: 1010,
+                                                                                        columnNumber: 39
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 1011,
-                                                                                columnNumber: 35
+                                                                                lineNumber: 1004,
+                                                                                columnNumber: 37
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                                                 onClick: ()=>{
@@ -7645,52 +7645,52 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                                         size: 16
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                        lineNumber: 1028,
-                                                                                        columnNumber: 37
+                                                                                        lineNumber: 1021,
+                                                                                        columnNumber: 39
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                         className: "text-xs hidden sm:inline",
                                                                                         children: t('copy')
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                        lineNumber: 1029,
-                                                                                        columnNumber: 37
+                                                                                        lineNumber: 1022,
+                                                                                        columnNumber: 39
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                                lineNumber: 1019,
-                                                                                columnNumber: 35
+                                                                                lineNumber: 1012,
+                                                                                columnNumber: 37
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 1002,
-                                                                        columnNumber: 33
+                                                                        lineNumber: 995,
+                                                                        columnNumber: 35
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 983,
-                                                                columnNumber: 29
+                                                                lineNumber: 976,
+                                                                columnNumber: 31
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 975,
-                                                        columnNumber: 27
+                                                        lineNumber: 968,
+                                                        columnNumber: 29
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 917,
-                                                columnNumber: 25
+                                                lineNumber: 910,
+                                                columnNumber: 27
                                             }, this)
                                         ]
                                     }, schedule.id, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 883,
-                                        columnNumber: 23
+                                        lineNumber: 879,
+                                        columnNumber: 25
                                     }, this);
                                 }) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "bg-black/40 p-6 sm:p-8 rounded-lg text-center",
@@ -7700,16 +7700,16 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                             className: "mx-auto text-gray-400 mb-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 1041,
-                                            columnNumber: 19
+                                            lineNumber: 1034,
+                                            columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "text-gray-400 mb-4",
                                             children: t('noCoursesFound')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 1042,
-                                            columnNumber: 19
+                                            lineNumber: 1035,
+                                            columnNumber: 21
                                         }, this),
                                         showManagement && user?.role === 'coach' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                             onClick: ()=>{
@@ -7720,19 +7720,19 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                             children: t('scheduleYourFirstCourse')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 1044,
-                                            columnNumber: 21
+                                            lineNumber: 1037,
+                                            columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                    lineNumber: 1040,
-                                    columnNumber: 17
+                                    lineNumber: 1033,
+                                    columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                lineNumber: 870,
-                                columnNumber: 13
+                                lineNumber: 866,
+                                columnNumber: 15
                             }, this) : viewMode === 'month' && calendarView === 'calendar' ? /* Month Calendar Grid View */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "bg-black/20 rounded-lg overflow-hidden",
                                 children: [
@@ -7754,27 +7754,27 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         children: day
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1064,
-                                                        columnNumber: 21
+                                                        lineNumber: 1057,
+                                                        columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "sm:hidden text-xs",
                                                         children: day.slice(0, 1)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1065,
-                                                        columnNumber: 21
+                                                        lineNumber: 1058,
+                                                        columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, day, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1063,
-                                                columnNumber: 19
+                                                lineNumber: 1056,
+                                                columnNumber: 21
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1061,
-                                        columnNumber: 15
+                                        lineNumber: 1054,
+                                        columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "grid grid-cols-7 gap-0",
@@ -7795,22 +7795,22 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                 children: getDayOfMonth(day)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1094,
-                                                                columnNumber: 25
+                                                                lineNumber: 1083,
+                                                                columnNumber: 27
                                                             }, this),
                                                             isDropTarget && draggedSchedule && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "text-green-400 text-xs hidden sm:inline",
                                                                 children: t('dropHere')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1096,
-                                                                columnNumber: 27
+                                                                lineNumber: 1085,
+                                                                columnNumber: 29
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1091,
-                                                        columnNumber: 23
+                                                        lineNumber: 1081,
+                                                        columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "space-y-1",
@@ -7835,8 +7835,8 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                             className: "w-2 h-2 sm:w-3 sm:h-3 mr-1 text-[#D91CD2] bg-black/60 border-gray-600 rounded"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1121,
-                                                                            columnNumber: 33
+                                                                            lineNumber: 1107,
+                                                                            columnNumber: 35
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "hidden sm:inline",
@@ -7846,22 +7846,22 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1131,
-                                                                            columnNumber: 31
+                                                                            lineNumber: 1117,
+                                                                            columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "truncate",
                                                                             children: course.title
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1132,
-                                                                            columnNumber: 31
+                                                                            lineNumber: 1118,
+                                                                            columnNumber: 33
                                                                         }, this)
                                                                     ]
                                                                 }, idx, true, {
                                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                    lineNumber: 1106,
-                                                                    columnNumber: 29
+                                                                    lineNumber: 1095,
+                                                                    columnNumber: 31
                                                                 }, this);
                                                             }),
                                                             daySchedules.length > (window.innerWidth < 640 ? 1 : 2) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7874,32 +7874,32 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1137,
-                                                                columnNumber: 27
+                                                                lineNumber: 1123,
+                                                                columnNumber: 29
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1100,
-                                                        columnNumber: 23
+                                                        lineNumber: 1089,
+                                                        columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, index, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1079,
-                                                columnNumber: 21
+                                                lineNumber: 1072,
+                                                columnNumber: 23
                                             }, this);
                                         })
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1071,
-                                        columnNumber: 15
+                                        lineNumber: 1064,
+                                        columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                lineNumber: 1059,
-                                columnNumber: 13
+                                lineNumber: 1052,
+                                columnNumber: 15
                             }, this) : /* Timeline View for Week/Month and Week/Day views */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "space-y-4",
                                 children: filteredSchedules.length > 0 ? filteredSchedules.sort((a, b)=>{
@@ -7934,22 +7934,22 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                     children: course.title
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                    lineNumber: 1172,
-                                                                    columnNumber: 31
+                                                                    lineNumber: 1158,
+                                                                    columnNumber: 33
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     className: `px-2 py-1 rounded-full text-xs border ${getLevelColor(schedule.level)} self-start`,
                                                                     children: schedule.level
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                    lineNumber: 1173,
-                                                                    columnNumber: 31
+                                                                    lineNumber: 1159,
+                                                                    columnNumber: 33
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 1171,
-                                                            columnNumber: 29
+                                                            lineNumber: 1157,
+                                                            columnNumber: 31
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-4 text-sm",
@@ -7961,22 +7961,22 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                             className: "mr-2 flex-shrink-0"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1180,
-                                                                            columnNumber: 33
+                                                                            lineNumber: 1166,
+                                                                            columnNumber: 35
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "truncate",
                                                                             children: formatDate(schedule.startTime)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1181,
-                                                                            columnNumber: 33
+                                                                            lineNumber: 1167,
+                                                                            columnNumber: 35
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                    lineNumber: 1179,
-                                                                    columnNumber: 31
+                                                                    lineNumber: 1165,
+                                                                    columnNumber: 33
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                     className: "flex items-center text-gray-400",
@@ -7985,8 +7985,8 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                             className: "mr-2 flex-shrink-0"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1184,
-                                                                            columnNumber: 33
+                                                                            lineNumber: 1170,
+                                                                            columnNumber: 35
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "truncate",
@@ -7997,14 +7997,14 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1185,
-                                                                            columnNumber: 33
+                                                                            lineNumber: 1171,
+                                                                            columnNumber: 35
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                    lineNumber: 1183,
-                                                                    columnNumber: 31
+                                                                    lineNumber: 1169,
+                                                                    columnNumber: 33
                                                                 }, this),
                                                                 schedule.location && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                     className: "flex items-center text-gray-400",
@@ -8013,22 +8013,22 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                             className: "mr-2 flex-shrink-0"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1189,
-                                                                            columnNumber: 35
+                                                                            lineNumber: 1175,
+                                                                            columnNumber: 37
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "truncate",
                                                                             children: schedule.location
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1190,
-                                                                            columnNumber: 35
+                                                                            lineNumber: 1176,
+                                                                            columnNumber: 37
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                    lineNumber: 1188,
-                                                                    columnNumber: 33
+                                                                    lineNumber: 1174,
+                                                                    columnNumber: 35
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                     className: "flex items-center text-gray-400",
@@ -8037,8 +8037,8 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                             className: "mr-2 flex-shrink-0"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1194,
-                                                                            columnNumber: 33
+                                                                            lineNumber: 1180,
+                                                                            columnNumber: 35
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "truncate",
@@ -8049,14 +8049,14 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1195,
-                                                                            columnNumber: 33
+                                                                            lineNumber: 1181,
+                                                                            columnNumber: 35
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                    lineNumber: 1193,
-                                                                    columnNumber: 31
+                                                                    lineNumber: 1179,
+                                                                    columnNumber: 33
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                     className: "flex items-center text-gray-400",
@@ -8065,8 +8065,8 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                             className: "mr-2 flex-shrink-0"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1198,
-                                                                            columnNumber: 33
+                                                                            lineNumber: 1184,
+                                                                            columnNumber: 35
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "truncate",
@@ -8076,26 +8076,26 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                            lineNumber: 1199,
-                                                                            columnNumber: 33
+                                                                            lineNumber: 1185,
+                                                                            columnNumber: 35
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                    lineNumber: 1197,
-                                                                    columnNumber: 31
+                                                                    lineNumber: 1183,
+                                                                    columnNumber: 33
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 1178,
-                                                            columnNumber: 29
+                                                            lineNumber: 1164,
+                                                            columnNumber: 31
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 1170,
-                                                    columnNumber: 27
+                                                    lineNumber: 1156,
+                                                    columnNumber: 29
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3",
@@ -8109,8 +8109,8 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                             children: t('bookNow')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 1206,
-                                                            columnNumber: 31
+                                                            lineNumber: 1192,
+                                                            columnNumber: 33
                                                         }, this),
                                                         showManagement && user?.role === 'coach' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "flex gap-2",
@@ -8126,13 +8126,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                         size: 16
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 1227,
-                                                                        columnNumber: 35
+                                                                        lineNumber: 1213,
+                                                                        columnNumber: 37
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                    lineNumber: 1219,
-                                                                    columnNumber: 33
+                                                                    lineNumber: 1205,
+                                                                    columnNumber: 35
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                                     onClick: (e)=>{
@@ -8145,36 +8145,36 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                         size: 16
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 1237,
-                                                                        columnNumber: 35
+                                                                        lineNumber: 1223,
+                                                                        columnNumber: 37
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                    lineNumber: 1229,
-                                                                    columnNumber: 33
+                                                                    lineNumber: 1215,
+                                                                    columnNumber: 35
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 1218,
-                                                            columnNumber: 31
+                                                            lineNumber: 1204,
+                                                            columnNumber: 33
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 1204,
-                                                    columnNumber: 27
+                                                    lineNumber: 1190,
+                                                    columnNumber: 29
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 1169,
-                                            columnNumber: 25
+                                            lineNumber: 1155,
+                                            columnNumber: 27
                                         }, this)
                                     }, schedule.id, false, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1162,
-                                        columnNumber: 23
+                                        lineNumber: 1148,
+                                        columnNumber: 25
                                     }, this);
                                 }) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "bg-black/40 p-6 sm:p-8 rounded-lg text-center",
@@ -8184,16 +8184,16 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                             className: "mx-auto text-gray-400 mb-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 1248,
-                                            columnNumber: 19
+                                            lineNumber: 1234,
+                                            columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "text-gray-400 mb-4",
                                             children: t('noCoursesScheduled')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 1249,
-                                            columnNumber: 19
+                                            lineNumber: 1235,
+                                            columnNumber: 21
                                         }, this),
                                         showManagement && user?.role === 'coach' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                             onClick: ()=>{
@@ -8204,30 +8204,30 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                             children: t('scheduleYourFirstCourse')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 1251,
-                                            columnNumber: 21
+                                            lineNumber: 1237,
+                                            columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                    lineNumber: 1247,
-                                    columnNumber: 17
+                                    lineNumber: 1233,
+                                    columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                lineNumber: 1149,
-                                columnNumber: 13
+                                lineNumber: 1135,
+                                columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                            lineNumber: 867,
-                            columnNumber: 9
+                            lineNumber: 863,
+                            columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/CourseCalendar.tsx",
                     lineNumber: 703,
-                    columnNumber: 5
+                    columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/CourseCalendar.tsx",
@@ -8264,7 +8264,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 children: course.title
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1285,
+                                                lineNumber: 1271,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -8274,18 +8274,18 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                     size: 20
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                    lineNumber: 1290,
+                                                    lineNumber: 1276,
                                                     columnNumber: 25
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1286,
+                                                lineNumber: 1272,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1284,
+                                        lineNumber: 1270,
                                         columnNumber: 21
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8297,7 +8297,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 className: "w-full h-40 object-cover rounded-lg"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1295,
+                                                lineNumber: 1281,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8305,7 +8305,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 children: course.description
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1301,
+                                                lineNumber: 1287,
                                                 columnNumber: 23
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8318,20 +8318,20 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                 className: "mr-2 text-[#D91CD2]"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1305,
+                                                                lineNumber: 1291,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: formatDate(selectedSchedule.startTime)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1306,
+                                                                lineNumber: 1292,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1304,
+                                                        lineNumber: 1290,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8341,7 +8341,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                 className: "mr-2 text-[#D91CD2]"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1309,
+                                                                lineNumber: 1295,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -8352,13 +8352,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1310,
+                                                                lineNumber: 1296,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1308,
+                                                        lineNumber: 1294,
                                                         columnNumber: 25
                                                     }, this),
                                                     selectedSchedule.location && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8368,20 +8368,20 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                 className: "mr-2 text-[#D91CD2]"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1314,
+                                                                lineNumber: 1300,
                                                                 columnNumber: 29
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: selectedSchedule.location
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1315,
+                                                                lineNumber: 1301,
                                                                 columnNumber: 29
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1313,
+                                                        lineNumber: 1299,
                                                         columnNumber: 27
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8391,7 +8391,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                 className: "flex items-center"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1319,
+                                                                lineNumber: 1305,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -8404,19 +8404,19 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1320,
+                                                                lineNumber: 1306,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1318,
+                                                        lineNumber: 1304,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1303,
+                                                lineNumber: 1289,
                                                 columnNumber: 23
                                             }, this),
                                             selectedSchedule.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8426,7 +8426,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         children: t('additionalInformation')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1326,
+                                                        lineNumber: 1312,
                                                         columnNumber: 27
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8434,13 +8434,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         children: selectedSchedule.description
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1327,
+                                                        lineNumber: 1313,
                                                         columnNumber: 27
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1325,
+                                                lineNumber: 1311,
                                                 columnNumber: 25
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8455,7 +8455,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1332,
+                                                        lineNumber: 1318,
                                                         columnNumber: 25
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -8466,13 +8466,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1335,
+                                                        lineNumber: 1321,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1331,
+                                                lineNumber: 1317,
                                                 columnNumber: 23
                                             }, this),
                                             onBookCourse && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -8484,7 +8484,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 children: t('bookThisCourse')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1339,
+                                                lineNumber: 1325,
                                                 columnNumber: 25
                                             }, this),
                                             showManagement && user?.role === 'coach' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -8499,26 +8499,26 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         size: 18
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1360,
+                                                        lineNumber: 1346,
                                                         columnNumber: 27
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: t('Scan Reservations')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1361,
+                                                        lineNumber: 1347,
                                                         columnNumber: 27
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1352,
+                                                lineNumber: 1338,
                                                 columnNumber: 25
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1294,
+                                        lineNumber: 1280,
                                         columnNumber: 21
                                     }, this)
                                 ]
@@ -8526,17 +8526,17 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                         })()
                     }, void 0, false, {
                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                        lineNumber: 1272,
+                        lineNumber: 1258,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                    lineNumber: 1271,
+                    lineNumber: 1257,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                lineNumber: 1269,
+                lineNumber: 1255,
                 columnNumber: 7
             }, this),
             scannerSchedule && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$HelmetReservationScanner$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -8548,7 +8548,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                 schedule: scannerSchedule
             }, void 0, false, {
                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                lineNumber: 1375,
+                lineNumber: 1361,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -8574,7 +8574,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                 children: editingSchedule ? t('editSchedule') : t('scheduleCourse')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                lineNumber: 1395,
+                                lineNumber: 1381,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -8588,7 +8588,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 children: t('course')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1401,
+                                                lineNumber: 1387,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -8605,7 +8605,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         children: t('selectACourse')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1408,
+                                                        lineNumber: 1394,
                                                         columnNumber: 21
                                                     }, this),
                                                     courses.map((course)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -8613,23 +8613,23 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                             children: course.title
                                                         }, course.id, false, {
                                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                            lineNumber: 1410,
+                                                            lineNumber: 1396,
                                                             columnNumber: 23
                                                         }, this))
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1402,
+                                                lineNumber: 1388,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1400,
+                                        lineNumber: 1386,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "grid grid-cols-2 gap-4",
+                                        className: "grid grid-cols-1 md:grid-cols-2 gap-4",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 children: [
@@ -8638,7 +8638,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         children: t('startTime')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1417,
+                                                        lineNumber: 1403,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -8655,13 +8655,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         }
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1418,
+                                                        lineNumber: 1404,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1416,
+                                                lineNumber: 1402,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8671,7 +8671,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         children: t('endTime')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1428,
+                                                        lineNumber: 1414,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -8688,19 +8688,19 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         }
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1429,
+                                                        lineNumber: 1415,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1427,
+                                                lineNumber: 1413,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1415,
+                                        lineNumber: 1401,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8710,7 +8710,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 children: t('level')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1441,
+                                                lineNumber: 1427,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -8727,7 +8727,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         children: t('allLevels')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1448,
+                                                        lineNumber: 1434,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -8735,7 +8735,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         children: t('beginner')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1449,
+                                                        lineNumber: 1435,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -8743,7 +8743,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         children: t('intermediate')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1450,
+                                                        lineNumber: 1436,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -8751,19 +8751,19 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         children: t('advanced')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1451,
+                                                        lineNumber: 1437,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1442,
+                                                lineNumber: 1428,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1440,
+                                        lineNumber: 1426,
                                         columnNumber: 17
                                     }, this),
                                     !editingSchedule && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8778,7 +8778,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1458,
+                                                lineNumber: 1444,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8841,7 +8841,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                         className: "w-4 h-4 text-[#D91CD2] bg-gray-700 border-gray-600 rounded focus:ring-[#D91CD2] focus:ring-2"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 1476,
+                                                                        lineNumber: 1462,
                                                                         columnNumber: 29
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -8849,18 +8849,18 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                                         children: day.label
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                        lineNumber: 1495,
+                                                                        lineNumber: 1481,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 ]
                                                             }, day.value, true, {
                                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                                lineNumber: 1472,
+                                                                lineNumber: 1458,
                                                                 columnNumber: 27
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1462,
+                                                        lineNumber: 1448,
                                                         columnNumber: 23
                                                     }, this),
                                                     formData.repeatDays && formData.repeatDays.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8868,19 +8868,19 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         children: t('schedulesWillBeCreatedForNext12Weeks') || 'Schedules will be created for the next 12 weeks on selected days'
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1500,
+                                                        lineNumber: 1486,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1461,
+                                                lineNumber: 1447,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1457,
+                                        lineNumber: 1443,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8895,7 +8895,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1509,
+                                                lineNumber: 1495,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -8909,13 +8909,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 placeholder: t('e.g.StudioA,Online')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1510,
+                                                lineNumber: 1496,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1508,
+                                        lineNumber: 1494,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8930,7 +8930,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1520,
+                                                lineNumber: 1506,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -8943,13 +8943,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 placeholder: t('anyAdditionalInformationForStudents')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1521,
+                                                lineNumber: 1507,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1519,
+                                        lineNumber: 1505,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8967,7 +8967,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1531,
+                                                        lineNumber: 1517,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -8983,13 +8983,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         max: "50"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1532,
+                                                        lineNumber: 1518,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1530,
+                                                lineNumber: 1516,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9004,7 +9004,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1543,
+                                                        lineNumber: 1529,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -9020,19 +9020,19 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         step: "0.01"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1544,
+                                                        lineNumber: 1530,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1542,
+                                                lineNumber: 1528,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1529,
+                                        lineNumber: 1515,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9049,7 +9049,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 children: t('cancel')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1557,
+                                                lineNumber: 1543,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9059,35 +9059,35 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 children: isLoading ? t('saving') : editingSchedule ? t('updateSchedule') : t('createSchedule')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1568,
+                                                lineNumber: 1554,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1556,
+                                        lineNumber: 1542,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                lineNumber: 1399,
+                                lineNumber: 1385,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                        lineNumber: 1389,
+                        lineNumber: 1375,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                    lineNumber: 1388,
+                    lineNumber: 1374,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                lineNumber: 1386,
+                lineNumber: 1372,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -9116,7 +9116,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                         size: 24
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1593,
+                                        lineNumber: 1579,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -9124,13 +9124,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                         children: t('confirmAction')
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1594,
+                                        lineNumber: 1580,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                lineNumber: 1592,
+                                lineNumber: 1578,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9138,7 +9138,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                 children: confirmationModal.message
                             }, void 0, false, {
                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                lineNumber: 1597,
+                                lineNumber: 1583,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9153,7 +9153,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                         children: t('cancel')
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1600,
+                                        lineNumber: 1586,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9162,29 +9162,29 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                         children: confirmationModal.type === 'delete' ? t('delete') : confirmationModal.type === 'move' ? t('move') : t('duplicate')
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1606,
+                                        lineNumber: 1592,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                lineNumber: 1599,
+                                lineNumber: 1585,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                        lineNumber: 1586,
+                        lineNumber: 1572,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                    lineNumber: 1585,
+                    lineNumber: 1571,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                lineNumber: 1583,
+                lineNumber: 1569,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -9213,7 +9213,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                         children: t('bulkOperations')
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1634,
+                                        lineNumber: 1619,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9223,18 +9223,18 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                             size: 24
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CourseCalendar.tsx",
-                                            lineNumber: 1639,
+                                            lineNumber: 1624,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1635,
+                                        lineNumber: 1620,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                lineNumber: 1633,
+                                lineNumber: 1618,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9244,7 +9244,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                lineNumber: 1643,
+                                lineNumber: 1628,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9257,7 +9257,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 children: t('targetDate')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1649,
+                                                lineNumber: 1634,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -9273,13 +9273,13 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                 min: new Date().toISOString().split('T')[0]
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1650,
+                                                lineNumber: 1635,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1648,
+                                        lineNumber: 1633,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9298,14 +9298,14 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         size: 16
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1674,
+                                                        lineNumber: 1659,
                                                         columnNumber: 21
                                                     }, this),
                                                     t('move')
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1665,
+                                                lineNumber: 1650,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9321,42 +9321,42 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
                                                         size: 16
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                        lineNumber: 1686,
+                                                        lineNumber: 1671,
                                                         columnNumber: 21
                                                     }, this),
                                                     t('duplicate')
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                                lineNumber: 1677,
+                                                lineNumber: 1662,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                                        lineNumber: 1664,
+                                        lineNumber: 1649,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                                lineNumber: 1647,
+                                lineNumber: 1632,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/CourseCalendar.tsx",
-                        lineNumber: 1627,
+                        lineNumber: 1612,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/CourseCalendar.tsx",
-                    lineNumber: 1626,
+                    lineNumber: 1611,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/CourseCalendar.tsx",
-                lineNumber: 1624,
+                lineNumber: 1609,
                 columnNumber: 7
             }, this)
         ]
@@ -9366,7 +9366,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
         columnNumber: 5
     }, this);
 }
-_s(CourseCalendar, "1U+wIhCw1N6BrEX+rzIGMhzrvbU=", false, function() {
+_s(CourseCalendar, "W5yW+STqKM1r2/Sw51+hfvBOZwI=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$i18next$2f$dist$2f$es$2f$useTranslation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$auth$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]

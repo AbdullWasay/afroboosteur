@@ -3733,7 +3733,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center justify-between text-sm mt-2",
+                                    className: "flex items-start justify-between text-xs sm:text-sm mt-2",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: "text-gray-400",
@@ -3761,7 +3761,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                     columnNumber: 13
                                 }, this),
                                 coachId && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center space-x-2 text-sm mt-2",
+                                    className: "flex items-start space-x-2 text-xs sm:text-sm mt-2",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiAlertCircle"], {
                                             className: "text-yellow-400",
@@ -3772,7 +3772,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "text-yellow-300",
+                                            className: "text-yellow-300 break-words leading-snug pr-1",
                                             children: t('Only discount cards from this coach will be accepted')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
@@ -3919,7 +3919,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "grid grid-cols-3 gap-2 mb-6",
+                            className: "flex flex-col sm:grid sm:grid-cols-3 gap-2 mb-6",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>{
@@ -3927,7 +3927,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                         setUseManualEntry(false);
                                         setUseCameraScanner(false);
                                     },
-                                    className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${!useManualEntry && !useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                    className: `py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${!useManualEntry && !useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                     children: t('Upload Image')
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
@@ -3942,21 +3942,21 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                         setUseCameraScanner(true);
                                         await startCamera();
                                     },
-                                    className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                    className: `py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiCamera"], {
                                             className: "inline mr-1",
                                             size: 14
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 506,
+                                            lineNumber: 504,
                                             columnNumber: 15
                                         }, this),
                                         t('Scan QR')
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 492,
+                                    lineNumber: 491,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3965,11 +3965,11 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                         setUseManualEntry(true);
                                         setUseCameraScanner(false);
                                     },
-                                    className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${useManualEntry ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                    className: `py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${useManualEntry ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                     children: t('Manual Entry')
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 509,
+                                    lineNumber: 507,
                                     columnNumber: 13
                                 }, this)
                             ]
@@ -3992,7 +3992,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                             autoPlay: true
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 530,
+                                            lineNumber: 527,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("canvas", {
@@ -4000,7 +4000,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                             className: "hidden"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 537,
+                                            lineNumber: 534,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4016,7 +4016,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                                 children: isCameraActive ? t('Point camera at discount card QR code') : t('Starting camera...')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 543,
+                                                                lineNumber: 540,
                                                                 columnNumber: 23
                                                             }, this),
                                                             detectedCode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4024,18 +4024,18 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                                 children: t('QR Code detected!')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 550,
+                                                                lineNumber: 547,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                        lineNumber: 542,
+                                                        lineNumber: 539,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 541,
+                                                    lineNumber: 538,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4047,51 +4047,51 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                                 className: "w-6 h-6 border-t-2 border-l-2 border-purple-400 absolute top-2 left-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 560,
+                                                                lineNumber: 557,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "w-6 h-6 border-t-2 border-r-2 border-purple-400 absolute top-2 right-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 561,
+                                                                lineNumber: 558,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "w-6 h-6 border-b-2 border-l-2 border-purple-400 absolute bottom-2 left-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 562,
+                                                                lineNumber: 559,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "w-6 h-6 border-b-2 border-r-2 border-purple-400 absolute bottom-2 right-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                                lineNumber: 563,
+                                                                lineNumber: 560,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                        lineNumber: 559,
+                                                        lineNumber: 556,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 558,
+                                                    lineNumber: 555,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 540,
+                                            lineNumber: 537,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 529,
+                                    lineNumber: 526,
                                     columnNumber: 15
                                 }, this),
                                 cameraError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4103,7 +4103,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 size: 16
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 572,
+                                                lineNumber: 569,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4111,18 +4111,18 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 children: cameraError
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 573,
+                                                lineNumber: 570,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                        lineNumber: 571,
+                                        lineNumber: 568,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 570,
+                                    lineNumber: 567,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4136,20 +4136,20 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                     size: 18
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 583,
+                                                    lineNumber: 580,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('Stop Camera')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 584,
+                                                    lineNumber: 581,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 579,
+                                            lineNumber: 576,
                                             columnNumber: 17
                                         }, this),
                                         !cameraError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4161,32 +4161,32 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                     size: 18
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 592,
+                                                    lineNumber: 589,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: isCameraActive && !cameraError ? t('Camera Active') : t('Start Camera')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 593,
+                                                    lineNumber: 590,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 587,
+                                            lineNumber: 584,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 578,
+                                    lineNumber: 575,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                            lineNumber: 528,
+                            lineNumber: 525,
                             columnNumber: 13
                         }, this) : !useManualEntry ? /* QR Code Upload */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "space-y-4",
@@ -4207,12 +4207,12 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                     className: "w-full h-full object-contain"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                    lineNumber: 608,
+                                                    lineNumber: 605,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 607,
+                                                lineNumber: 604,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4220,13 +4220,13 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 children: t('QR code image selected. Click validate to continue.')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 616,
+                                                lineNumber: 613,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                        lineNumber: 606,
+                                        lineNumber: 603,
                                         columnNumber: 19
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "space-y-4",
@@ -4235,7 +4235,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 className: "text-4xl text-gray-400 mx-auto"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 622,
+                                                lineNumber: 619,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4245,7 +4245,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                         children: t('Upload Discount Card QR Code')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                        lineNumber: 624,
+                                                        lineNumber: 621,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4253,24 +4253,24 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                         children: t('Click to select a PNG/JPG image containing the discount card QR code')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                        lineNumber: 625,
+                                                        lineNumber: 622,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 623,
+                                                lineNumber: 620,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                        lineNumber: 621,
+                                        lineNumber: 618,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 601,
+                                    lineNumber: 598,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4281,7 +4281,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                     className: "hidden"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 633,
+                                    lineNumber: 630,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4294,14 +4294,14 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 className: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 648,
+                                                lineNumber: 645,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: t('Validating...')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 649,
+                                                lineNumber: 646,
                                                 columnNumber: 21
                                             }, this)
                                         ]
@@ -4311,27 +4311,27 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 size: 18
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 653,
+                                                lineNumber: 650,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: t('Validate Discount Card')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 654,
+                                                lineNumber: 651,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 641,
+                                    lineNumber: 638,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                            lineNumber: 600,
+                            lineNumber: 597,
                             columnNumber: 13
                         }, this) : /* Manual Code Entry */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "space-y-4",
@@ -4343,7 +4343,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                             children: t('Discount Card Code')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 663,
+                                            lineNumber: 660,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4354,13 +4354,13 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                             className: "w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                            lineNumber: 666,
+                                            lineNumber: 663,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 662,
+                                    lineNumber: 659,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4373,14 +4373,14 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 className: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 682,
+                                                lineNumber: 679,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: t('Validating...')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 683,
+                                                lineNumber: 680,
                                                 columnNumber: 21
                                             }, this)
                                         ]
@@ -4390,27 +4390,27 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                                 size: 18
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 687,
+                                                lineNumber: 684,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 children: t('Validate Discount Card')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                                lineNumber: 688,
+                                                lineNumber: 685,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                    lineNumber: 675,
+                                    lineNumber: 672,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                            lineNumber: 661,
+                            lineNumber: 658,
                             columnNumber: 13
                         }, this),
                         isValidating && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -4429,7 +4429,7 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                         size: 24
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                        lineNumber: 703,
+                                        lineNumber: 700,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4437,18 +4437,18 @@ function DiscountCardScanner({ onValidation, onClose, customerId, customerName, 
                                         children: t('Validating discount card...')
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                        lineNumber: 704,
+                                        lineNumber: 701,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                                lineNumber: 702,
+                                lineNumber: 699,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/DiscountCardScanner.tsx",
-                            lineNumber: 697,
+                            lineNumber: 694,
                             columnNumber: 13
                         }, this)
                     ]

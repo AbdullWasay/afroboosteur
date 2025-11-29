@@ -47,7 +47,9 @@ function GiftCardManagement({ className = '', userType }) {
         expirationMethod: 'preset',
         customExpirationDate: '',
         customTimeUnit: 'days',
-        customTimeValue: '1'
+        customTimeValue: '1',
+        sendViaEmail: false,
+        recipientEmail: ''
     });
     const [generatingQR, setGeneratingQR] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const statusFilters = [
@@ -191,7 +193,9 @@ function GiftCardManagement({ className = '', userType }) {
                     expirationMethod: 'preset',
                     customExpirationDate: '',
                     customTimeUnit: 'days',
-                    customTimeValue: '1'
+                    customTimeValue: '1',
+                    sendViaEmail: false,
+                    recipientEmail: ''
                 });
             }
         } catch (error) {
@@ -546,7 +550,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                 children: t('Gift Cards Management')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                lineNumber: 558,
+                                lineNumber: 562,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -556,13 +560,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                lineNumber: 559,
+                                lineNumber: 563,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 557,
+                        lineNumber: 561,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -573,26 +577,26 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                 size: 18
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                lineNumber: 567,
+                                lineNumber: 571,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: t('Create Gift Card')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                lineNumber: 568,
+                                lineNumber: 572,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 563,
+                        lineNumber: 567,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                lineNumber: 556,
+                lineNumber: 560,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -603,12 +607,12 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                         children: filter.label
                     }, filter.value, false, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 575,
+                        lineNumber: 579,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                lineNumber: 573,
+                lineNumber: 577,
                 columnNumber: 7
             }, this),
             isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -618,7 +622,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                         className: "w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 592,
+                        lineNumber: 595,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -626,13 +630,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                         children: t('Loading gift cards...')
                     }, void 0, false, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 593,
+                        lineNumber: 596,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                lineNumber: 591,
+                lineNumber: 594,
                 columnNumber: 9
             }, this) : filteredCards.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "space-y-4",
@@ -658,12 +662,12 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                 children: getStatusText(card)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                lineNumber: 608,
+                                                lineNumber: 611,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                            lineNumber: 607,
+                                            lineNumber: 610,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -679,27 +683,27 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         className: "w-full h-full object-contain"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 616,
-                                                        columnNumber: 21
+                                                        lineNumber: 619,
+                                                        columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 615,
-                                                    columnNumber: 19
+                                                    lineNumber: 618,
+                                                    columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-gray-400 text-sm font-mono",
                                                     children: card.cardCode
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 624,
-                                                    columnNumber: 19
+                                                    lineNumber: 627,
+                                                    columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                            lineNumber: 614,
-                                            columnNumber: 17
+                                            lineNumber: 617,
+                                            columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "space-y-3",
@@ -715,8 +719,8 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 630,
-                                                            columnNumber: 21
+                                                            lineNumber: 633,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "text-xl font-bold text-purple-400",
@@ -727,14 +731,14 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 631,
-                                                            columnNumber: 21
+                                                            lineNumber: 634,
+                                                            columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 629,
-                                                    columnNumber: 19
+                                                    lineNumber: 632,
+                                                    columnNumber: 21
                                                 }, this),
                                                 card.isUsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "flex items-center justify-between",
@@ -747,8 +751,8 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 638,
-                                                            columnNumber: 23
+                                                            lineNumber: 641,
+                                                            columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "text-lg font-semibold text-green-400",
@@ -759,14 +763,14 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 639,
-                                                            columnNumber: 23
+                                                            lineNumber: 642,
+                                                            columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 637,
-                                                    columnNumber: 21
+                                                    lineNumber: 640,
+                                                    columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "flex items-center justify-between",
@@ -779,22 +783,22 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 646,
-                                                            columnNumber: 21
+                                                            lineNumber: 649,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "text-white text-sm",
                                                             children: formatDate(card.expirationDate)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 647,
-                                                            columnNumber: 21
+                                                            lineNumber: 650,
+                                                            columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 645,
-                                                    columnNumber: 19
+                                                    lineNumber: 648,
+                                                    columnNumber: 21
                                                 }, this),
                                                 card.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     children: [
@@ -806,22 +810,22 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 652,
-                                                            columnNumber: 23
+                                                            lineNumber: 655,
+                                                            columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                             className: "text-white text-sm mt-1 break-words overflow-hidden leading-relaxed",
                                                             children: card.description
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 653,
-                                                            columnNumber: 23
+                                                            lineNumber: 656,
+                                                            columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 651,
-                                                    columnNumber: 21
+                                                    lineNumber: 654,
+                                                    columnNumber: 23
                                                 }, this),
                                                 card.isUsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "pt-3 border-t border-gray-700 space-y-2",
@@ -837,22 +841,22 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 662,
-                                                                    columnNumber: 25
+                                                                    lineNumber: 665,
+                                                                    columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     className: "text-white text-sm text-right break-words ml-2 min-w-0",
                                                                     children: card.usedByName || 'Unknown'
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 663,
-                                                                    columnNumber: 25
+                                                                    lineNumber: 666,
+                                                                    columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 661,
-                                                            columnNumber: 23
+                                                            lineNumber: 664,
+                                                            columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "flex items-center justify-between",
@@ -865,34 +869,34 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 666,
-                                                                    columnNumber: 25
+                                                                    lineNumber: 669,
+                                                                    columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     className: "text-white text-sm",
                                                                     children: formatDate(card.usedAt)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 667,
-                                                                    columnNumber: 25
+                                                                    lineNumber: 670,
+                                                                    columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 665,
-                                                            columnNumber: 23
+                                                            lineNumber: 668,
+                                                            columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 660,
-                                                    columnNumber: 21
+                                                    lineNumber: 663,
+                                                    columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                            lineNumber: 628,
-                                            columnNumber: 17
+                                            lineNumber: 631,
+                                            columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "flex flex-col sm:flex-row sm:items-center sm:justify-between mt-6 pt-4 border-t border-gray-700 space-y-3 sm:space-y-0",
@@ -908,13 +912,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 681,
-                                                                columnNumber: 23
+                                                                lineNumber: 684,
+                                                                columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 676,
-                                                            columnNumber: 21
+                                                            lineNumber: 679,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             onClick: ()=>shareQRCode(card),
@@ -924,13 +928,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 688,
-                                                                columnNumber: 23
+                                                                lineNumber: 691,
+                                                                columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 683,
-                                                            columnNumber: 21
+                                                            lineNumber: 686,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             onClick: ()=>downloadCompleteCard(card),
@@ -940,13 +944,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 695,
-                                                                columnNumber: 23
+                                                                lineNumber: 698,
+                                                                columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 690,
-                                                            columnNumber: 21
+                                                            lineNumber: 693,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             onClick: ()=>copyCardCode(card.cardCode),
@@ -956,19 +960,19 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 702,
-                                                                columnNumber: 23
+                                                                lineNumber: 705,
+                                                                columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 697,
-                                                            columnNumber: 21
+                                                            lineNumber: 700,
+                                                            columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 675,
-                                                    columnNumber: 19
+                                                    lineNumber: 678,
+                                                    columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "flex items-center justify-center sm:justify-end space-x-2",
@@ -981,13 +985,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 713,
-                                                                columnNumber: 25
+                                                                lineNumber: 716,
+                                                                columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 708,
-                                                            columnNumber: 23
+                                                            lineNumber: 711,
+                                                            columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             onClick: ()=>handleDeleteCard(card.id),
@@ -997,40 +1001,40 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 721,
-                                                                columnNumber: 23
+                                                                lineNumber: 724,
+                                                                columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 716,
-                                                            columnNumber: 21
+                                                            lineNumber: 719,
+                                                            columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 706,
-                                                    columnNumber: 19
+                                                    lineNumber: 709,
+                                                    columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                            lineNumber: 674,
-                                            columnNumber: 17
+                                            lineNumber: 677,
+                                            columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                    lineNumber: 605,
+                                    lineNumber: 608,
                                     columnNumber: 17
                                 }, this)
                             }, card.id, false, {
                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                lineNumber: 600,
+                                lineNumber: 603,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 598,
+                        lineNumber: 601,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1058,13 +1062,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         children: getStatusText(card)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 743,
-                                                        columnNumber: 21
+                                                        lineNumber: 746,
+                                                        columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 742,
-                                                    columnNumber: 19
+                                                    lineNumber: 745,
+                                                    columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "text-center mb-6",
@@ -1079,27 +1083,27 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 className: "w-full h-full object-contain"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 751,
-                                                                columnNumber: 23
+                                                                lineNumber: 754,
+                                                                columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 750,
-                                                            columnNumber: 21
+                                                            lineNumber: 753,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                             className: "text-gray-400 text-sm font-mono",
                                                             children: card.cardCode
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 759,
-                                                            columnNumber: 21
+                                                            lineNumber: 762,
+                                                            columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 749,
-                                                    columnNumber: 19
+                                                    lineNumber: 752,
+                                                    columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "space-y-3",
@@ -1115,8 +1119,8 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 765,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 768,
+                                                                    columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     className: "text-xl font-bold text-purple-400",
@@ -1127,14 +1131,14 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 766,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 769,
+                                                                    columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 764,
-                                                            columnNumber: 21
+                                                            lineNumber: 767,
+                                                            columnNumber: 23
                                                         }, this),
                                                         card.isUsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "flex items-center justify-between",
@@ -1147,8 +1151,8 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 773,
-                                                                    columnNumber: 25
+                                                                    lineNumber: 776,
+                                                                    columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     className: "text-lg font-semibold text-green-400",
@@ -1159,14 +1163,14 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 774,
-                                                                    columnNumber: 25
+                                                                    lineNumber: 777,
+                                                                    columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 772,
-                                                            columnNumber: 23
+                                                            lineNumber: 775,
+                                                            columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "flex items-center justify-between",
@@ -1179,22 +1183,22 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 781,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 784,
+                                                                    columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     className: "text-white text-sm",
                                                                     children: formatDate(card.expirationDate)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 782,
-                                                                    columnNumber: 23
+                                                                    lineNumber: 785,
+                                                                    columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 780,
-                                                            columnNumber: 21
+                                                            lineNumber: 783,
+                                                            columnNumber: 23
                                                         }, this),
                                                         card.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             children: [
@@ -1206,22 +1210,22 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 787,
-                                                                    columnNumber: 25
+                                                                    lineNumber: 790,
+                                                                    columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                     className: "text-white text-sm mt-1",
                                                                     children: card.description
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 788,
-                                                                    columnNumber: 25
+                                                                    lineNumber: 791,
+                                                                    columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 786,
-                                                            columnNumber: 23
+                                                            lineNumber: 789,
+                                                            columnNumber: 25
                                                         }, this),
                                                         card.isUsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "pt-3 border-t border-gray-700 space-y-2",
@@ -1237,22 +1241,22 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                            lineNumber: 795,
-                                                                            columnNumber: 27
+                                                                            lineNumber: 798,
+                                                                            columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "text-white text-sm",
                                                                             children: card.usedByName || 'Unknown'
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                            lineNumber: 796,
-                                                                            columnNumber: 27
+                                                                            lineNumber: 799,
+                                                                            columnNumber: 29
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 794,
-                                                                    columnNumber: 25
+                                                                    lineNumber: 797,
+                                                                    columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                     className: "flex items-center justify-between",
@@ -1265,34 +1269,34 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                            lineNumber: 799,
-                                                                            columnNumber: 27
+                                                                            lineNumber: 802,
+                                                                            columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "text-white text-sm",
                                                                             children: formatDate(card.usedAt)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                            lineNumber: 800,
-                                                                            columnNumber: 27
+                                                                            lineNumber: 803,
+                                                                            columnNumber: 29
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                    lineNumber: 798,
-                                                                    columnNumber: 25
+                                                                    lineNumber: 801,
+                                                                    columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 793,
-                                                            columnNumber: 23
+                                                            lineNumber: 796,
+                                                            columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 763,
-                                                    columnNumber: 19
+                                                    lineNumber: 766,
+                                                    columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "flex flex-wrap items-center justify-center gap-2 mt-6 pt-4 border-t border-gray-700",
@@ -1305,13 +1309,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 813,
-                                                                columnNumber: 23
+                                                                lineNumber: 816,
+                                                                columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 808,
-                                                            columnNumber: 21
+                                                            lineNumber: 811,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             onClick: ()=>downloadCompleteCard(card),
@@ -1321,13 +1325,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 820,
-                                                                columnNumber: 23
+                                                                lineNumber: 823,
+                                                                columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 815,
-                                                            columnNumber: 21
+                                                            lineNumber: 818,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             onClick: ()=>shareQRCode(card),
@@ -1337,13 +1341,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 827,
-                                                                columnNumber: 23
+                                                                lineNumber: 830,
+                                                                columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 822,
-                                                            columnNumber: 21
+                                                            lineNumber: 825,
+                                                            columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             onClick: ()=>copyCardCode(card.cardCode),
@@ -1353,13 +1357,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 834,
-                                                                columnNumber: 23
+                                                                lineNumber: 837,
+                                                                columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 829,
-                                                            columnNumber: 21
+                                                            lineNumber: 832,
+                                                            columnNumber: 23
                                                         }, this),
                                                         card.isActive && !card.isUsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             onClick: ()=>handleDeactivateCard(card.id),
@@ -1369,13 +1373,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 842,
-                                                                columnNumber: 23
+                                                                lineNumber: 845,
+                                                                columnNumber: 27
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 837,
-                                                            columnNumber: 23
+                                                            lineNumber: 840,
+                                                            columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             onClick: ()=>handleDeleteCard(card.id),
@@ -1385,35 +1389,35 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 size: 18
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 850,
-                                                                columnNumber: 23
+                                                                lineNumber: 853,
+                                                                columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                            lineNumber: 845,
-                                                            columnNumber: 21
+                                                            lineNumber: 848,
+                                                            columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 807,
+                                                    lineNumber: 810,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                            lineNumber: 740,
-                                            columnNumber: 17
+                                            lineNumber: 743,
+                                            columnNumber: 19
                                         }, this)
                                     }, `mobile-${card.id}`, false, {
                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                        lineNumber: 734,
-                                        columnNumber: 15
+                                        lineNumber: 737,
+                                        columnNumber: 17
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                lineNumber: 732,
-                                columnNumber: 11
+                                lineNumber: 735,
+                                columnNumber: 13
                             }, this),
                             filteredCards.length > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "text-center mt-2",
@@ -1422,24 +1426,24 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                     children: t('Swipe left to see more cards')
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                    lineNumber: 861,
-                                    columnNumber: 15
+                                    lineNumber: 864,
+                                    columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                lineNumber: 860,
-                                columnNumber: 13
+                                lineNumber: 863,
+                                columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 731,
-                        columnNumber: 9
+                        lineNumber: 734,
+                        columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                lineNumber: 596,
+                lineNumber: 599,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "text-center py-16",
@@ -1448,7 +1452,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                         className: "text-6xl text-gray-600 mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 868,
+                        lineNumber: 871,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1456,7 +1460,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                         children: statusFilter === 'all' ? t('No gift cards yet') : t('No gift cards with this status')
                     }, void 0, false, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 869,
+                        lineNumber: 872,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1464,7 +1468,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                         children: statusFilter === 'all' ? t('Create your first gift card to start selling gift cards to your customers.') : t('Try selecting a different status filter.')
                     }, void 0, false, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 872,
+                        lineNumber: 875,
                         columnNumber: 11
                     }, this),
                     statusFilter === 'all' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1473,13 +1477,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                         children: t('Create Gift Card')
                     }, void 0, false, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 879,
+                        lineNumber: 882,
                         columnNumber: 13
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                lineNumber: 867,
+                lineNumber: 870,
                 columnNumber: 9
             }, this),
             showCreateModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1493,7 +1497,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                         opacity: 1,
                         scale: 1
                     },
-                    className: "bg-gray-900 rounded-lg max-w-md w-full",
+                    className: "bg-gray-900 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "p-6",
                         children: [
@@ -1505,7 +1509,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                         children: t('Create Gift Card')
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                        lineNumber: 899,
+                                        lineNumber: 902,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1515,23 +1519,99 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                             size: 24
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                            lineNumber: 904,
+                                            lineNumber: 907,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                        lineNumber: 900,
+                                        lineNumber: 903,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                lineNumber: 898,
+                                lineNumber: 901,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex space-x-2 mb-6 border-b border-gray-700",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>setCardForm((prev)=>({
+                                                    ...prev,
+                                                    sendViaEmail: false,
+                                                    recipientEmail: ''
+                                                })),
+                                        className: `px-4 py-2 text-sm font-medium transition-colors border-b-2 ${!cardForm.sendViaEmail ? 'border-purple-500 text-purple-400' : 'border-transparent text-gray-400 hover:text-white'}`,
+                                        children: t('Create Card')
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/GiftCardManagement.tsx",
+                                        lineNumber: 913,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>setCardForm((prev)=>({
+                                                    ...prev,
+                                                    sendViaEmail: true
+                                                })),
+                                        className: `px-4 py-2 text-sm font-medium transition-colors border-b-2 ${cardForm.sendViaEmail ? 'border-purple-500 text-purple-400' : 'border-transparent text-gray-400 hover:text-white'}`,
+                                        children: t('Create & Send via Email')
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/GiftCardManagement.tsx",
+                                        lineNumber: 922,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/GiftCardManagement.tsx",
+                                lineNumber: 912,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "space-y-4",
                                 children: [
+                                    cardForm.sendViaEmail && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "block text-sm font-medium text-gray-300 mb-2",
+                                                children: [
+                                                    t('Recipient Email'),
+                                                    " *"
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/components/GiftCardManagement.tsx",
+                                                lineNumber: 937,
+                                                columnNumber: 21
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                type: "email",
+                                                value: cardForm.recipientEmail || '',
+                                                onChange: (e)=>setCardForm((prev)=>({
+                                                            ...prev,
+                                                            recipientEmail: e.target.value
+                                                        })),
+                                                className: "w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent",
+                                                placeholder: "recipient@example.com",
+                                                required: cardForm.sendViaEmail
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/GiftCardManagement.tsx",
+                                                lineNumber: 940,
+                                                columnNumber: 21
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-xs text-gray-500 mt-1",
+                                                children: t('The gift card will be sent to this email address')
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/components/GiftCardManagement.tsx",
+                                                lineNumber: 948,
+                                                columnNumber: 21
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/components/GiftCardManagement.tsx",
+                                        lineNumber: 936,
+                                        columnNumber: 19
+                                    }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -1542,7 +1622,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                lineNumber: 910,
+                                                lineNumber: 955,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1558,13 +1638,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                 placeholder: "50.00"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                lineNumber: 913,
+                                                lineNumber: 958,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                        lineNumber: 909,
+                                        lineNumber: 954,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1579,7 +1659,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                lineNumber: 925,
+                                                lineNumber: 970,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1593,13 +1673,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                 placeholder: t('Gift card description...')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                lineNumber: 928,
+                                                lineNumber: 973,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                        lineNumber: 924,
+                                        lineNumber: 969,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1612,7 +1692,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                lineNumber: 938,
+                                                lineNumber: 983,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1632,7 +1712,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 className: "mr-2 text-purple-500 focus:ring-purple-500"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 945,
+                                                                lineNumber: 990,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1640,13 +1720,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 children: t('Preset Options')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 952,
+                                                                lineNumber: 997,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 944,
+                                                        lineNumber: 989,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -1663,7 +1743,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 className: "mr-2 text-purple-500 focus:ring-purple-500"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 955,
+                                                                lineNumber: 1000,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1671,19 +1751,19 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 children: t('Custom Period')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 962,
+                                                                lineNumber: 1007,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 954,
+                                                        lineNumber: 999,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                lineNumber: 943,
+                                                lineNumber: 988,
                                                 columnNumber: 19
                                             }, this),
                                             cardForm.expirationMethod === 'preset' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1702,7 +1782,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 973,
+                                                        lineNumber: 1018,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1713,7 +1793,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 974,
+                                                        lineNumber: 1019,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1724,7 +1804,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 975,
+                                                        lineNumber: 1020,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1735,7 +1815,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 976,
+                                                        lineNumber: 1021,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1746,7 +1826,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 977,
+                                                        lineNumber: 1022,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1757,7 +1837,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 978,
+                                                        lineNumber: 1023,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1768,7 +1848,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 979,
+                                                        lineNumber: 1024,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1779,7 +1859,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 980,
+                                                        lineNumber: 1025,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1790,7 +1870,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 981,
+                                                        lineNumber: 1026,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1801,13 +1881,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 982,
+                                                        lineNumber: 1027,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                lineNumber: 968,
+                                                lineNumber: 1013,
                                                 columnNumber: 21
                                             }, this),
                                             cardForm.expirationMethod === 'custom' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1820,7 +1900,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 children: t('Custom Time Period')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 991,
+                                                                lineNumber: 1036,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1838,7 +1918,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                         placeholder: "1"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                        lineNumber: 995,
+                                                                        lineNumber: 1040,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1854,7 +1934,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                                 children: t('Hours')
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                                lineNumber: 1008,
+                                                                                lineNumber: 1053,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1862,7 +1942,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                                 children: t('Days')
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                                lineNumber: 1009,
+                                                                                lineNumber: 1054,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1870,7 +1950,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                                 children: t('Weeks')
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                                lineNumber: 1010,
+                                                                                lineNumber: 1055,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1878,25 +1958,25 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                                 children: t('Months')
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                                lineNumber: 1011,
+                                                                                lineNumber: 1056,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                        lineNumber: 1003,
+                                                                        lineNumber: 1048,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 994,
+                                                                lineNumber: 1039,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 990,
+                                                        lineNumber: 1035,
                                                         columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1906,7 +1986,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 children: t('Or Set Exact Expiration Date')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 1018,
+                                                                lineNumber: 1063,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1920,7 +2000,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 min: new Date().toISOString().slice(0, 16)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 1021,
+                                                                lineNumber: 1066,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1928,31 +2008,31 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                                 children: t('Leave empty to use the time period above')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                                lineNumber: 1028,
+                                                                lineNumber: 1073,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                        lineNumber: 1017,
+                                                        lineNumber: 1062,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                lineNumber: 988,
+                                                lineNumber: 1033,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                        lineNumber: 937,
+                                        lineNumber: 982,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                lineNumber: 908,
+                                lineNumber: 933,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1964,12 +2044,12 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                         children: t('Cancel')
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                        lineNumber: 1038,
+                                        lineNumber: 1083,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         onClick: handleCreateCard,
-                                        disabled: !cardForm.amount || generatingQR,
+                                        disabled: !cardForm.amount || generatingQR || cardForm.sendViaEmail && !cardForm.recipientEmail,
                                         className: "px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2",
                                         children: generatingQR ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                                             children: [
@@ -1977,14 +2057,14 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                     className: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 1051,
+                                                    lineNumber: 1096,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('Creating...')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 1052,
+                                                    lineNumber: 1097,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
@@ -1994,53 +2074,53 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                                                     size: 18
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 1056,
+                                                    lineNumber: 1101,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    children: t('Create')
+                                                    children: cardForm.sendViaEmail ? t('Create & Send') : t('Create')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                                    lineNumber: 1057,
+                                                    lineNumber: 1102,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                        lineNumber: 1044,
+                                        lineNumber: 1089,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                                lineNumber: 1037,
+                                lineNumber: 1082,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/GiftCardManagement.tsx",
-                        lineNumber: 897,
+                        lineNumber: 900,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/GiftCardManagement.tsx",
-                    lineNumber: 892,
+                    lineNumber: 895,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/GiftCardManagement.tsx",
-                lineNumber: 891,
+                lineNumber: 894,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/GiftCardManagement.tsx",
-        lineNumber: 554,
+        lineNumber: 558,
         columnNumber: 5
     }, this);
 }
-_s(GiftCardManagement, "x4YB6adboWQ+vvep80xisAFiT1Y=", false, function() {
+_s(GiftCardManagement, "/qWWhKgHZqbleJU7vsPPz59cJ88=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$i18next$2f$dist$2f$es$2f$useTranslation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$auth$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]

@@ -7877,6 +7877,7 @@ function DiscountCardManagement({ coachId }) {
     const [showCreateModal, setShowCreateModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [selectedCard, setSelectedCard] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [filter, setFilter] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('all');
+    const [searchTerm, setSearchTerm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "DiscountCardManagement.useEffect": ()=>{
             loadDiscountCards();
@@ -8285,6 +8286,15 @@ function DiscountCardManagement({ coachId }) {
                 const usageCount = typeof card.usageCount === 'number' ? card.usageCount : 0;
                 const usageLimit = typeof card.usageLimit === 'number' ? card.usageLimit : null;
                 const isUsedUp = usageLimit ? usageCount >= usageLimit : false;
+                const lowerSearch = searchTerm.trim().toLowerCase();
+                if (lowerSearch) {
+                    const name = (card.memberName || '').toLowerCase();
+                    const email = (card.memberEmail || '').toLowerCase();
+                    const code = (card.code || '').toLowerCase();
+                    const courseName = (card.courseName || '').toLowerCase();
+                    const matchesSearch = name.includes(lowerSearch) || email.includes(lowerSearch) || code.includes(lowerSearch) || courseName.includes(lowerSearch);
+                    if (!matchesSearch) return false;
+                }
                 switch(filter){
                     case 'active':
                         return card.isActive && !isExpired && !isUsedUp;
@@ -8344,12 +8354,12 @@ function DiscountCardManagement({ coachId }) {
                 className: "w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"
             }, void 0, false, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 556,
+                lineNumber: 571,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-            lineNumber: 555,
+            lineNumber: 570,
             columnNumber: 7
         }, this);
     }
@@ -8366,7 +8376,7 @@ function DiscountCardManagement({ coachId }) {
                                 children: t('Discount Cards Management')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                lineNumber: 566,
+                                lineNumber: 581,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8374,13 +8384,13 @@ function DiscountCardManagement({ coachId }) {
                                 children: t('Create and manage discount cards for your students')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                lineNumber: 567,
+                                lineNumber: 582,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 565,
+                        lineNumber: 580,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -8391,26 +8401,26 @@ function DiscountCardManagement({ coachId }) {
                                 size: 18
                             }, void 0, false, {
                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                lineNumber: 575,
+                                lineNumber: 590,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: t('Create Discount Card')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                lineNumber: 576,
+                                lineNumber: 591,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 571,
+                        lineNumber: 586,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 564,
+                lineNumber: 579,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8431,7 +8441,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Total Cards')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 588,
+                                            lineNumber: 603,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8439,13 +8449,13 @@ function DiscountCardManagement({ coachId }) {
                                             children: Array.isArray(discountCards) ? discountCards.length : 0
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 589,
+                                            lineNumber: 604,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 587,
+                                    lineNumber: 602,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiPercent"], {
@@ -8453,18 +8463,18 @@ function DiscountCardManagement({ coachId }) {
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 591,
+                                    lineNumber: 606,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                            lineNumber: 586,
+                            lineNumber: 601,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 582,
+                        lineNumber: 597,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -8482,7 +8492,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Active Cards')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 601,
+                                            lineNumber: 616,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8496,13 +8506,13 @@ function DiscountCardManagement({ coachId }) {
                                             }).length
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 602,
+                                            lineNumber: 617,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 600,
+                                    lineNumber: 615,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiCheckCircle"], {
@@ -8510,18 +8520,18 @@ function DiscountCardManagement({ coachId }) {
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 612,
+                                    lineNumber: 627,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                            lineNumber: 599,
+                            lineNumber: 614,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 595,
+                        lineNumber: 610,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -8539,7 +8549,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Total Uses')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 622,
+                                            lineNumber: 637,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8550,13 +8560,13 @@ function DiscountCardManagement({ coachId }) {
                                             }, 0) : 0
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 623,
+                                            lineNumber: 638,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 621,
+                                    lineNumber: 636,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiUser"], {
@@ -8564,18 +8574,18 @@ function DiscountCardManagement({ coachId }) {
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 630,
+                                    lineNumber: 645,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                            lineNumber: 620,
+                            lineNumber: 635,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 616,
+                        lineNumber: 631,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -8593,7 +8603,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Expired Cards')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 640,
+                                            lineNumber: 655,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8607,13 +8617,13 @@ function DiscountCardManagement({ coachId }) {
                                             }).length
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 641,
+                                            lineNumber: 656,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 639,
+                                    lineNumber: 654,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiClock"], {
@@ -8621,57 +8631,101 @@ function DiscountCardManagement({ coachId }) {
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 651,
+                                    lineNumber: 666,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                            lineNumber: 638,
+                            lineNumber: 653,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 634,
+                        lineNumber: 649,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 581,
+                lineNumber: 596,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex space-x-1 bg-gray-800 rounded-lg p-1",
+                className: "flex flex-col md:flex-row md:items-center md:justify-between gap-3",
                 children: [
-                    {
-                        key: 'all',
-                        label: t('All Cards')
-                    },
-                    {
-                        key: 'active',
-                        label: t('Active')
-                    },
-                    {
-                        key: 'expired',
-                        label: t('Expired')
-                    },
-                    {
-                        key: 'used',
-                        label: t('Used Up')
-                    }
-                ].map((tab)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: ()=>setFilter(tab.key),
-                        className: `flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${filter === tab.key ? 'bg-purple-600 text-white' : 'text-gray-400 hover:text-white'}`,
-                        children: tab.label
-                    }, tab.key, false, {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "w-full md:w-1/2",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "relative",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiUser"], {
+                                    className: "absolute left-3 top-1/2 -translate-y-1/2 text-gray-400",
+                                    size: 16
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/DiscountCardManagement.tsx",
+                                    lineNumber: 676,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                    type: "text",
+                                    value: searchTerm,
+                                    onChange: (e)=>setSearchTerm(e.target.value),
+                                    placeholder: t('Search by name, email or code') || 'Search by name, email or code',
+                                    className: "w-full pl-9 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/DiscountCardManagement.tsx",
+                                    lineNumber: 677,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/components/DiscountCardManagement.tsx",
+                            lineNumber: 675,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 664,
-                        columnNumber: 11
-                    }, this))
-            }, void 0, false, {
+                        lineNumber: 674,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex space-x-1 bg-gray-800 rounded-lg p-1",
+                        children: [
+                            {
+                                key: 'all',
+                                label: t('All Cards')
+                            },
+                            {
+                                key: 'active',
+                                label: t('Active')
+                            },
+                            {
+                                key: 'expired',
+                                label: t('Expired')
+                            },
+                            {
+                                key: 'used',
+                                label: t('Used Up')
+                            }
+                        ].map((tab)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>setFilter(tab.key),
+                                className: `flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${filter === tab.key ? 'bg-purple-600 text-white' : 'text-gray-400 hover:text-white'}`,
+                                children: tab.label
+                            }, tab.key, false, {
+                                fileName: "[project]/src/components/DiscountCardManagement.tsx",
+                                lineNumber: 695,
+                                columnNumber: 11
+                            }, this))
+                    }, void 0, false, {
+                        fileName: "[project]/src/components/DiscountCardManagement.tsx",
+                        lineNumber: 688,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 657,
+                lineNumber: 672,
                 columnNumber: 7
             }, this),
             getFilteredCards().length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8681,7 +8735,7 @@ function DiscountCardManagement({ coachId }) {
                         className: "text-gray-600 text-6xl mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 681,
+                        lineNumber: 713,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -8689,7 +8743,7 @@ function DiscountCardManagement({ coachId }) {
                         children: t('No discount cards found')
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 682,
+                        lineNumber: 714,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8697,7 +8751,7 @@ function DiscountCardManagement({ coachId }) {
                         children: filter === 'all' ? t('Create your first discount card to get started') : t('No cards match the current filter')
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 685,
+                        lineNumber: 717,
                         columnNumber: 11
                     }, this),
                     filter === 'all' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -8706,16 +8760,16 @@ function DiscountCardManagement({ coachId }) {
                         children: t('Create First Discount Card')
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 692,
+                        lineNumber: 724,
                         columnNumber: 13
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 680,
+                lineNumber: 712,
                 columnNumber: 9
             }, this) : /* Unified Grid Layout for All Screen Sizes */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+                className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[600px] overflow-y-auto pr-1",
                 children: getFilteredCards().map((card)=>{
                     const status = getCardStatus(card);
                     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -8736,12 +8790,12 @@ function DiscountCardManagement({ coachId }) {
                                                 size: 20
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                lineNumber: 715,
+                                                lineNumber: 747,
                                                 columnNumber: 23
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 714,
+                                            lineNumber: 746,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8756,7 +8810,7 @@ function DiscountCardManagement({ coachId }) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 718,
+                                                    lineNumber: 750,
                                                     columnNumber: 23
                                                 }, this),
                                                 card.courseName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8764,7 +8818,7 @@ function DiscountCardManagement({ coachId }) {
                                                     children: card.courseName
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 722,
+                                                    lineNumber: 754,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8775,7 +8829,7 @@ function DiscountCardManagement({ coachId }) {
                                                             children: t(status.status)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 727,
+                                                            lineNumber: 759,
                                                             columnNumber: 25
                                                         }, this),
                                                         card.memberName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -8787,25 +8841,25 @@ function DiscountCardManagement({ coachId }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 731,
+                                                            lineNumber: 763,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 726,
+                                                    lineNumber: 758,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 717,
+                                            lineNumber: 749,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 713,
+                                    lineNumber: 745,
                                     columnNumber: 19
                                 }, this),
                                 card.qrCodeImage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8821,12 +8875,12 @@ function DiscountCardManagement({ coachId }) {
                                                 className: "w-full h-full object-contain"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                lineNumber: 743,
+                                                lineNumber: 775,
                                                 columnNumber: 25
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 742,
+                                            lineNumber: 774,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8834,13 +8888,13 @@ function DiscountCardManagement({ coachId }) {
                                             children: card.code
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 751,
+                                            lineNumber: 783,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 741,
+                                    lineNumber: 773,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8853,7 +8907,7 @@ function DiscountCardManagement({ coachId }) {
                                                     children: t('Course')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 759,
+                                                    lineNumber: 791,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8861,13 +8915,13 @@ function DiscountCardManagement({ coachId }) {
                                                     children: card.courseName
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 760,
+                                                    lineNumber: 792,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 758,
+                                            lineNumber: 790,
                                             columnNumber: 23
                                         }, this),
                                         card.memberEmail && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8877,7 +8931,7 @@ function DiscountCardManagement({ coachId }) {
                                                     children: t('Member Email')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 765,
+                                                    lineNumber: 797,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8885,13 +8939,13 @@ function DiscountCardManagement({ coachId }) {
                                                     children: card.memberEmail
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 766,
+                                                    lineNumber: 798,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 764,
+                                            lineNumber: 796,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8904,7 +8958,7 @@ function DiscountCardManagement({ coachId }) {
                                                             children: t('Expiration Date')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 771,
+                                                            lineNumber: 803,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8912,13 +8966,13 @@ function DiscountCardManagement({ coachId }) {
                                                             children: new Date(card.expiryDate).toLocaleDateString()
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 772,
+                                                            lineNumber: 804,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 770,
+                                                    lineNumber: 802,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8928,7 +8982,7 @@ function DiscountCardManagement({ coachId }) {
                                                             children: t('Usage')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 777,
+                                                            lineNumber: 809,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8940,19 +8994,19 @@ function DiscountCardManagement({ coachId }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 778,
+                                                            lineNumber: 810,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 776,
+                                                    lineNumber: 808,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 769,
+                                            lineNumber: 801,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8962,7 +9016,7 @@ function DiscountCardManagement({ coachId }) {
                                                     children: t('Created')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 790,
+                                                    lineNumber: 822,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8970,19 +9024,19 @@ function DiscountCardManagement({ coachId }) {
                                                     children: new Date(card.createdAt).toLocaleDateString()
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 791,
+                                                    lineNumber: 823,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 789,
+                                            lineNumber: 821,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 756,
+                                    lineNumber: 788,
                                     columnNumber: 19
                                 }, this),
                                 card.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8993,7 +9047,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Description')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 799,
+                                            lineNumber: 831,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9001,13 +9055,13 @@ function DiscountCardManagement({ coachId }) {
                                             children: card.description
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 800,
+                                            lineNumber: 832,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 798,
+                                    lineNumber: 830,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9018,7 +9072,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Card Code')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 805,
+                                            lineNumber: 837,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9029,7 +9083,7 @@ function DiscountCardManagement({ coachId }) {
                                                     children: card.code
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 807,
+                                                    lineNumber: 839,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9040,24 +9094,24 @@ function DiscountCardManagement({ coachId }) {
                                                         size: 16
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                        lineNumber: 815,
+                                                        lineNumber: 847,
                                                         columnNumber: 25
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 810,
+                                                    lineNumber: 842,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 806,
+                                            lineNumber: 838,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 804,
+                                    lineNumber: 836,
                                     columnNumber: 19
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9072,20 +9126,20 @@ function DiscountCardManagement({ coachId }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 827,
+                                                    lineNumber: 859,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('QR')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 828,
+                                                    lineNumber: 860,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 822,
+                                            lineNumber: 854,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9097,20 +9151,20 @@ function DiscountCardManagement({ coachId }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 836,
+                                                    lineNumber: 868,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('Card')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 837,
+                                                    lineNumber: 869,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 831,
+                                            lineNumber: 863,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9122,20 +9176,20 @@ function DiscountCardManagement({ coachId }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 845,
+                                                    lineNumber: 877,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('Share')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 846,
+                                                    lineNumber: 878,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 840,
+                                            lineNumber: 872,
                                             columnNumber: 21
                                         }, this),
                                         card.isActive && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9147,20 +9201,20 @@ function DiscountCardManagement({ coachId }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 855,
+                                                    lineNumber: 887,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('Deactivate')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 856,
+                                                    lineNumber: 888,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 850,
+                                            lineNumber: 882,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9172,43 +9226,43 @@ function DiscountCardManagement({ coachId }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 865,
+                                                    lineNumber: 897,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('Delete')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 866,
+                                                    lineNumber: 898,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 860,
+                                            lineNumber: 892,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 821,
+                                    lineNumber: 853,
                                     columnNumber: 19
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                            lineNumber: 711,
+                            lineNumber: 743,
                             columnNumber: 17
                         }, this)
                     }, card.id, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 706,
+                        lineNumber: 738,
                         columnNumber: 15
                     }, this);
                 })
             }, void 0, false, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 702,
+                lineNumber: 734,
                 columnNumber: 9
             }, this),
             showCreateModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$CreateDiscountCardModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -9217,17 +9271,17 @@ function DiscountCardManagement({ coachId }) {
                 coachId: coachId
             }, void 0, false, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 878,
+                lineNumber: 910,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-        lineNumber: 562,
+        lineNumber: 577,
         columnNumber: 5
     }, this);
 }
-_s(DiscountCardManagement, "K4qXbEfs8pySxTSdSHNH9/MlNRg=", false, function() {
+_s(DiscountCardManagement, "WQ1GkCSOWezzaWzBaXMp00lWKLI=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$i18next$2f$dist$2f$es$2f$useTranslation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$auth$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
@@ -10598,6 +10652,16 @@ const CoachOffersPanel = ()=>{
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [savingOfferId, setSavingOfferId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [feedback, setFeedback] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [showCreateModal, setShowCreateModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [newOffer, setNewOffer] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
+        title: '',
+        subtitle: '',
+        description: '',
+        price: 0,
+        buttonLabel: 'Select',
+        emoji: '✨',
+        sortOrder: 0
+    });
     const sortedOffers = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "CoachOffersPanel.useMemo[sortedOffers]": ()=>[
                 ...offers
@@ -10723,6 +10787,65 @@ const CoachOffersPanel = ()=>{
             setSavingOfferId(null);
         }
     };
+    const handleCreateOffer = async ()=>{
+        try {
+            setIsLoading(true);
+            // Use MAIN_OFFERS_COACH_ID to ensure it appears in the public popup
+            const offerData = {
+                ...newOffer,
+                coachId: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$database$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MAIN_OFFERS_COACH_ID"],
+                coachName: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$database$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MAIN_OFFERS_COACH_NAME"],
+                slug: newOffer.title?.toLowerCase().replace(/\s+/g, '-') || 'new-offer',
+                isActive: true,
+                currency: 'CHF'
+            };
+            await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$database$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["offerService"].create(offerData);
+            setShowCreateModal(false);
+            setNewOffer({
+                title: '',
+                subtitle: '',
+                description: '',
+                price: 0,
+                buttonLabel: 'Select',
+                emoji: '✨',
+                sortOrder: 0
+            });
+            // Refresh offers
+            await loadOffers(true);
+            setFeedback({
+                type: 'success',
+                message: t('Offer created successfully')
+            });
+        } catch (error) {
+            console.error('Failed to create offer', error);
+            setFeedback({
+                type: 'error',
+                message: t('Failed to create offer')
+            });
+        } finally{
+            setIsLoading(false);
+        }
+    };
+    const handleDeleteOffer = async (offerId)=>{
+        if (!confirm(t('Are you sure you want to delete this offer?'))) return;
+        try {
+            setIsLoading(true);
+            await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$database$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["offerService"].delete(offerId);
+            await loadOffers(true);
+            setFeedback({
+                type: 'success',
+                message: t('Offer deleted successfully')
+            });
+        } catch (error) {
+            console.error('Failed to delete offer', error);
+            setFeedback({
+                type: 'error',
+                message: t('Failed to delete offer')
+            });
+        } finally{
+            setIsLoading(false);
+        }
+    };
     if (isLoading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10732,7 +10855,7 @@ const CoachOffersPanel = ()=>{
                         className: "w-6 h-6 border-2 border-[#D91CD2] border-t-transparent rounded-full animate-spin"
                     }, void 0, false, {
                         fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                        lineNumber: 178,
+                        lineNumber: 255,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -10740,18 +10863,18 @@ const CoachOffersPanel = ()=>{
                         children: t('loadingOffers') || 'Loading offers...'
                     }, void 0, false, {
                         fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                        lineNumber: 179,
+                        lineNumber: 256,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                lineNumber: 177,
+                lineNumber: 254,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-            lineNumber: 176,
+            lineNumber: 253,
             columnNumber: 7
         }, this);
     }
@@ -10762,12 +10885,12 @@ const CoachOffersPanel = ()=>{
                 children: t('noOffersFound') || 'No offers found'
             }, void 0, false, {
                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                lineNumber: 188,
+                lineNumber: 265,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-            lineNumber: 187,
+            lineNumber: 264,
             columnNumber: 7
         }, this);
     }
@@ -10776,55 +10899,82 @@ const CoachOffersPanel = ()=>{
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex items-center space-x-3",
+                    className: "flex flex-col sm:flex-row sm:items-center justify-between gap-4",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "p-3 rounded-full bg-[#D91CD2]/10 text-[#D91CD2]",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiGift"], {
-                                size: 20
-                            }, void 0, false, {
-                                fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                lineNumber: 200,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                            lineNumber: 199,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center space-x-3",
                             children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                    className: "text-xl font-semibold",
-                                    children: t('Offer Management')
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "p-3 rounded-full bg-[#D91CD2]/10 text-[#D91CD2]",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiGift"], {
+                                        size: 20
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                        lineNumber: 278,
+                                        columnNumber: 15
+                                    }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                    lineNumber: 203,
+                                    lineNumber: 277,
                                     columnNumber: 13
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: "text-sm text-gray-400",
-                                    children: t('offerManagementSubtitle') || 'Customize the offers displayed inside the Ready to Dance popup.'
-                                }, void 0, false, {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                            className: "text-xl font-semibold",
+                                            children: t('Offer Management')
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 281,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-sm text-gray-400",
+                                            children: t('offerManagementSubtitle') || 'Customize the offers displayed inside the Ready to Dance popup.'
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 282,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                    lineNumber: 204,
+                                    lineNumber: 280,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                            lineNumber: 202,
+                            lineNumber: 276,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: ()=>setShowCreateModal(true),
+                            className: "btn-primary flex items-center justify-center px-4 py-2",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiPlus"], {
+                                    className: "mr-2"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                    lineNumber: 292,
+                                    columnNumber: 13
+                                }, this),
+                                t('Create Offer')
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                            lineNumber: 288,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                    lineNumber: 198,
+                    lineNumber: 275,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                lineNumber: 197,
+                lineNumber: 274,
                 columnNumber: 7
             }, this),
             feedback && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10832,7 +10982,7 @@ const CoachOffersPanel = ()=>{
                 children: feedback.message
             }, void 0, false, {
                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                lineNumber: 213,
+                lineNumber: 299,
                 columnNumber: 9
             }, this),
             sortedOffers.map((offer)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -10851,7 +11001,7 @@ const CoachOffersPanel = ()=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 228,
+                                            lineNumber: 313,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -10859,7 +11009,7 @@ const CoachOffersPanel = ()=>{
                                             children: offer.title
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 231,
+                                            lineNumber: 316,
                                             columnNumber: 15
                                         }, this),
                                         offer.subtitle && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -10867,13 +11017,13 @@ const CoachOffersPanel = ()=>{
                                             children: offer.subtitle
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 232,
+                                            lineNumber: 317,
                                             columnNumber: 34
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                    lineNumber: 227,
+                                    lineNumber: 312,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10888,7 +11038,7 @@ const CoachOffersPanel = ()=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 235,
+                                            lineNumber: 320,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10899,52 +11049,70 @@ const CoachOffersPanel = ()=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 236,
+                                            lineNumber: 321,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                    lineNumber: 234,
+                                    lineNumber: 319,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                            lineNumber: 226,
+                            lineNumber: 311,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "flex items-center justify-between mb-4",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                className: "flex items-center space-x-2 text-sm text-gray-300",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "checkbox",
-                                        checked: offer.isActive !== false,
-                                        onChange: (e)=>handleOfferActiveChange(offer.id, e.target.checked),
-                                        className: "h-4 w-4 rounded border-gray-600 bg-gray-800 text-[#D91CD2] focus:ring-[#D91CD2]"
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                    className: "flex items-center space-x-2 text-sm text-gray-300",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                            type: "checkbox",
+                                            checked: offer.isActive !== false,
+                                            onChange: (e)=>handleOfferActiveChange(offer.id, e.target.checked),
+                                            className: "h-4 w-4 rounded border-gray-600 bg-gray-800 text-[#D91CD2] focus:ring-[#D91CD2]"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 327,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            children: t('Offer active')
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 333,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                    lineNumber: 326,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: ()=>handleDeleteOffer(offer.id),
+                                    className: "text-red-400 hover:text-red-300 p-2",
+                                    title: t('Delete Offer'),
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiTrash2"], {
+                                        size: 18
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                        lineNumber: 242,
-                                        columnNumber: 15
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        children: t('Offer active')
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                        lineNumber: 248,
+                                        lineNumber: 340,
                                         columnNumber: 15
                                     }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                lineNumber: 241,
-                                columnNumber: 13
-                            }, this)
-                        }, void 0, false, {
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                    lineNumber: 335,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                            lineNumber: 240,
+                            lineNumber: 325,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10960,7 +11128,7 @@ const CoachOffersPanel = ()=>{
                                                     children: t('Title')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                    lineNumber: 255,
+                                                    lineNumber: 347,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -10970,13 +11138,13 @@ const CoachOffersPanel = ()=>{
                                                     className: "input-primary w-full mt-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                    lineNumber: 256,
+                                                    lineNumber: 348,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 254,
+                                            lineNumber: 346,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10986,7 +11154,7 @@ const CoachOffersPanel = ()=>{
                                                     children: t('Button label')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                    lineNumber: 264,
+                                                    lineNumber: 356,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -10996,19 +11164,19 @@ const CoachOffersPanel = ()=>{
                                                     className: "input-primary w-full mt-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                    lineNumber: 265,
+                                                    lineNumber: 357,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 263,
+                                            lineNumber: 355,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                    lineNumber: 253,
+                                    lineNumber: 345,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11018,7 +11186,7 @@ const CoachOffersPanel = ()=>{
                                             children: t('Description')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 275,
+                                            lineNumber: 367,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -11027,13 +11195,13 @@ const CoachOffersPanel = ()=>{
                                             className: "input-primary w-full mt-1 min-h-[100px]"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 276,
+                                            lineNumber: 368,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                    lineNumber: 274,
+                                    lineNumber: 366,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11046,7 +11214,7 @@ const CoachOffersPanel = ()=>{
                                                     children: t('Subtitle')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                    lineNumber: 285,
+                                                    lineNumber: 377,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -11056,13 +11224,13 @@ const CoachOffersPanel = ()=>{
                                                     className: "input-primary w-full mt-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                    lineNumber: 286,
+                                                    lineNumber: 378,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 284,
+                                            lineNumber: 376,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11072,7 +11240,7 @@ const CoachOffersPanel = ()=>{
                                                     children: t('Price (CHF)')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                    lineNumber: 294,
+                                                    lineNumber: 386,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -11083,25 +11251,25 @@ const CoachOffersPanel = ()=>{
                                                     className: "input-primary w-full mt-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                    lineNumber: 295,
+                                                    lineNumber: 387,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 293,
+                                            lineNumber: 385,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                    lineNumber: 283,
+                                    lineNumber: 375,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                            lineNumber: 252,
+                            lineNumber: 344,
                             columnNumber: 11
                         }, this),
                         offer.options?.length ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11112,20 +11280,20 @@ const CoachOffersPanel = ()=>{
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiLayers"], {}, void 0, false, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 309,
+                                            lineNumber: 401,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: t('Subscription Options')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 310,
+                                            lineNumber: 402,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                    lineNumber: 308,
+                                    lineNumber: 400,
                                     columnNumber: 15
                                 }, this),
                                 offer.options.map((option)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11139,7 +11307,7 @@ const CoachOffersPanel = ()=>{
                                                         children: t('Option label')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                        lineNumber: 315,
+                                                        lineNumber: 407,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -11152,26 +11320,26 @@ const CoachOffersPanel = ()=>{
                                                                 className: "h-3.5 w-3.5 rounded border-gray-600 bg-gray-800 text-[#D91CD2] focus:ring-[#D91CD2]"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                                lineNumber: 317,
+                                                                lineNumber: 409,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                 children: t('Option active')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                                lineNumber: 323,
+                                                                lineNumber: 415,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                        lineNumber: 316,
+                                                        lineNumber: 408,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                lineNumber: 314,
+                                                lineNumber: 406,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11184,7 +11352,7 @@ const CoachOffersPanel = ()=>{
                                                                 children: t('Option label')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                                lineNumber: 328,
+                                                                lineNumber: 420,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -11194,13 +11362,13 @@ const CoachOffersPanel = ()=>{
                                                                 className: "input-primary w-full mt-1"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                                lineNumber: 329,
+                                                                lineNumber: 421,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                        lineNumber: 327,
+                                                        lineNumber: 419,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11210,7 +11378,7 @@ const CoachOffersPanel = ()=>{
                                                                 children: t('Option price')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                                lineNumber: 337,
+                                                                lineNumber: 429,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -11221,19 +11389,19 @@ const CoachOffersPanel = ()=>{
                                                                 className: "input-primary w-full mt-1"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                                lineNumber: 338,
+                                                                lineNumber: 430,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                        lineNumber: 336,
+                                                        lineNumber: 428,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                lineNumber: 326,
+                                                lineNumber: 418,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11243,7 +11411,7 @@ const CoachOffersPanel = ()=>{
                                                         children: t('Option description')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                        lineNumber: 348,
+                                                        lineNumber: 440,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -11252,25 +11420,25 @@ const CoachOffersPanel = ()=>{
                                                         className: "input-primary w-full mt-1"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                        lineNumber: 349,
+                                                        lineNumber: 441,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                lineNumber: 347,
+                                                lineNumber: 439,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, option.id, true, {
                                         fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                        lineNumber: 313,
+                                        lineNumber: 405,
                                         columnNumber: 17
                                     }, this))
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                            lineNumber: 307,
+                            lineNumber: 399,
                             columnNumber: 13
                         }, this) : null,
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11281,20 +11449,20 @@ const CoachOffersPanel = ()=>{
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiGift"], {}, void 0, false, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 362,
+                                            lineNumber: 454,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: t('offerPaymentHint') || 'These prices power the Ready to Dance popup offers.'
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                            lineNumber: 363,
+                                            lineNumber: 455,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                    lineNumber: 361,
+                                    lineNumber: 453,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -11307,7 +11475,7 @@ const CoachOffersPanel = ()=>{
                                                 className: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                lineNumber: 372,
+                                                lineNumber: 464,
                                                 columnNumber: 19
                                             }, this),
                                             t('saving') || 'Saving...'
@@ -11318,7 +11486,7 @@ const CoachOffersPanel = ()=>{
                                                 className: "mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                                lineNumber: 377,
+                                                lineNumber: 469,
                                                 columnNumber: 19
                                             }, this),
                                             t('Save Offer')
@@ -11326,29 +11494,314 @@ const CoachOffersPanel = ()=>{
                                     }, void 0, true)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                                    lineNumber: 365,
+                                    lineNumber: 457,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                            lineNumber: 360,
+                            lineNumber: 452,
                             columnNumber: 11
                         }, this)
                     ]
                 }, offer.id, true, {
                     fileName: "[project]/src/components/CoachOffersPanel.tsx",
-                    lineNumber: 225,
+                    lineNumber: 310,
                     columnNumber: 9
-                }, this))
+                }, this)),
+            showCreateModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "bg-[#1a1a1a] rounded-xl max-w-lg w-full p-6 border border-gray-800 shadow-xl max-h-[90vh] overflow-y-auto",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                            className: "text-xl font-bold mb-4",
+                            children: t('Create New Offer')
+                        }, void 0, false, {
+                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                            lineNumber: 482,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "space-y-4",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                            className: "block text-sm text-gray-400 mb-1",
+                                            children: t('Title')
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 486,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                            type: "text",
+                                            value: newOffer.title,
+                                            onChange: (e)=>setNewOffer({
+                                                    ...newOffer,
+                                                    title: e.target.value
+                                                }),
+                                            className: "input-primary w-full",
+                                            placeholder: t('e.g. Starter Pack')
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 487,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                    lineNumber: 485,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                            className: "block text-sm text-gray-400 mb-1",
+                                            children: t('Subtitle')
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 497,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                            type: "text",
+                                            value: newOffer.subtitle,
+                                            onChange: (e)=>setNewOffer({
+                                                    ...newOffer,
+                                                    subtitle: e.target.value
+                                                }),
+                                            className: "input-primary w-full",
+                                            placeholder: t('e.g. Perfect for beginners')
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 498,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                    lineNumber: 496,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                            className: "block text-sm text-gray-400 mb-1",
+                                            children: t('Description')
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 508,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
+                                            value: newOffer.description,
+                                            onChange: (e)=>setNewOffer({
+                                                    ...newOffer,
+                                                    description: e.target.value
+                                                }),
+                                            className: "input-primary w-full min-h-[80px]",
+                                            placeholder: t('Describe what is included...')
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 509,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                    lineNumber: 507,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "grid grid-cols-2 gap-4",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: "block text-sm text-gray-400 mb-1",
+                                                    children: t('Price (CHF)')
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                                    lineNumber: 519,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    type: "number",
+                                                    min: "0",
+                                                    value: newOffer.price,
+                                                    onChange: (e)=>setNewOffer({
+                                                            ...newOffer,
+                                                            price: Number(e.target.value)
+                                                        }),
+                                                    className: "input-primary w-full"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                                    lineNumber: 520,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 518,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: "block text-sm text-gray-400 mb-1",
+                                                    children: t('Sort Order')
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                                    lineNumber: 529,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    type: "number",
+                                                    value: newOffer.sortOrder,
+                                                    onChange: (e)=>setNewOffer({
+                                                            ...newOffer,
+                                                            sortOrder: Number(e.target.value)
+                                                        }),
+                                                    className: "input-primary w-full"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                                    lineNumber: 530,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 528,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                    lineNumber: 517,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "grid grid-cols-2 gap-4",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: "block text-sm text-gray-400 mb-1",
+                                                    children: t('Button Label')
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                                    lineNumber: 541,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    type: "text",
+                                                    value: newOffer.buttonLabel,
+                                                    onChange: (e)=>setNewOffer({
+                                                            ...newOffer,
+                                                            buttonLabel: e.target.value
+                                                        }),
+                                                    className: "input-primary w-full"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                                    lineNumber: 542,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 540,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: "block text-sm text-gray-400 mb-1",
+                                                    children: t('Emoji')
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                                    lineNumber: 550,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    type: "text",
+                                                    value: newOffer.emoji,
+                                                    onChange: (e)=>setNewOffer({
+                                                            ...newOffer,
+                                                            emoji: e.target.value
+                                                        }),
+                                                    className: "input-primary w-full"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                                    lineNumber: 551,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                            lineNumber: 549,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                    lineNumber: 539,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                            lineNumber: 484,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex justify-end space-x-3 mt-6",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: ()=>setShowCreateModal(false),
+                                    className: "px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition-colors",
+                                    children: t('Cancel')
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                    lineNumber: 562,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: handleCreateOffer,
+                                    disabled: !newOffer.title || !newOffer.description,
+                                    className: "btn-primary px-4 py-2",
+                                    children: t('Create')
+                                }, void 0, false, {
+                                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                                    lineNumber: 568,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                            lineNumber: 561,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                    lineNumber: 481,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/src/components/CoachOffersPanel.tsx",
+                lineNumber: 480,
+                columnNumber: 9
+            }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/CoachOffersPanel.tsx",
-        lineNumber: 196,
+        lineNumber: 273,
         columnNumber: 5
     }, this);
 };
-_s(CoachOffersPanel, "nkdXz9eULpVhJWNvo/ng4Gx8DhI=", false, function() {
+_s(CoachOffersPanel, "AQmNU8X6mj0uPIhMkA6awu2zSac=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$auth$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$i18next$2f$dist$2f$es$2f$useTranslation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"]
