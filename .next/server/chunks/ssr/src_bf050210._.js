@@ -5640,7 +5640,7 @@ function GiftCardScanner({ onValidation, onClose, customerId, customerName, busi
                 opacity: 1,
                 scale: 1
             },
-            className: "bg-gray-900 rounded-lg max-w-md w-full",
+            className: "bg-gray-900 rounded-xl w-full max-w-md max-h-[90vh] overflow-y-auto border border-gray-700",
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "p-6",
                 children: [
@@ -5741,7 +5741,7 @@ function GiftCardScanner({ onValidation, onClose, customerId, customerName, busi
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "grid grid-cols-3 gap-2 mb-6",
+                        className: "flex flex-col gap-2 mb-6",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: ()=>{
@@ -5749,7 +5749,7 @@ function GiftCardScanner({ onValidation, onClose, customerId, customerName, busi
                                     setUseManualEntry(false);
                                     setUseCameraScanner(false);
                                 },
-                                className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${!useManualEntry && !useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                className: `w-full py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${!useManualEntry && !useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                 children: t('Upload Image')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftCardScanner.tsx",
@@ -5764,7 +5764,7 @@ function GiftCardScanner({ onValidation, onClose, customerId, customerName, busi
                                     setUseCameraScanner(true); // Set this first
                                     await startCamera();
                                 },
-                                className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                className: `w-full py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FiCamera"], {
                                         className: "inline mr-1",
@@ -5787,7 +5787,7 @@ function GiftCardScanner({ onValidation, onClose, customerId, customerName, busi
                                     setUseManualEntry(true);
                                     setUseCameraScanner(false);
                                 },
-                                className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${useManualEntry ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                className: `w-full py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${useManualEntry ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                 children: t('Manual Entry')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftCardScanner.tsx",
@@ -9073,12 +9073,13 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                         className: "bg-gray-900 rounded-xl w-full max-w-md max-h-[95vh] sm:max-h-[90vh] flex flex-col",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex justify-between items-center p-4 sm:p-6 border-b border-gray-700",
+                                className: "flex justify-between items-start p-4 sm:p-6 border-b border-gray-700 gap-3",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex-1 min-w-0",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                className: "text-lg sm:text-xl font-semibold truncate pr-2",
+                                                className: "text-lg sm:text-xl font-semibold text-white break-words",
                                                 children: t('Step 1: Apply Gift or Discount Card')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CardSelectionStep.tsx",
@@ -9086,11 +9087,11 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                className: "text-sm text-gray-400 mt-1",
+                                                className: "text-sm text-gray-400 mt-1 break-words",
                                                 children: t('Scan or enter your gift card or discount code (optional)')
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                lineNumber: 100,
+                                                lineNumber: 102,
                                                 columnNumber: 19
                                             }, this)
                                         ]
@@ -9106,12 +9107,12 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                                             size: 24
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                            lineNumber: 106,
+                                            lineNumber: 110,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                        lineNumber: 102,
+                                        lineNumber: 106,
                                         columnNumber: 17
                                     }, this)
                                 ]
@@ -9130,12 +9131,12 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                                             children: errorMessage
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                            lineNumber: 115,
+                                            lineNumber: 119,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                        lineNumber: 114,
+                                        lineNumber: 118,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9155,12 +9156,12 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                                                             size: 24
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                            lineNumber: 129,
+                                                            lineNumber: 133,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                        lineNumber: 128,
+                                                        lineNumber: 132,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9171,7 +9172,7 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                                                                 children: t('Scan Gift Card')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                                lineNumber: 132,
+                                                                lineNumber: 136,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9179,19 +9180,19 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                                                                 children: t('Scan QR code or upload gift card image')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                                lineNumber: 133,
+                                                                lineNumber: 137,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                        lineNumber: 131,
+                                                        lineNumber: 135,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                lineNumber: 121,
+                                                lineNumber: 125,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9208,12 +9209,12 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                                                             size: 24
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                            lineNumber: 146,
+                                                            lineNumber: 150,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                        lineNumber: 145,
+                                                        lineNumber: 149,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9224,7 +9225,7 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                                                                 children: t('Scan Discount Card')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                                lineNumber: 149,
+                                                                lineNumber: 153,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9232,31 +9233,31 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                                                                 children: t('Scan coach discount card for automatic discount')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                                lineNumber: 150,
+                                                                lineNumber: 154,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                        lineNumber: 148,
+                                                        lineNumber: 152,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                                lineNumber: 138,
+                                                lineNumber: 142,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                        lineNumber: 119,
+                                        lineNumber: 123,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                lineNumber: 111,
+                                lineNumber: 115,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9267,12 +9268,12 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                                     children: t("I don't have any cards - Continue to Payment")
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                    lineNumber: 158,
+                                    lineNumber: 162,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/CardSelectionStep.tsx",
-                                lineNumber: 157,
+                                lineNumber: 161,
                                 columnNumber: 15
                             }, this)
                         ]
@@ -9302,7 +9303,7 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                 transactionType: transactionType
             }, void 0, false, {
                 fileName: "[project]/src/components/CardSelectionStep.tsx",
-                lineNumber: 172,
+                lineNumber: 176,
                 columnNumber: 9
             }, this),
             showDiscountCardScanner && user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$DiscountCardScanner$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -9314,7 +9315,7 @@ function CardSelectionStep({ isOpen, onClose, onNext, userId, coachId, courseId,
                 orderAmount: amount
             }, void 0, false, {
                 fileName: "[project]/src/components/CardSelectionStep.tsx",
-                lineNumber: 186,
+                lineNumber: 190,
                 columnNumber: 9
             }, this)
         ]
@@ -9885,7 +9886,7 @@ function CourseDetail() {
         }
     };
     const formatDate = (date)=>{
-        return new Intl.DateTimeFormat('en-US', {
+        return new Intl.DateTimeFormat('fr-FR', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -10364,7 +10365,7 @@ function CourseDetail() {
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "font-medium",
-                                                                            children: startTime.toLocaleDateString('en-US', {
+                                                                            children: startTime.toLocaleDateString('fr-FR', {
                                                                                 weekday: 'long',
                                                                                 month: 'long',
                                                                                 day: 'numeric',
@@ -10395,16 +10396,16 @@ function CourseDetail() {
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             className: "font-medium",
                                                                             children: [
-                                                                                startTime.toLocaleTimeString('en-US', {
+                                                                                startTime.toLocaleTimeString('fr-FR', {
                                                                                     hour: '2-digit',
                                                                                     minute: '2-digit',
-                                                                                    hour12: true
+                                                                                    hour12: false
                                                                                 }),
                                                                                 " - ",
-                                                                                endTime.toLocaleTimeString('en-US', {
+                                                                                endTime.toLocaleTimeString('fr-FR', {
                                                                                     hour: '2-digit',
                                                                                     minute: '2-digit',
-                                                                                    hour12: true
+                                                                                    hour12: false
                                                                                 })
                                                                             ]
                                                                         }, void 0, true, {

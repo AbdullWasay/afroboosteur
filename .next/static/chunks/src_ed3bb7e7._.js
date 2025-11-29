@@ -2343,7 +2343,7 @@ function GiftCardScanner({ onValidation, onClose, customerId, customerName, busi
                 opacity: 1,
                 scale: 1
             },
-            className: "bg-gray-900 rounded-lg max-w-md w-full",
+            className: "bg-gray-900 rounded-xl w-full max-w-md max-h-[90vh] overflow-y-auto border border-gray-700",
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "p-6",
                 children: [
@@ -2444,7 +2444,7 @@ function GiftCardScanner({ onValidation, onClose, customerId, customerName, busi
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "grid grid-cols-3 gap-2 mb-6",
+                        className: "flex flex-col gap-2 mb-6",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: ()=>{
@@ -2452,7 +2452,7 @@ function GiftCardScanner({ onValidation, onClose, customerId, customerName, busi
                                     setUseManualEntry(false);
                                     setUseCameraScanner(false);
                                 },
-                                className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${!useManualEntry && !useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                className: `w-full py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${!useManualEntry && !useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                 children: t('Upload Image')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftCardScanner.tsx",
@@ -2467,7 +2467,7 @@ function GiftCardScanner({ onValidation, onClose, customerId, customerName, busi
                                     setUseCameraScanner(true); // Set this first
                                     await startCamera();
                                 },
-                                className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                className: `w-full py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${useCameraScanner ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiCamera"], {
                                         className: "inline mr-1",
@@ -2490,7 +2490,7 @@ function GiftCardScanner({ onValidation, onClose, customerId, customerName, busi
                                     setUseManualEntry(true);
                                     setUseCameraScanner(false);
                                 },
-                                className: `py-2 px-3 rounded-lg text-sm font-medium transition-colors ${useManualEntry ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
+                                className: `w-full py-3 px-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${useManualEntry ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-400 hover:text-white'}`,
                                 children: t('Manual Entry')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/GiftCardScanner.tsx",
