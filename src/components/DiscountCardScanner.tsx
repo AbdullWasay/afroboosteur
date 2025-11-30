@@ -228,10 +228,21 @@ export default function DiscountCardScanner({
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
 
-        if (qrCode) {
-          console.log('📹 Discount Card - QR Code detected:', qrCode.data);
-          setDetectedCode(qrCode.data);
-          handleValidateDiscountCard(qrCode.data);
+        if (qrCode && qrCode.data) {
+          let extractedCode = qrCode.data.trim();
+          
+          // If QR code contains a URL, try to extract the code from it
+          if (extractedCode.startsWith('http://') || extractedCode.startsWith('https://')) {
+            console.log('📹 QR code contains URL, extracting code...');
+            const urlParts = extractedCode.split('/');
+            extractedCode = urlParts[urlParts.length - 1] || extractedCode;
+          }
+          
+          extractedCode = extractedCode.toUpperCase();
+          console.log('📹 Discount Card - QR Code detected:', extractedCode);
+          console.log('📹 Original QR data:', qrCode.data);
+          setDetectedCode(extractedCode);
+          handleValidateDiscountCard(extractedCode);
           return;
         }
       }
@@ -268,8 +279,20 @@ export default function DiscountCardScanner({
         const imageData = ctx?.getImageData(0, 0, canvas.width, canvas.height);
         if (imageData) {
           const qrCode = jsQR(imageData.data, imageData.width, imageData.height);
-          if (qrCode) {
-            handleValidateDiscountCard(qrCode.data);
+          if (qrCode && qrCode.data) {
+            let extractedCode = qrCode.data.trim();
+            
+            // If QR code contains a URL, try to extract the code from it
+            if (extractedCode.startsWith('http://') || extractedCode.startsWith('https://')) {
+              console.log('📷 QR code contains URL, extracting code...');
+              const urlParts = extractedCode.split('/');
+              extractedCode = urlParts[urlParts.length - 1] || extractedCode;
+            }
+            
+            extractedCode = extractedCode.toUpperCase();
+            console.log('📷 Discount Card - QR Code extracted from image:', extractedCode);
+            console.log('📷 Original QR data:', qrCode.data);
+            handleValidateDiscountCard(extractedCode);
           } else {
             onValidation({
               valid: false,
@@ -304,27 +327,93 @@ export default function DiscountCardScanner({
   };
 
   const handleValidateDiscountCard = async (code: string) => {
+    // Validate required fields before making request
+    if (!code || !code.trim()) {
+      onValidation({
+        valid: false,
+        discountPercentage: 0,
+        cardCode: '',
+        memberName: '',
+        coachId: '',
+        expirationDate: '',
+        description: '',
+        error: t('Please enter or scan a discount code')
+      });
+      return;
+    }
+
+    if (!customerId) {
+      onValidation({
+        valid: false,
+        discountPercentage: 0,
+        cardCode: code,
+        memberName: '',
+        coachId: '',
+        expirationDate: '',
+        description: '',
+        error: t('Customer ID is required')
+      });
+      return;
+    }
+
     setIsValidating(true);
 
     try {
-      const response = await fetch('/api/discount-cards/validate', {
+      const normalizedCode = code.trim().toUpperCase();
+      console.log('🔍 Validating discount card with code:', normalizedCode);
+      console.log('Request data:', {
+        cardCode: normalizedCode,
+        customerId,
+        customerName: customerName || 'N/A',
+        coachId: coachId || 'N/A',
+        orderAmount: orderAmount || 0
+      });
+
+      // Ensure we're sending valid data
+      const requestBody = {
+        cardCode: normalizedCode,
+        customerId: customerId,
+        ...(customerName && { customerName }),
+        ...(coachId && { coachId }),
+        ...(orderAmount !== undefined && orderAmount !== null && { orderAmount: Number(orderAmount) || 0 })
+      };
+
+      console.log('Sending request to /api/discount-cards/validate');
+      console.log('Request body:', requestBody);
+
+      // Make sure we're using the correct API endpoint
+      const apiUrl = '/api/discount-cards/validate';
+      console.log('API URL:', apiUrl);
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          cardCode: code,
-          customerId,
-          customerName,
-          coachId,
-          orderAmount
-        }),
+        body: JSON.stringify(requestBody),
       });
 
-      const result = await response.json();
-      console.log('🎁 Discount Card validation result:', result);
+      console.log('Response URL:', response.url);
+      console.log('Response status:', response.status);
+
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      let result;
+
+      if (contentType && contentType.includes('application/json')) {
+        result = await response.json();
+        console.log('🎁 Discount Card validation result:', result);
+      } else {
+        const text = await response.text();
+        console.error('Non-JSON response:', text);
+        throw new Error('Invalid response from server');
+      }
 
       if (response.ok && result.valid) {
+        console.log('✅ Discount card is valid');
         onValidation({
           valid: true,
           discountPercentage: result.discountPercentage,
@@ -337,6 +426,7 @@ export default function DiscountCardScanner({
           finalAmount: result.finalAmount
         });
       } else {
+        console.log('❌ Discount card validation failed:', result.error);
         onValidation({
           valid: false,
           discountPercentage: 0,
@@ -348,8 +438,21 @@ export default function DiscountCardScanner({
           error: result.error || t('Invalid discount card')
         });
       }
-    } catch (error) {
-      console.error('Error validating discount card:', error);
+    } catch (error: any) {
+      console.error('❌ Error validating discount card:', error);
+      console.error('Error details:', {
+        message: error?.message,
+        stack: error?.stack
+      });
+      
+      let errorMessage = t('Error validating discount card');
+      
+      if (error?.message) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      }
+      
       onValidation({
         valid: false,
         discountPercentage: 0,
@@ -358,7 +461,7 @@ export default function DiscountCardScanner({
         coachId: '',
         expirationDate: '',
         description: '',
-        error: t('Error validating discount card')
+        error: errorMessage
       });
     } finally {
       setIsValidating(false);
@@ -367,7 +470,9 @@ export default function DiscountCardScanner({
 
   const handleManualValidation = () => {
     if (manualCode.trim()) {
-      handleValidateDiscountCard(manualCode.trim());
+      const normalizedCode = manualCode.trim().toUpperCase();
+      console.log('✍️ Manual code entry:', normalizedCode);
+      handleValidateDiscountCard(normalizedCode);
     }
   };
 

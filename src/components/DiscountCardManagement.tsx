@@ -155,32 +155,76 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
     expirationDate: string;
     description?: string;
   }) => {
-    // Transform to old format
-    const discountPercentage = cardData.advantageType === 'percentage_discount' 
-      ? (cardData.value || 0)
-      : 0;
-    
-    const oldFormatData = {
-      memberEmail: cardData.userEmail,
-      courseId: cardData.courseId,
-      discountPercentage,
-      expirationDate: cardData.expirationDate,
-      description: cardData.description || '',
-      maxUsage: 1, // Default to 1
-      cardType: cardData.courseId ? 'course' as const : 'student' as const,
-    };
-    
-    await handleCreateCard(oldFormatData);
+    try {
+      // Validate required fields
+      if (!cardData.expirationDate) {
+        alert(t('Expiration date is required'));
+        return;
+      }
+      
+      // Transform to old format
+      let discountPercentage: number;
+      let cardTitle: string;
+      
+      if (cardData.advantageType === 'percentage_discount') {
+        if (!cardData.value || cardData.value <= 0 || cardData.value > 100) {
+          alert(t('Discount percentage must be between 1 and 100'));
+          return;
+        }
+        discountPercentage = cardData.value;
+        cardTitle = `${discountPercentage}% ${t('Discount Card')}`;
+      } else if (cardData.advantageType === 'free') {
+        // For "free" cards, use 100% discount
+        discountPercentage = 100;
+        cardTitle = t('Free Card') || 'Free Card';
+      } else {
+        // For "special_price", use 100% discount for now
+        // The special price logic would need to be handled separately
+        if (!cardData.value || cardData.value <= 0) {
+          alert(t('Special price must be greater than 0'));
+          return;
+        }
+        discountPercentage = 100;
+        cardTitle = `${t('Special Price Card')}: ${cardData.value} CHF`;
+      }
+      
+      // Validate discount percentage
+      if (discountPercentage < 1 || discountPercentage > 100) {
+        alert(t('Discount percentage must be between 1 and 100'));
+        return;
+      }
+      
+      const oldFormatData = {
+        memberEmail: cardData.userEmail,
+        courseId: cardData.courseId,
+        discountPercentage,
+        title: cardTitle,
+        expirationDate: cardData.expirationDate,
+        description: cardData.description || '',
+        maxUsage: 1, // Default to 1
+        cardType: cardData.courseId ? 'course' as const : 'student' as const,
+        advantageType: cardData.advantageType, // Store for future use
+        specialPrice: cardData.advantageType === 'special_price' ? cardData.value : undefined,
+      };
+      
+      await handleCreateCard(oldFormatData);
+    } catch (error: any) {
+      console.error('Error in handleCreateCardWrapper:', error);
+      alert(error?.message || t('Error preparing discount card data'));
+    }
   };
 
   const handleCreateCard = async (cardData: {
     memberEmail?: string;
     courseId?: string;
     discountPercentage: number;
+    title?: string;
     expirationDate: string;
     description: string;
     maxUsage: number;
     cardType: 'student' | 'course';
+    advantageType?: 'free' | 'special_price' | 'percentage_discount';
+    specialPrice?: number;
   }) => {
     try {
       const response = await fetch('/api/discount-cards/create', {
@@ -190,7 +234,7 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
         },
         body: JSON.stringify({
           coachId,
-          title: `${cardData.discountPercentage}% Discount Card`,
+          title: cardData.title || `${cardData.discountPercentage}% Discount Card`,
           description: cardData.description,
           discountPercentage: cardData.discountPercentage,
           userEmail: cardData.memberEmail,
@@ -202,7 +246,18 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
       });
 
       if (response.ok) {
-        const data = await response.json();
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        let data;
+        
+        if (contentType && contentType.includes('application/json')) {
+          data = await response.json();
+        } else {
+          const text = await response.text();
+          console.error('Non-JSON response:', text);
+          throw new Error(t('Invalid response from server'));
+        }
+        
         // Handle the API response structure { success: true, discountCard: {...} }
         const newCard = data.discountCard || data;
         
@@ -221,12 +276,52 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
         setDiscountCards(prev => [mappedCard, ...prev]);
         setShowCreateModal(false);
       } else {
-        const error = await response.json();
-        alert(error.message || t('Error creating discount card'));
+        // Handle error response - check if it's JSON
+        const contentType = response.headers.get('content-type');
+        let errorMessage = t('Error creating discount card');
+        
+          try {
+            if (contentType && contentType.includes('application/json')) {
+              const errorData = await response.json();
+              errorMessage = errorData.error || errorData.message || errorMessage;
+              console.error('Error creating discount card:', errorData);
+              
+              // In development, show more details
+              if (process.env.NODE_ENV === 'development' && errorData.details) {
+                console.error('Error details:', errorData.details);
+                errorMessage += '\n\nCheck console for details.';
+              }
+            } else {
+              const errorText = await response.text();
+              console.error('Non-JSON error response:', errorText);
+              // Try to extract a meaningful error message
+              if (errorText.includes('Internal Server Error')) {
+                errorMessage = t('Internal server error. Please try again later.');
+              } else if (errorText) {
+                errorMessage = errorText.substring(0, 200); // Limit message length
+              }
+            }
+          } catch (parseError) {
+            console.error('Error parsing error response:', parseError);
+            errorMessage = t('Error creating discount card. Please check your connection and try again.');
+          }
+          
+          alert(errorMessage);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating discount card:', error);
-      alert(t('Error creating discount card'));
+      let errorMessage = t('Error creating discount card');
+      
+      // Handle specific error types
+      if (error instanceof SyntaxError) {
+        errorMessage = t('Invalid response from server. Please try again.');
+      } else if (error?.message) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      }
+      
+      alert(errorMessage);
     }
   };
 

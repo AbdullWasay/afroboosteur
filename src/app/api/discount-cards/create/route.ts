@@ -31,9 +31,21 @@ const generateDiscountCode = (coachName: string, percentage: number): string => 
 };
 
 export async function POST(request: NextRequest) {
+  console.log('=== Discount Card Creation Request Started ===');
+  
   try {
-    const body = await request.json();
-    console.log('Request body:', body);
+    // Parse request body with error handling
+    let body;
+    try {
+      body = await request.json();
+      console.log('Request body parsed successfully:', JSON.stringify(body, null, 2));
+    } catch (parseError: any) {
+      console.error('Error parsing request body:', parseError);
+      return NextResponse.json(
+        { error: 'Invalid JSON in request body', details: parseError?.message },
+        { status: 400 }
+      );
+    }
     const {
       coachId,
       title,
@@ -98,7 +110,14 @@ export async function POST(request: NextRequest) {
 
     if (!code) {
       // Generate new code if not provided
-      code = generateDiscountCode(coach.firstName + coach.lastName, discountPercentage);
+      const coachName = (coach.firstName || '') + (coach.lastName || '');
+      if (!coachName) {
+        return NextResponse.json(
+          { error: 'Coach name is missing. Cannot generate discount code.' },
+          { status: 400 }
+        );
+      }
+      code = generateDiscountCode(coachName, discountPercentage);
 
       // Check if code already exists (very unlikely but good to check)
       const existingCodeQuery = query(
@@ -109,7 +128,8 @@ export async function POST(request: NextRequest) {
       
       if (!existingCodeSnapshot.empty) {
         // Regenerate with additional timestamp
-        code = generateDiscountCode(coach.firstName + coach.lastName, discountPercentage) + Math.random().toString(36).substr(2, 3);
+        const coachName = (coach.firstName || '') + (coach.lastName || '');
+        code = generateDiscountCode(coachName, discountPercentage) + Math.random().toString(36).substr(2, 3);
       }
     } else {
       // If code is provided, check if it already exists
@@ -128,20 +148,49 @@ export async function POST(request: NextRequest) {
       code = code.toUpperCase();
     }
 
+    // Ensure code is uppercase for consistency
+    code = code.toUpperCase();
+    
     // Generate QR code if not provided
     if (!qrCodeImage) {
-      qrCodeImage = await QRCode.toDataURL(code, {
-        width: 300,
-        margin: 2,
-        color: {
-          dark: '#000000',
-          light: '#FFFFFF',
-        },
-      });
+      try {
+        console.log('Generating QR code for code:', code);
+        qrCodeImage = await QRCode.toDataURL(code, {
+          width: 200, // Reduced size to prevent Firestore size limits
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF',
+          },
+        });
+        
+        // Check QR code size (Firestore has 1MB limit per document)
+        if (qrCodeImage.length > 1000000) { // ~1MB
+          console.warn('QR code is very large, regenerating with smaller size...');
+          qrCodeImage = await QRCode.toDataURL(code, {
+            width: 150,
+            margin: 1,
+            color: {
+              dark: '#000000',
+              light: '#FFFFFF',
+            },
+          });
+        }
+        
+        console.log('✅ QR code generated successfully');
+        console.log('   Code stored in QR:', code);
+        console.log('   QR code size:', qrCodeImage.length, 'bytes');
+      } catch (qrError: any) {
+        console.error('❌ Error generating QR code:', qrError);
+        throw new Error(`Failed to generate QR code: ${qrError?.message || 'Unknown error'}`);
+      }
+    } else {
+      console.log('Using provided QR code image');
     }
 
-    // Create discount card object
-    const discountCard: Omit<DiscountCard, 'id'> = {
+    // Prepare Firestore document data
+    // Convert dates to Timestamps for Firestore
+    const firestoreData: any = {
       coachId,
       coachName: `${coach.firstName} ${coach.lastName}`,
       title: title || 'Special Discount',
@@ -150,35 +199,102 @@ export async function POST(request: NextRequest) {
       code,
       qrCodeImage,
       isActive: true,
-      expirationDate: expirationDate ? new Date(expirationDate) : undefined,
-      usageLimit: maxUsage || undefined,
+      usageLimit: maxUsage || null,
       timesUsed: 0,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
       ...(userEmail ? { userEmail } : {}),
       ...(courseId ? { courseId } : {}),
       ...(cardType ? { cardType } : {})
     };
 
-    // Save to Firestore
-    const docRef = await addDoc(collection(db, 'discount_cards'), {
-      ...discountCard,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    });
+    // Add expiration date if provided (convert to Firestore Timestamp)
+    if (expirationDate) {
+      try {
+        const expDate = new Date(expirationDate);
+        if (isNaN(expDate.getTime())) {
+          throw new Error('Invalid expiration date format');
+        }
+        firestoreData.expirationDate = Timestamp.fromDate(expDate);
+      } catch (dateError: any) {
+        console.error('Error parsing expiration date:', dateError);
+        throw new Error(`Invalid expiration date: ${dateError?.message || 'Unknown error'}`);
+      }
+    }
 
+    console.log('Saving discount card to Firestore...');
+    console.log('Firestore data keys:', Object.keys(firestoreData));
+    
+    // Save to Firestore
+    let docRef;
+    try {
+      docRef = await addDoc(collection(db, 'discount_cards'), firestoreData);
+      console.log('✅ Discount card saved successfully with ID:', docRef.id);
+    } catch (firestoreError: any) {
+      console.error('❌ Firestore save error:', firestoreError);
+      console.error('Firestore error code:', firestoreError?.code);
+      console.error('Firestore error message:', firestoreError?.message);
+      throw new Error(`Failed to save to Firestore: ${firestoreError?.message || 'Unknown error'}`);
+    }
+
+    // Convert back to regular format for response (with Date objects)
+    const responseCard = {
+      id: docRef.id,
+      coachId: firestoreData.coachId,
+      coachName: firestoreData.coachName,
+      title: firestoreData.title,
+      description: firestoreData.description,
+      discountPercentage: firestoreData.discountPercentage,
+      code: firestoreData.code,
+      qrCodeImage: firestoreData.qrCodeImage,
+      isActive: firestoreData.isActive,
+      expirationDate: firestoreData.expirationDate ? firestoreData.expirationDate.toDate() : undefined,
+      usageLimit: firestoreData.usageLimit,
+      timesUsed: firestoreData.timesUsed,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...(firestoreData.userEmail ? { userEmail: firestoreData.userEmail } : {}),
+      ...(firestoreData.courseId ? { courseId: firestoreData.courseId } : {}),
+      ...(firestoreData.cardType ? { cardType: firestoreData.cardType } : {})
+    };
+
+    console.log('=== Discount Card Creation Completed Successfully ===');
     return NextResponse.json({
       success: true,
-      discountCard: {
-        id: docRef.id,
-        ...discountCard
-      }
+      discountCard: responseCard
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating discount card:', error);
+    console.error('Error stack:', error?.stack);
+    console.error('Error details:', {
+      message: error?.message,
+      name: error?.name,
+      code: error?.code
+    });
+    
+    // Return detailed error message
+    let errorMessage = 'Failed to create discount card';
+    
+    if (error?.message) {
+      errorMessage = error.message;
+    } else if (typeof error === 'string') {
+      errorMessage = error;
+    }
+    
+    // In development, include more details
+    const response: any = {
+      error: errorMessage
+    };
+    
+    if (process.env.NODE_ENV === 'development') {
+      response.details = error?.stack;
+      response.errorType = error?.name;
+      response.errorCode = error?.code;
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to create discount card' },
+      response,
       { status: 500 }
     );
   }

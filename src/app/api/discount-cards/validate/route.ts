@@ -17,15 +17,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Normalize code to uppercase for consistency
+    const normalizedCode = cardCode.toUpperCase();
+    console.log('🔍 Validating discount code:', normalizedCode);
+    
     // Find discount card by code
     const discountCardQuery = query(
       collection(db, 'discount_cards'),
-      where('code', '==', cardCode.toUpperCase())
+      where('code', '==', normalizedCode)
     );
     
     const querySnapshot = await getDocs(discountCardQuery);
     
     if (querySnapshot.empty) {
+      console.log('❌ Discount code not found:', normalizedCode);
       return NextResponse.json(
         { 
           valid: false, 
@@ -40,6 +45,13 @@ export async function POST(request: NextRequest) {
       id: discountCardDoc.id,
       ...discountCardDoc.data()
     } as any;
+    
+    console.log('✅ Discount card found:', {
+      id: discountCard.id,
+      code: discountCard.code,
+      userEmail: discountCard.userEmail,
+      isActive: discountCard.isActive
+    });
 
     // Check if card is active
     if (!discountCard.isActive) {
@@ -81,14 +93,57 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if code is user-specific
-    if (discountCard.userEmail && customerId && discountCard.userEmail !== customerId) {
-      return NextResponse.json(
-        { 
-          valid: false, 
-          error: 'This discount code is not valid for your account' 
-        },
-        { status: 200 }
-      );
+    if (discountCard.userEmail && customerId) {
+      console.log('Checking user-specific discount card:', {
+        cardEmail: discountCard.userEmail,
+        customerId: customerId
+      });
+      
+      // Get user email from customerId
+      let customerEmail: string | null = null;
+      try {
+        const customer = await userService.getById(customerId);
+        if (customer) {
+          customerEmail = customer.email;
+          console.log('Customer found, email:', customerEmail);
+        } else {
+          console.log('Customer not found for ID:', customerId);
+        }
+      } catch (error) {
+        console.error('Error fetching customer:', error);
+      }
+      
+      // Compare emails (case-insensitive)
+      if (customerEmail && discountCard.userEmail.toLowerCase() !== customerEmail.toLowerCase()) {
+        console.log('❌ Email mismatch:', {
+          cardEmail: discountCard.userEmail,
+          customerEmail: customerEmail,
+          customerId: customerId
+        });
+        return NextResponse.json(
+          { 
+            valid: false, 
+            error: 'This discount code is not valid for your account' 
+          },
+          { status: 200 }
+        );
+      }
+      
+      // If user email not found but card is user-specific, deny access
+      if (!customerEmail && discountCard.userEmail) {
+        console.log('❌ Customer not found for ID:', customerId);
+        return NextResponse.json(
+          { 
+            valid: false, 
+            error: 'This discount code is not valid for your account' 
+          },
+          { status: 200 }
+        );
+      }
+      
+      console.log('✅ User validation passed');
+    } else {
+      console.log('Card is not user-specific, skipping user validation');
     }
 
     // Calculate discount amount
@@ -115,10 +170,19 @@ export async function POST(request: NextRequest) {
       }
     });
 
-  } catch (error) {
-    console.error('Error validating discount code:', error);
+  } catch (error: any) {
+    console.error('❌ Error validating discount code:', error);
+    console.error('Error details:', {
+      message: error?.message,
+      stack: error?.stack,
+      name: error?.name
+    });
+    
     return NextResponse.json(
-      { error: 'Failed to validate discount code' },
+      { 
+        valid: false,
+        error: error?.message || 'Failed to validate discount code'
+      },
       { status: 500 }
     );
   }
@@ -183,11 +247,19 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    if (discountCard.userEmail && userEmail && discountCard.userEmail !== userEmail) {
-      return NextResponse.json(
-        { error: 'This discount code is not valid for your account' },
-        { status: 400 }
-      );
+    // Check if code is user-specific
+    if (discountCard.userEmail && userEmail) {
+      // Compare emails (case-insensitive)
+      if (discountCard.userEmail.toLowerCase() !== userEmail.toLowerCase()) {
+        console.log('Email mismatch in PUT:', {
+          cardEmail: discountCard.userEmail,
+          userEmail: userEmail
+        });
+        return NextResponse.json(
+          { error: 'This discount code is not valid for your account' },
+          { status: 400 }
+        );
+      }
     }
 
     // Increment usage count
