@@ -717,6 +717,22 @@ const offerService = {
             return sortOffers(buildDefaultOffers(MAIN_OFFERS_COACH_ID, MAIN_OFFERS_COACH_NAME));
         }
     },
+    async create (offerData) {
+        const payload = removeUndefinedFields({
+            ...offerData,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            isActive: true,
+            options: [],
+            paymentMethods: [
+                'credit_card',
+                'twint'
+            ],
+            highlightItems: []
+        });
+        // Use addDoc to let Firestore generate the ID
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["addDoc"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["collection"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"], COACH_OFFERS_COLLECTION), payload);
+    },
     async update (id, data) {
         // Ensure all fields are properly saved, including nested options
         const updateData = removeUndefinedFields({
@@ -732,6 +748,9 @@ const offerService = {
             isActive,
             updatedAt: new Date()
         }));
+    },
+    async delete (id) {
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["deleteDoc"])((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$firebase$2f$firestore$2f$dist$2f$index$2e$node$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["doc"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$firebase$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["db"], COACH_OFFERS_COLLECTION, id));
     }
 };
 const offerPurchaseService = {

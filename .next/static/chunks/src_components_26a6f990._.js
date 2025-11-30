@@ -4327,7 +4327,7 @@ function MyReservations({ userId }) {
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                         className: "text-white font-medium",
-                                                                        children: classDate.toLocaleDateString('en-US', {
+                                                                        children: classDate.toLocaleDateString('fr-FR', {
                                                                             weekday: 'long',
                                                                             year: 'numeric',
                                                                             month: 'long',
@@ -4382,12 +4382,12 @@ function MyReservations({ userId }) {
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                         className: "text-white font-medium",
                                                                         children: [
-                                                                            startTime.toLocaleTimeString('en-US', {
+                                                                            startTime.toLocaleTimeString('fr-FR', {
                                                                                 hour: '2-digit',
                                                                                 minute: '2-digit'
                                                                             }),
                                                                             " - ",
-                                                                            endTime.toLocaleTimeString('en-US', {
+                                                                            endTime.toLocaleTimeString('fr-FR', {
                                                                                 hour: '2-digit',
                                                                                 minute: '2-digit'
                                                                             })
@@ -8753,11 +8753,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$ico
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$i18next$2f$dist$2f$es$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$module__evaluation$3e$__ = __turbopack_context__.i("[project]/node_modules/react-i18next/dist/es/index.js [app-client] (ecmascript) <module evaluation>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$i18next$2f$dist$2f$es$2f$useTranslation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-i18next/dist/es/useTranslation.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$auth$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/auth.tsx [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$CreateDiscountCardModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/CreateDiscountCardModal.tsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
-;
 ;
 ;
 ;
@@ -8772,9 +8770,12 @@ function DiscountCardManagement({ coachId }) {
     const [discountCards, setDiscountCards] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [showCreateModal, setShowCreateModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [editingCard, setEditingCard] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [selectedCard, setSelectedCard] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [filter, setFilter] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('all');
     const [searchTerm, setSearchTerm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [searchCourse, setSearchCourse] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [searchExpiration, setSearchExpiration] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "DiscountCardManagement.useEffect": ()=>{
             loadDiscountCards();
@@ -9251,12 +9252,12 @@ function DiscountCardManagement({ coachId }) {
                 className: "w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"
             }, void 0, false, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 571,
+                lineNumber: 574,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-            lineNumber: 570,
+            lineNumber: 573,
             columnNumber: 7
         }, this);
     }
@@ -9273,7 +9274,7 @@ function DiscountCardManagement({ coachId }) {
                                 children: t('Discount Cards Management')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                lineNumber: 581,
+                                lineNumber: 584,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9281,13 +9282,13 @@ function DiscountCardManagement({ coachId }) {
                                 children: t('Create and manage discount cards for your students')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                lineNumber: 582,
+                                lineNumber: 585,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 580,
+                        lineNumber: 583,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9298,26 +9299,26 @@ function DiscountCardManagement({ coachId }) {
                                 size: 18
                             }, void 0, false, {
                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                lineNumber: 590,
+                                lineNumber: 593,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: t('Create Discount Card')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                lineNumber: 591,
+                                lineNumber: 594,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 586,
+                        lineNumber: 589,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 579,
+                lineNumber: 582,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9338,7 +9339,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Total Cards')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 603,
+                                            lineNumber: 606,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9346,13 +9347,13 @@ function DiscountCardManagement({ coachId }) {
                                             children: Array.isArray(discountCards) ? discountCards.length : 0
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 604,
+                                            lineNumber: 607,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 602,
+                                    lineNumber: 605,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiPercent"], {
@@ -9360,18 +9361,18 @@ function DiscountCardManagement({ coachId }) {
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 606,
+                                    lineNumber: 609,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                            lineNumber: 601,
+                            lineNumber: 604,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 597,
+                        lineNumber: 600,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -9389,7 +9390,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Active Cards')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 616,
+                                            lineNumber: 619,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9403,13 +9404,13 @@ function DiscountCardManagement({ coachId }) {
                                             }).length
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 617,
+                                            lineNumber: 620,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 615,
+                                    lineNumber: 618,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiCheckCircle"], {
@@ -9417,18 +9418,18 @@ function DiscountCardManagement({ coachId }) {
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 627,
+                                    lineNumber: 630,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                            lineNumber: 614,
+                            lineNumber: 617,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 610,
+                        lineNumber: 613,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -9446,7 +9447,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Total Uses')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 637,
+                                            lineNumber: 640,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9457,13 +9458,13 @@ function DiscountCardManagement({ coachId }) {
                                             }, 0) : 0
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 638,
+                                            lineNumber: 641,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 636,
+                                    lineNumber: 639,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiUser"], {
@@ -9471,18 +9472,18 @@ function DiscountCardManagement({ coachId }) {
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 645,
+                                    lineNumber: 648,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                            lineNumber: 635,
+                            lineNumber: 638,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 631,
+                        lineNumber: 634,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -9500,7 +9501,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Expired Cards')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 655,
+                                            lineNumber: 658,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9514,13 +9515,13 @@ function DiscountCardManagement({ coachId }) {
                                             }).length
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 656,
+                                            lineNumber: 659,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 654,
+                                    lineNumber: 657,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FiClock"], {
@@ -9528,24 +9529,24 @@ function DiscountCardManagement({ coachId }) {
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 666,
+                                    lineNumber: 669,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                            lineNumber: 653,
+                            lineNumber: 656,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 649,
+                        lineNumber: 652,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 596,
+                lineNumber: 599,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9561,7 +9562,7 @@ function DiscountCardManagement({ coachId }) {
                                     size: 16
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 676,
+                                    lineNumber: 679,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -9572,18 +9573,18 @@ function DiscountCardManagement({ coachId }) {
                                     className: "w-full pl-9 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 677,
+                                    lineNumber: 680,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                            lineNumber: 675,
+                            lineNumber: 678,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 674,
+                        lineNumber: 677,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9611,18 +9612,18 @@ function DiscountCardManagement({ coachId }) {
                                 children: tab.label
                             }, tab.key, false, {
                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                lineNumber: 695,
+                                lineNumber: 698,
                                 columnNumber: 11
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 688,
+                        lineNumber: 691,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 672,
+                lineNumber: 675,
                 columnNumber: 7
             }, this),
             getFilteredCards().length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9632,7 +9633,7 @@ function DiscountCardManagement({ coachId }) {
                         className: "text-gray-600 text-6xl mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 713,
+                        lineNumber: 716,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -9640,7 +9641,7 @@ function DiscountCardManagement({ coachId }) {
                         children: t('No discount cards found')
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 714,
+                        lineNumber: 717,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9648,7 +9649,7 @@ function DiscountCardManagement({ coachId }) {
                         children: filter === 'all' ? t('Create your first discount card to get started') : t('No cards match the current filter')
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 717,
+                        lineNumber: 720,
                         columnNumber: 11
                     }, this),
                     filter === 'all' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9657,13 +9658,13 @@ function DiscountCardManagement({ coachId }) {
                         children: t('Create First Discount Card')
                     }, void 0, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 724,
+                        lineNumber: 727,
                         columnNumber: 13
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 712,
+                lineNumber: 715,
                 columnNumber: 9
             }, this) : /* Unified Grid Layout for All Screen Sizes */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[600px] overflow-y-auto pr-1",
@@ -9687,12 +9688,12 @@ function DiscountCardManagement({ coachId }) {
                                                 size: 20
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                lineNumber: 747,
+                                                lineNumber: 750,
                                                 columnNumber: 23
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 746,
+                                            lineNumber: 749,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9707,7 +9708,7 @@ function DiscountCardManagement({ coachId }) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 750,
+                                                    lineNumber: 753,
                                                     columnNumber: 23
                                                 }, this),
                                                 card.courseName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9715,7 +9716,7 @@ function DiscountCardManagement({ coachId }) {
                                                     children: card.courseName
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 754,
+                                                    lineNumber: 757,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9726,7 +9727,7 @@ function DiscountCardManagement({ coachId }) {
                                                             children: t(status.status)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 759,
+                                                            lineNumber: 762,
                                                             columnNumber: 25
                                                         }, this),
                                                         card.memberName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -9738,25 +9739,25 @@ function DiscountCardManagement({ coachId }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 763,
+                                                            lineNumber: 766,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 758,
+                                                    lineNumber: 761,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 749,
+                                            lineNumber: 752,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 745,
+                                    lineNumber: 748,
                                     columnNumber: 19
                                 }, this),
                                 card.qrCodeImage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9772,12 +9773,12 @@ function DiscountCardManagement({ coachId }) {
                                                 className: "w-full h-full object-contain"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                lineNumber: 775,
+                                                lineNumber: 778,
                                                 columnNumber: 25
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 774,
+                                            lineNumber: 777,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9785,13 +9786,13 @@ function DiscountCardManagement({ coachId }) {
                                             children: card.code
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 783,
+                                            lineNumber: 786,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 773,
+                                    lineNumber: 776,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9804,7 +9805,7 @@ function DiscountCardManagement({ coachId }) {
                                                     children: t('Course')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 791,
+                                                    lineNumber: 794,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9812,13 +9813,13 @@ function DiscountCardManagement({ coachId }) {
                                                     children: card.courseName
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 792,
+                                                    lineNumber: 795,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 790,
+                                            lineNumber: 793,
                                             columnNumber: 23
                                         }, this),
                                         card.memberEmail && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9828,7 +9829,7 @@ function DiscountCardManagement({ coachId }) {
                                                     children: t('Member Email')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 797,
+                                                    lineNumber: 800,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9836,13 +9837,13 @@ function DiscountCardManagement({ coachId }) {
                                                     children: card.memberEmail
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 798,
+                                                    lineNumber: 801,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 796,
+                                            lineNumber: 799,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9855,7 +9856,7 @@ function DiscountCardManagement({ coachId }) {
                                                             children: t('Expiration Date')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 803,
+                                                            lineNumber: 806,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9863,13 +9864,13 @@ function DiscountCardManagement({ coachId }) {
                                                             children: new Date(card.expiryDate).toLocaleDateString()
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 804,
+                                                            lineNumber: 807,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 802,
+                                                    lineNumber: 805,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9879,7 +9880,7 @@ function DiscountCardManagement({ coachId }) {
                                                             children: t('Usage')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 809,
+                                                            lineNumber: 812,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9891,19 +9892,19 @@ function DiscountCardManagement({ coachId }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                            lineNumber: 810,
+                                                            lineNumber: 813,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 808,
+                                                    lineNumber: 811,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 801,
+                                            lineNumber: 804,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9913,7 +9914,7 @@ function DiscountCardManagement({ coachId }) {
                                                     children: t('Created')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 822,
+                                                    lineNumber: 825,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9921,19 +9922,19 @@ function DiscountCardManagement({ coachId }) {
                                                     children: new Date(card.createdAt).toLocaleDateString()
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 823,
+                                                    lineNumber: 826,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 821,
+                                            lineNumber: 824,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 788,
+                                    lineNumber: 791,
                                     columnNumber: 19
                                 }, this),
                                 card.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9944,7 +9945,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Description')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 831,
+                                            lineNumber: 834,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -9952,13 +9953,13 @@ function DiscountCardManagement({ coachId }) {
                                             children: card.description
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 832,
+                                            lineNumber: 835,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 830,
+                                    lineNumber: 833,
                                     columnNumber: 21
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9969,7 +9970,7 @@ function DiscountCardManagement({ coachId }) {
                                             children: t('Card Code')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 837,
+                                            lineNumber: 840,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9980,7 +9981,7 @@ function DiscountCardManagement({ coachId }) {
                                                     children: card.code
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 839,
+                                                    lineNumber: 842,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9991,24 +9992,24 @@ function DiscountCardManagement({ coachId }) {
                                                         size: 16
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                        lineNumber: 847,
+                                                        lineNumber: 850,
                                                         columnNumber: 25
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 842,
+                                                    lineNumber: 845,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 838,
+                                            lineNumber: 841,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 836,
+                                    lineNumber: 839,
                                     columnNumber: 19
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10023,20 +10024,20 @@ function DiscountCardManagement({ coachId }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 859,
+                                                    lineNumber: 862,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('QR')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 860,
+                                                    lineNumber: 863,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 854,
+                                            lineNumber: 857,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -10048,20 +10049,20 @@ function DiscountCardManagement({ coachId }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 868,
+                                                    lineNumber: 871,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('Card')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 869,
+                                                    lineNumber: 872,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 863,
+                                            lineNumber: 866,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -10073,20 +10074,20 @@ function DiscountCardManagement({ coachId }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 877,
+                                                    lineNumber: 880,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('Share')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 878,
+                                                    lineNumber: 881,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 872,
+                                            lineNumber: 875,
                                             columnNumber: 21
                                         }, this),
                                         card.isActive && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -10098,20 +10099,20 @@ function DiscountCardManagement({ coachId }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 887,
+                                                    lineNumber: 890,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('Deactivate')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 888,
+                                                    lineNumber: 891,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 882,
+                                            lineNumber: 885,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -10123,62 +10124,62 @@ function DiscountCardManagement({ coachId }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 897,
+                                                    lineNumber: 900,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: t('Delete')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                                    lineNumber: 898,
+                                                    lineNumber: 901,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                            lineNumber: 892,
+                                            lineNumber: 895,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                                    lineNumber: 853,
+                                    lineNumber: 856,
                                     columnNumber: 19
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                            lineNumber: 743,
+                            lineNumber: 746,
                             columnNumber: 17
                         }, this)
                     }, card.id, false, {
                         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                        lineNumber: 738,
+                        lineNumber: 741,
                         columnNumber: 15
                     }, this);
                 })
             }, void 0, false, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 734,
+                lineNumber: 737,
                 columnNumber: 9
             }, this),
-            showCreateModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$CreateDiscountCardModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+            showCreateModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CreateDiscountCardModal, {
                 onClose: ()=>setShowCreateModal(false),
                 onSubmit: handleCreateCard,
                 coachId: coachId
             }, void 0, false, {
                 fileName: "[project]/src/components/DiscountCardManagement.tsx",
-                lineNumber: 910,
+                lineNumber: 913,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/DiscountCardManagement.tsx",
-        lineNumber: 577,
+        lineNumber: 580,
         columnNumber: 5
     }, this);
 }
-_s(DiscountCardManagement, "WQ1GkCSOWezzaWzBaXMp00lWKLI=", false, function() {
+_s(DiscountCardManagement, "ZIdp8sMb6e9qef2nJAWtVaoGJJE=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$i18next$2f$dist$2f$es$2f$useTranslation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$auth$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]

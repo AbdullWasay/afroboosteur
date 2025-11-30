@@ -4519,7 +4519,9 @@ function PaymentHandlerWithCredits(props) {
         }
     };
     const isMethodAllowed = (methodId)=>{
+        // If no restrictions specified, allow all methods (like in course booking)
         if (!props.allowedPaymentMethods || props.allowedPaymentMethods.length === 0) return true;
+        // Otherwise check if method is in allowed list
         return props.allowedPaymentMethods.includes(methodId);
     };
     const loadPaymentSettings = async ()=>{
@@ -4543,7 +4545,7 @@ function PaymentHandlerWithCredits(props) {
                         size: 24
                     }, void 0, false, {
                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 185,
+                        lineNumber: 187,
                         columnNumber: 17
                     }, this),
                     isEnabled: hasEnoughCredits,
@@ -4553,8 +4555,10 @@ function PaymentHandlerWithCredits(props) {
                     }) : `${t('Insufficient credits')} (${t('Available')}: ${user.credits.toFixed(2)} CHF, ${t('Required')}: ${discountedAmount.toFixed(2)} CHF)`
                 });
             }
-            // Add other payment methods
-            if (isMethodAllowed('stripe')) {
+            // Add other payment methods - ALWAYS show all configured methods (like course booking)
+            // All methods should be available for all offers
+            // Stripe (Credit/Debit Card) - Always add if configured
+            if (stripeEnabled) {
                 methods.push({
                     id: 'stripe',
                     name: t('creditDebitCard'),
@@ -4562,13 +4566,15 @@ function PaymentHandlerWithCredits(props) {
                         size: 24
                     }, void 0, false, {
                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 201,
+                        lineNumber: 206,
                         columnNumber: 17
                     }, this),
-                    isEnabled: stripeEnabled
+                    isEnabled: true // Always enabled if Stripe is configured
                 });
             }
-            if (isMethodAllowed('paypal')) {
+            // PayPal - Always add if configured
+            // PayPal should always be available when configured (like in course booking)
+            if (paypalEnabled) {
                 methods.push({
                     id: 'paypal',
                     name: t('paypal'),
@@ -4576,13 +4582,16 @@ function PaymentHandlerWithCredits(props) {
                         size: 24
                     }, void 0, false, {
                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 210,
+                        lineNumber: 217,
                         columnNumber: 17
                     }, this),
-                    isEnabled: paypalEnabled
+                    isEnabled: true // Always enabled if PayPal is configured
                 });
             }
-            if (isMethodAllowed('twint')) {
+            // TWINT - Always show if Stripe is configured (like in course booking)
+            // TWINT uses Stripe infrastructure, so enable it if Stripe is configured
+            const stripeConfigured = stripeDoc.exists() && stripeDoc.data().isConfigured; // Stripe configured (even if not enabled)
+            if (stripeConfigured) {
                 methods.push({
                     id: 'twint',
                     name: 'TWINT',
@@ -4591,27 +4600,27 @@ function PaymentHandlerWithCredits(props) {
                         children: "📱"
                     }, void 0, false, {
                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 219,
+                        lineNumber: 229,
                         columnNumber: 17
                     }, this),
-                    isEnabled: stripeEnabled // TWINT requires Stripe to be configured
+                    isEnabled: true // Always enabled if Stripe is configured
                 });
             }
-            if (isMethodAllowed('gift-card')) {
-                methods.push({
-                    id: 'gift-card',
-                    name: t('Use a gift card to pay for this purchase'),
-                    icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FiGift"], {
-                        size: 24
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 228,
-                        columnNumber: 17
-                    }, this),
-                    isEnabled: true
-                });
-            }
-            if (isMethodAllowed('discount-card')) {
+            // Gift Card - Always available for all offers and courses
+            methods.push({
+                id: 'gift-card',
+                name: t('Use a gift card to pay for this purchase'),
+                icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FiGift"], {
+                    size: 24
+                }, void 0, false, {
+                    fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
+                    lineNumber: 238,
+                    columnNumber: 15
+                }, this),
+                isEnabled: true
+            });
+            // Discount Card - Always available when coachId is provided
+            if (props.coachId) {
                 methods.push({
                     id: 'discount-card',
                     name: t('Use discount card') || 'Use discount card',
@@ -4619,16 +4628,22 @@ function PaymentHandlerWithCredits(props) {
                         size: 24
                     }, void 0, false, {
                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 237,
+                        lineNumber: 247,
                         columnNumber: 17
                     }, this),
-                    isEnabled: Boolean(props.coachId)
+                    isEnabled: true
                 });
             }
             setPaymentMethods(methods);
             const availableMethods = methods.filter((m)=>m.isEnabled);
+            // If no methods are available, check if it's because of restrictions
             if (availableMethods.length === 0) {
-                setError(t('noPaymentMethodsAvailable'));
+                // If we have allowedPaymentMethods but none are enabled, show helpful error
+                if (props.allowedPaymentMethods && props.allowedPaymentMethods.length > 0) {
+                    setError(t('noPaymentMethodsAvailable') + '. Please configure payment methods in admin settings or contact support.');
+                } else {
+                    setError(t('noPaymentMethodsAvailable'));
+                }
             } else if (availableMethods.length === 1) {
                 // Only one method available, use it directly
                 setSelectedMethod(availableMethods[0].id);
@@ -4832,7 +4847,7 @@ function PaymentHandlerWithCredits(props) {
                             className: "w-16 h-16 border-4 border-[#D91CD2] border-t-transparent rounded-full animate-spin mx-auto mb-4"
                         }, void 0, false, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 480,
+                            lineNumber: 496,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -4840,7 +4855,7 @@ function PaymentHandlerWithCredits(props) {
                             children: t('Processing Payment')
                         }, void 0, false, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 481,
+                            lineNumber: 497,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4848,7 +4863,7 @@ function PaymentHandlerWithCredits(props) {
                             children: t('Please wait while we process your payment. Do not close this window.')
                         }, void 0, false, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 482,
+                            lineNumber: 498,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4858,31 +4873,31 @@ function PaymentHandlerWithCredits(props) {
                                     className: "w-2 h-2 bg-[#D91CD2] rounded-full animate-pulse"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 486,
+                                    lineNumber: 502,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: t('Secure transaction in progress')
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 487,
+                                    lineNumber: 503,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 485,
+                            lineNumber: 501,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                    lineNumber: 475,
+                    lineNumber: 491,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 474,
+                lineNumber: 490,
                 columnNumber: 9
             }, this),
             (showMethodSelection || isLoading || error) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4912,7 +4927,7 @@ function PaymentHandlerWithCredits(props) {
                                             children: t('Step 2: Choose Payment Method')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 505,
+                                            lineNumber: 521,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4920,13 +4935,13 @@ function PaymentHandlerWithCredits(props) {
                                             children: props.title
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 506,
+                                            lineNumber: 522,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 504,
+                                    lineNumber: 520,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4936,18 +4951,18 @@ function PaymentHandlerWithCredits(props) {
                                         size: 24
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                        lineNumber: 512,
+                                        lineNumber: 528,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 508,
+                                    lineNumber: 524,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 503,
+                            lineNumber: 519,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4961,7 +4976,7 @@ function PaymentHandlerWithCredits(props) {
                                             className: "w-8 h-8 border-2 border-[#D91CD2] border-t-transparent rounded-full animate-spin mx-auto mb-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 521,
+                                            lineNumber: 537,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4969,13 +4984,13 @@ function PaymentHandlerWithCredits(props) {
                                             children: t('loadingPaymentOptions')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 522,
+                                            lineNumber: 538,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 520,
+                                    lineNumber: 536,
                                     columnNumber: 19
                                 }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "text-center py-8",
@@ -4985,7 +5000,7 @@ function PaymentHandlerWithCredits(props) {
                                             children: error
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 526,
+                                            lineNumber: 542,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4994,13 +5009,13 @@ function PaymentHandlerWithCredits(props) {
                                             children: t('close')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 527,
+                                            lineNumber: 543,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 525,
+                                    lineNumber: 541,
                                     columnNumber: 19
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "space-y-4 sm:space-y-6",
@@ -5013,7 +5028,7 @@ function PaymentHandlerWithCredits(props) {
                                                     children: props.description
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 538,
+                                                    lineNumber: 554,
                                                     columnNumber: 23
                                                 }, this),
                                                 discountCardResult && discountCardResult.valid ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5026,7 +5041,7 @@ function PaymentHandlerWithCredits(props) {
                                                                     size: 16
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 542,
+                                                                    lineNumber: 558,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5038,13 +5053,13 @@ function PaymentHandlerWithCredits(props) {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 543,
+                                                                    lineNumber: 559,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 541,
+                                                            lineNumber: 557,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5055,7 +5070,7 @@ function PaymentHandlerWithCredits(props) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 547,
+                                                            lineNumber: 563,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5066,7 +5081,7 @@ function PaymentHandlerWithCredits(props) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 550,
+                                                            lineNumber: 566,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5078,13 +5093,13 @@ function PaymentHandlerWithCredits(props) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 553,
+                                                            lineNumber: 569,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 540,
+                                                    lineNumber: 556,
                                                     columnNumber: 25
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-xl sm:text-2xl font-bold text-[#D91CD2] mt-4",
@@ -5094,13 +5109,13 @@ function PaymentHandlerWithCredits(props) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 562,
+                                                    lineNumber: 578,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 537,
+                                            lineNumber: 553,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5119,7 +5134,7 @@ function PaymentHandlerWithCredits(props) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 571,
+                                                            lineNumber: 587,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5128,13 +5143,13 @@ function PaymentHandlerWithCredits(props) {
                                                             children: showReferralInput ? t('Hide') : t('Have a referral code?')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 574,
+                                                            lineNumber: 590,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 570,
+                                                    lineNumber: 586,
                                                     columnNumber: 23
                                                 }, this),
                                                 showReferralInput && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5160,7 +5175,7 @@ function PaymentHandlerWithCredits(props) {
                                                                     className: `w-full px-3 py-3 sm:px-4 sm:py-2 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 text-base sm:text-sm ${referralValidated === true ? 'border-green-500' : referralValidated === false ? 'border-red-500' : 'border-gray-600'}`
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 585,
+                                                                    lineNumber: 601,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 referralValidated === true && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5170,12 +5185,12 @@ function PaymentHandlerWithCredits(props) {
                                                                         size: 18
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                        lineNumber: 607,
+                                                                        lineNumber: 623,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 606,
+                                                                    lineNumber: 622,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 referralValidated === false && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5185,18 +5200,18 @@ function PaymentHandlerWithCredits(props) {
                                                                         size: 18
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                        lineNumber: 612,
+                                                                        lineNumber: 628,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 611,
+                                                                    lineNumber: 627,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 584,
+                                                            lineNumber: 600,
                                                             columnNumber: 27
                                                         }, this),
                                                         referralValidated === true && referralUserInfo && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5207,7 +5222,7 @@ function PaymentHandlerWithCredits(props) {
                                                                     className: "flex-shrink-0"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 619,
+                                                                    lineNumber: 635,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5219,13 +5234,13 @@ function PaymentHandlerWithCredits(props) {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 620,
+                                                                    lineNumber: 636,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 618,
+                                                            lineNumber: 634,
                                                             columnNumber: 29
                                                         }, this),
                                                         referralValidated === false && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5236,32 +5251,32 @@ function PaymentHandlerWithCredits(props) {
                                                                     className: "flex-shrink-0"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 626,
+                                                                    lineNumber: 642,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     children: t('Invalid referral code')
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 627,
+                                                                    lineNumber: 643,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 625,
+                                                            lineNumber: 641,
                                                             columnNumber: 29
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 583,
+                                                    lineNumber: 599,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 569,
+                                            lineNumber: 585,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5279,7 +5294,7 @@ function PaymentHandlerWithCredits(props) {
                                                                     children: method.icon
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 646,
+                                                                    lineNumber: 662,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5290,7 +5305,7 @@ function PaymentHandlerWithCredits(props) {
                                                                             children: method.name
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                            lineNumber: 650,
+                                                                            lineNumber: 666,
                                                                             columnNumber: 31
                                                                         }, this),
                                                                         method.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5298,7 +5313,7 @@ function PaymentHandlerWithCredits(props) {
                                                                             children: method.description
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                            lineNumber: 652,
+                                                                            lineNumber: 668,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         isProcessingPayment && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5306,53 +5321,53 @@ function PaymentHandlerWithCredits(props) {
                                                                             children: method.id === 'credits' ? t('processing') : t('Processing payment...')
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                            lineNumber: 655,
+                                                                            lineNumber: 671,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 649,
+                                                                    lineNumber: 665,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 645,
+                                                            lineNumber: 661,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "w-4 h-4 rounded-full border-2 border-gray-500 flex-shrink-0"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 661,
+                                                            lineNumber: 677,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, method.id, true, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 637,
+                                                    lineNumber: 653,
                                                     columnNumber: 25
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 635,
+                                            lineNumber: 651,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 535,
+                                    lineNumber: 551,
                                     columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                lineNumber: 518,
+                                lineNumber: 534,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 517,
+                            lineNumber: 533,
                             columnNumber: 13
                         }, this),
                         !isLoading && !error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5364,23 +5379,23 @@ function PaymentHandlerWithCredits(props) {
                                 children: t('cancel')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                lineNumber: 673,
+                                lineNumber: 689,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 672,
+                            lineNumber: 688,
                             columnNumber: 15
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                    lineNumber: 496,
+                    lineNumber: 512,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 495,
+                lineNumber: 511,
                 columnNumber: 9
             }, this),
             selectedMethod === 'stripe' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$StripePaymentModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -5396,7 +5411,7 @@ function PaymentHandlerWithCredits(props) {
                 userId: props.userId
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 688,
+                lineNumber: 704,
                 columnNumber: 9
             }, this),
             selectedMethod === 'paypal' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$PaypalPaymentModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -5412,7 +5427,7 @@ function PaymentHandlerWithCredits(props) {
                 userId: props.userId
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 704,
+                lineNumber: 720,
                 columnNumber: 9
             }, this),
             selectedMethod === 'twint' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$TwintPaymentModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -5438,7 +5453,7 @@ function PaymentHandlerWithCredits(props) {
                 }
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 720,
+                lineNumber: 736,
                 columnNumber: 9
             }, this),
             isConfirmationOpen && purchaseItem && confirmationPaymentMethod && !isProcessingPayment && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$PurchaseConfirmationModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -5455,7 +5470,7 @@ function PaymentHandlerWithCredits(props) {
                 title: t('confirmPurchaseTitle')
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 746,
+                lineNumber: 762,
                 columnNumber: 9
             }, this),
             showGiftCardScanner && user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$GiftCardScanner$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -5469,7 +5484,7 @@ function PaymentHandlerWithCredits(props) {
                 transactionType: props.transactionType
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 763,
+                lineNumber: 779,
                 columnNumber: 9
             }, this),
             showDiscountCardScanner && user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$DiscountCardScanner$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -5481,7 +5496,7 @@ function PaymentHandlerWithCredits(props) {
                 orderAmount: props.amount
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 777,
+                lineNumber: 793,
                 columnNumber: 9
             }, this)
         ]
@@ -5697,14 +5712,12 @@ function WelcomePopup({ isOpen, onClose }) {
                 [offerId]: optionId
             }));
     };
+    // Don't restrict payment methods - show all available methods like in course booking
+    // This allows users to use any configured payment method (stripe, paypal, twint, credits, etc.)
     const mapAllowedPaymentMethods = (offer, option)=>{
-        const methods = getPaymentMethods(offer, option);
-        const mapped = [];
-        if (methods.includes('credit_card')) mapped.push('stripe');
-        if (methods.includes('twint')) mapped.push('twint');
-        if (methods.includes('gift_card')) mapped.push('gift-card');
-        if (methods.includes('discount_card')) mapped.push('discount-card');
-        return mapped;
+        // Return undefined to allow all payment methods (same as course booking)
+        // PaymentHandlerWithCredits will show all configured methods when allowedPaymentMethods is undefined
+        return undefined;
     };
     const openPayment = (offer)=>{
         if (!user) {
@@ -5850,7 +5863,7 @@ function WelcomePopup({ isOpen, onClose }) {
                 className: "animate-pulse bg-gray-800/40 h-32 rounded-2xl border border-gray-800"
             }, void 0, false, {
                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                lineNumber: 337,
+                lineNumber: 335,
                 columnNumber: 9
             }, this);
         }
@@ -5860,7 +5873,7 @@ function WelcomePopup({ isOpen, onClose }) {
                 children: t('noOffersFound') || 'No offers available at the moment.'
             }, void 0, false, {
                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                lineNumber: 343,
+                lineNumber: 341,
                 columnNumber: 9
             }, this);
         }
@@ -5884,20 +5897,20 @@ function WelcomePopup({ isOpen, onClose }) {
                                             children: currentOffer.emoji
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                                            lineNumber: 362,
+                                            lineNumber: 360,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: t('Offer')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                                            lineNumber: 363,
+                                            lineNumber: 361,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                                    lineNumber: 361,
+                                    lineNumber: 359,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -5905,7 +5918,7 @@ function WelcomePopup({ isOpen, onClose }) {
                                     children: currentOffer.title
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                                    lineNumber: 365,
+                                    lineNumber: 363,
                                     columnNumber: 13
                                 }, this),
                                 currentOffer.subtitle && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5913,13 +5926,13 @@ function WelcomePopup({ isOpen, onClose }) {
                                     children: currentOffer.subtitle
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                                    lineNumber: 366,
+                                    lineNumber: 364,
                                     columnNumber: 39
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                            lineNumber: 360,
+                            lineNumber: 358,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5930,7 +5943,7 @@ function WelcomePopup({ isOpen, onClose }) {
                                     children: t('Starting at')
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                                    lineNumber: 369,
+                                    lineNumber: 367,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5941,19 +5954,19 @@ function WelcomePopup({ isOpen, onClose }) {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                                    lineNumber: 370,
+                                    lineNumber: 368,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                            lineNumber: 368,
+                            lineNumber: 366,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                    lineNumber: 359,
+                    lineNumber: 357,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5961,7 +5974,7 @@ function WelcomePopup({ isOpen, onClose }) {
                     children: currentOffer.description
                 }, void 0, false, {
                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                    lineNumber: 374,
+                    lineNumber: 372,
                     columnNumber: 9
                 }, this),
                 currentOffer.highlightItems?.length ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5971,12 +5984,12 @@ function WelcomePopup({ isOpen, onClose }) {
                             children: item
                         }, item, false, {
                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                            lineNumber: 379,
+                            lineNumber: 377,
                             columnNumber: 15
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                    lineNumber: 377,
+                    lineNumber: 375,
                     columnNumber: 11
                 }, this) : null,
                 activeOptions.length ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5987,7 +6000,7 @@ function WelcomePopup({ isOpen, onClose }) {
                             children: t('Choose your option')
                         }, void 0, false, {
                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                            lineNumber: 388,
+                            lineNumber: 386,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6031,13 +6044,13 @@ function WelcomePopup({ isOpen, onClose }) {
                                             ]
                                         }, option.id, true, {
                                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                                            lineNumber: 426,
+                                            lineNumber: 424,
                                             columnNumber: 21
                                         }, this);
                                     })
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                                    lineNumber: 392,
+                                    lineNumber: 390,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FiChevronDown"], {
@@ -6045,13 +6058,13 @@ function WelcomePopup({ isOpen, onClose }) {
                                     size: 14
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                                    lineNumber: 432,
+                                    lineNumber: 430,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                            lineNumber: 391,
+                            lineNumber: 389,
                             columnNumber: 13
                         }, this),
                         selectedOption && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6059,13 +6072,13 @@ function WelcomePopup({ isOpen, onClose }) {
                             children: selectedOption.description
                         }, void 0, false, {
                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                            lineNumber: 435,
+                            lineNumber: 433,
                             columnNumber: 15
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                    lineNumber: 387,
+                    lineNumber: 385,
                     columnNumber: 11
                 }, this) : null,
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6073,7 +6086,7 @@ function WelcomePopup({ isOpen, onClose }) {
                     children: paymentBadges(currentOffer, selectedOption)
                 }, void 0, false, {
                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                    lineNumber: 442,
+                    lineNumber: 440,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6083,13 +6096,13 @@ function WelcomePopup({ isOpen, onClose }) {
                     children: user ? currentOffer.buttonLabel : t('signIn')
                 }, void 0, false, {
                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                    lineNumber: 446,
+                    lineNumber: 444,
                     columnNumber: 9
                 }, this)
             ]
         }, currentOffer.id, true, {
             fileName: "[project]/src/components/WelcomePopup.tsx",
-            lineNumber: 355,
+            lineNumber: 353,
             columnNumber: 7
         }, this);
     }, [
@@ -6123,7 +6136,7 @@ function WelcomePopup({ isOpen, onClose }) {
                             className: "fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999]"
                         }, void 0, false, {
                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                            lineNumber: 462,
+                            lineNumber: 460,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -6149,7 +6162,11 @@ function WelcomePopup({ isOpen, onClose }) {
                             className: "fixed inset-0 z-[10000] flex items-center justify-center p-2 sm:p-4",
                             onClick: (e)=>e.stopPropagation(),
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "bg-gray-900 rounded-2xl max-w-4xl w-full max-h-[95vh] overflow-hidden border border-gray-800 shadow-2xl relative flex flex-col",
+                                className: "bg-gray-900 rounded-2xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-gray-800 shadow-2xl relative flex flex-col",
+                                style: {
+                                    scrollbarWidth: 'thin',
+                                    scrollbarColor: '#D91CD2 #1F2937'
+                                },
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         onClick: onClose,
@@ -6159,12 +6176,12 @@ function WelcomePopup({ isOpen, onClose }) {
                                             size: 20
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                                            lineNumber: 483,
+                                            lineNumber: 486,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/WelcomePopup.tsx",
-                                        lineNumber: 479,
+                                        lineNumber: 482,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6179,12 +6196,12 @@ function WelcomePopup({ isOpen, onClose }) {
                                                     className: "object-cover"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                    lineNumber: 488,
+                                                    lineNumber: 491,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                lineNumber: 487,
+                                                lineNumber: 490,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6209,7 +6226,7 @@ function WelcomePopup({ isOpen, onClose }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                            lineNumber: 501,
+                                                            lineNumber: 504,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -6217,79 +6234,86 @@ function WelcomePopup({ isOpen, onClose }) {
                                                             children: t('Explore tailor-made offers and jump back into class.')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                            lineNumber: 504,
+                                                            lineNumber: 507,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                    lineNumber: 496,
+                                                    lineNumber: 499,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                lineNumber: 495,
+                                                lineNumber: 498,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/WelcomePopup.tsx",
-                                        lineNumber: 486,
+                                        lineNumber: 489,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "flex-1 overflow-hidden flex flex-col flex-shrink-0",
+                                        className: "flex-1 flex flex-col",
                                         children: [
                                             !isLoadingOffers && visibleOffers.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "flex gap-1 border-b border-gray-800 bg-gray-900/50 px-2 sm:px-4 flex-shrink-0",
-                                                children: visibleOffers.map((offer, index)=>{
-                                                    // Use title directly from database - no hardcoded overrides
-                                                    const displayName = offer.title || '';
-                                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                        onClick: ()=>{
-                                                            setActiveTab(index);
-                                                            // Scroll to top of content when switching tabs
-                                                            const contentArea = document.querySelector('[data-offer-content]');
-                                                            if (contentArea) {
-                                                                contentArea.scrollTop = 0;
-                                                            }
-                                                        },
-                                                        className: `flex-1 min-w-0 px-2 sm:px-3 py-2 text-xs font-medium transition-colors whitespace-nowrap ${activeTab === index ? 'border-b-2 border-[#D91CD2] text-[#D91CD2]' : 'text-gray-400 hover:text-gray-200'}`,
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "mr-1",
-                                                                children: offer.emoji || '🎯'
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                                lineNumber: 536,
-                                                                columnNumber: 29
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "hidden sm:inline truncate",
-                                                                children: displayName
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                                lineNumber: 537,
-                                                                columnNumber: 29
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "sm:hidden truncate",
-                                                                children: displayName.split(' ')[0]
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                                lineNumber: 538,
-                                                                columnNumber: 29
-                                                            }, this)
-                                                        ]
-                                                    }, offer.id, true, {
-                                                        fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                        lineNumber: 520,
-                                                        columnNumber: 27
-                                                    }, this);
-                                                })
+                                                className: "border-b border-gray-800 bg-gray-900/50 px-2 sm:px-4 flex-shrink-0",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "grid grid-cols-3 gap-1 sm:flex sm:flex-wrap",
+                                                    children: visibleOffers.map((offer, index)=>{
+                                                        // Use title directly from database - no hardcoded overrides
+                                                        const displayName = offer.title || '';
+                                                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            onClick: ()=>{
+                                                                setActiveTab(index);
+                                                                // Scroll to top of content when switching tabs
+                                                                const contentArea = document.querySelector('[data-offer-content]');
+                                                                if (contentArea) {
+                                                                    contentArea.scrollTop = 0;
+                                                                }
+                                                            },
+                                                            className: `flex-1 min-w-0 px-2 sm:px-3 py-2 text-xs font-medium transition-colors whitespace-nowrap text-center sm:text-left ${activeTab === index ? 'border-b-2 border-[#D91CD2] text-[#D91CD2] bg-gray-800/50' : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/30'}`,
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                    className: "mr-1",
+                                                                    children: offer.emoji || '🎯'
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/WelcomePopup.tsx",
+                                                                    lineNumber: 540,
+                                                                    columnNumber: 31
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                    className: "hidden sm:inline truncate",
+                                                                    children: displayName
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/WelcomePopup.tsx",
+                                                                    lineNumber: 541,
+                                                                    columnNumber: 31
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                    className: "sm:hidden truncate text-[10px]",
+                                                                    children: displayName.split(' ')[0] || displayName.substring(0, 8)
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/WelcomePopup.tsx",
+                                                                    lineNumber: 542,
+                                                                    columnNumber: 31
+                                                                }, this)
+                                                            ]
+                                                        }, offer.id, true, {
+                                                            fileName: "[project]/src/components/WelcomePopup.tsx",
+                                                            lineNumber: 524,
+                                                            columnNumber: 29
+                                                        }, this);
+                                                    })
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/components/WelcomePopup.tsx",
+                                                    lineNumber: 518,
+                                                    columnNumber: 23
+                                                }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                lineNumber: 514,
+                                                lineNumber: 517,
                                                 columnNumber: 21
                                             }, this),
                                             error && !visibleOffers.length && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6297,20 +6321,16 @@ function WelcomePopup({ isOpen, onClose }) {
                                                 children: error
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                lineNumber: 547,
+                                                lineNumber: 552,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 "data-offer-content": true,
-                                                className: "flex-1 overflow-y-auto min-h-0 p-3 sm:p-4 w-full max-w-full min-w-0",
-                                                style: {
-                                                    scrollbarWidth: 'thin',
-                                                    scrollbarColor: '#D91CD2 #000000'
-                                                },
+                                                className: "flex-1 p-3 sm:p-4 w-full max-w-full min-w-0",
                                                 children: offersContent
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                lineNumber: 553,
+                                                lineNumber: 558,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -6336,13 +6356,13 @@ function WelcomePopup({ isOpen, onClose }) {
                                                                 size: 14
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                                lineNumber: 575,
+                                                                lineNumber: 576,
                                                                 columnNumber: 47
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                        lineNumber: 570,
+                                                        lineNumber: 571,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6351,37 +6371,37 @@ function WelcomePopup({ isOpen, onClose }) {
                                                         children: t('Not Now')
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                        lineNumber: 577,
+                                                        lineNumber: 578,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                                                lineNumber: 565,
+                                                lineNumber: 566,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/WelcomePopup.tsx",
-                                        lineNumber: 511,
+                                        lineNumber: 514,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                                lineNumber: 478,
+                                lineNumber: 476,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/WelcomePopup.tsx",
-                            lineNumber: 470,
+                            lineNumber: 468,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true)
             }, void 0, false, {
                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                lineNumber: 459,
+                lineNumber: 457,
                 columnNumber: 7
             }, this),
             showDiscountCardScanner && user && activePurchase && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$DiscountCardScanner$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -6397,7 +6417,7 @@ function WelcomePopup({ isOpen, onClose }) {
                 orderAmount: activePurchase.amount
             }, void 0, false, {
                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                lineNumber: 593,
+                lineNumber: 594,
                 columnNumber: 9
             }, this),
             activePurchase && user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$PaymentHandlerWithCredits$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -6419,11 +6439,11 @@ function WelcomePopup({ isOpen, onClose }) {
                 transactionType: "course",
                 businessId: activePurchase.offer.coachId,
                 coachId: activePurchase.offer.coachId,
-                allowedPaymentMethods: mapAllowedPaymentMethods(activePurchase.offer, activePurchase.option),
+                allowedPaymentMethods: undefined,
                 preAppliedDiscountCardCode: selectedDiscountCardCode
             }, void 0, false, {
                 fileName: "[project]/src/components/WelcomePopup.tsx",
-                lineNumber: 608,
+                lineNumber: 609,
                 columnNumber: 9
             }, this)
         ]

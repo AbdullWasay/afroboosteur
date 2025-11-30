@@ -137,15 +137,15 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
     };
     const formatTime = (date)=>{
         const actualDate = date instanceof Date ? date : date.toDate();
-        return actualDate.toLocaleTimeString('en-US', {
+        return actualDate.toLocaleTimeString('fr-FR', {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: true
+            hour12: false
         });
     };
     const formatDate = (date)=>{
         const actualDate = date instanceof Date ? date : date.toDate();
-        return actualDate.toLocaleDateString('en-US', {
+        return actualDate.toLocaleDateString('fr-FR', {
             weekday: 'short',
             month: 'short',
             day: 'numeric'
@@ -153,7 +153,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
     };
     const formatDateDetailed = (date)=>{
         const actualDate = date instanceof Date ? date : date.toDate();
-        return actualDate.toLocaleDateString('en-US', {
+        return actualDate.toLocaleDateString('fr-FR', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -164,7 +164,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
     };
     const getDayOfWeek = (date)=>{
         const actualDate = date instanceof Date ? date : date.toDate();
-        return actualDate.toLocaleDateString('en-US', {
+        return actualDate.toLocaleDateString('fr-FR', {
             weekday: 'short'
         });
     };
@@ -206,7 +206,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
     };
     const getCalendarTitle = ()=>{
         if (viewMode === 'day') {
-            return currentDate.toLocaleDateString('en-US', {
+            return currentDate.toLocaleDateString('fr-FR', {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
@@ -217,16 +217,16 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
             startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
             const endOfWeek = new Date(startOfWeek);
             endOfWeek.setDate(startOfWeek.getDate() + 6);
-            return `${startOfWeek.toLocaleDateString('en-US', {
+            return `${startOfWeek.toLocaleDateString('fr-FR', {
                 month: 'short',
                 day: 'numeric'
-            })} - ${endOfWeek.toLocaleDateString('en-US', {
+            })} - ${endOfWeek.toLocaleDateString('fr-FR', {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric'
             })}`;
         } else {
-            return currentDate.toLocaleDateString('en-US', {
+            return currentDate.toLocaleDateString('fr-FR', {
                 year: 'numeric',
                 month: 'long'
             });
@@ -378,7 +378,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
             setConfirmationModal({
                 show: true,
                 type: 'move',
-                message: `Course successfully moved to ${targetDate.toLocaleDateString()}`,
+                message: `Course successfully moved to ${targetDate.toLocaleDateString('fr-FR')}`,
                 onConfirm: ()=>setConfirmationModal({
                         ...confirmationModal,
                         show: false
@@ -425,7 +425,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
         setConfirmationModal({
             show: true,
             type: 'move',
-            message: `Move ${selectedScheduleIds.size} selected schedule(s) to ${targetDate.toLocaleDateString()}?`,
+            message: `Move ${selectedScheduleIds.size} selected schedule(s) to ${targetDate.toLocaleDateString('fr-FR')}?`,
             onConfirm: async ()=>{
                 try {
                     const selectedSchedules = schedules.filter((s)=>selectedScheduleIds.has(s.id));
@@ -460,7 +460,7 @@ function CourseCalendar({ onBookCourse, showManagement = false }) {
         setConfirmationModal({
             show: true,
             type: 'duplicate',
-            message: `Duplicate ${selectedScheduleIds.size} selected schedule(s) to ${targetDate.toLocaleDateString()}?`,
+            message: `Duplicate ${selectedScheduleIds.size} selected schedule(s) to ${targetDate.toLocaleDateString('fr-FR')}?`,
             onConfirm: async ()=>{
                 try {
                     const selectedSchedules = schedules.filter((s)=>selectedScheduleIds.has(s.id));

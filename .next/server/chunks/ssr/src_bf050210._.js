@@ -7854,7 +7854,9 @@ function PaymentHandlerWithCredits(props) {
         }
     };
     const isMethodAllowed = (methodId)=>{
+        // If no restrictions specified, allow all methods (like in course booking)
         if (!props.allowedPaymentMethods || props.allowedPaymentMethods.length === 0) return true;
+        // Otherwise check if method is in allowed list
         return props.allowedPaymentMethods.includes(methodId);
     };
     const loadPaymentSettings = async ()=>{
@@ -7878,7 +7880,7 @@ function PaymentHandlerWithCredits(props) {
                         size: 24
                     }, void 0, false, {
                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 185,
+                        lineNumber: 187,
                         columnNumber: 17
                     }, this),
                     isEnabled: hasEnoughCredits,
@@ -7888,8 +7890,10 @@ function PaymentHandlerWithCredits(props) {
                     }) : `${t('Insufficient credits')} (${t('Available')}: ${user.credits.toFixed(2)} CHF, ${t('Required')}: ${discountedAmount.toFixed(2)} CHF)`
                 });
             }
-            // Add other payment methods
-            if (isMethodAllowed('stripe')) {
+            // Add other payment methods - ALWAYS show all configured methods (like course booking)
+            // All methods should be available for all offers
+            // Stripe (Credit/Debit Card) - Always add if configured
+            if (stripeEnabled) {
                 methods.push({
                     id: 'stripe',
                     name: t('creditDebitCard'),
@@ -7897,13 +7901,15 @@ function PaymentHandlerWithCredits(props) {
                         size: 24
                     }, void 0, false, {
                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 201,
+                        lineNumber: 206,
                         columnNumber: 17
                     }, this),
-                    isEnabled: stripeEnabled
+                    isEnabled: true // Always enabled if Stripe is configured
                 });
             }
-            if (isMethodAllowed('paypal')) {
+            // PayPal - Always add if configured
+            // PayPal should always be available when configured (like in course booking)
+            if (paypalEnabled) {
                 methods.push({
                     id: 'paypal',
                     name: t('paypal'),
@@ -7911,13 +7917,16 @@ function PaymentHandlerWithCredits(props) {
                         size: 24
                     }, void 0, false, {
                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 210,
+                        lineNumber: 217,
                         columnNumber: 17
                     }, this),
-                    isEnabled: paypalEnabled
+                    isEnabled: true // Always enabled if PayPal is configured
                 });
             }
-            if (isMethodAllowed('twint')) {
+            // TWINT - Always show if Stripe is configured (like in course booking)
+            // TWINT uses Stripe infrastructure, so enable it if Stripe is configured
+            const stripeConfigured = stripeDoc.exists() && stripeDoc.data().isConfigured; // Stripe configured (even if not enabled)
+            if (stripeConfigured) {
                 methods.push({
                     id: 'twint',
                     name: 'TWINT',
@@ -7926,27 +7935,27 @@ function PaymentHandlerWithCredits(props) {
                         children: "📱"
                     }, void 0, false, {
                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 219,
+                        lineNumber: 229,
                         columnNumber: 17
                     }, this),
-                    isEnabled: stripeEnabled // TWINT requires Stripe to be configured
+                    isEnabled: true // Always enabled if Stripe is configured
                 });
             }
-            if (isMethodAllowed('gift-card')) {
-                methods.push({
-                    id: 'gift-card',
-                    name: t('Use a gift card to pay for this purchase'),
-                    icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FiGift"], {
-                        size: 24
-                    }, void 0, false, {
-                        fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 228,
-                        columnNumber: 17
-                    }, this),
-                    isEnabled: true
-                });
-            }
-            if (isMethodAllowed('discount-card')) {
+            // Gift Card - Always available for all offers and courses
+            methods.push({
+                id: 'gift-card',
+                name: t('Use a gift card to pay for this purchase'),
+                icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FiGift"], {
+                    size: 24
+                }, void 0, false, {
+                    fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
+                    lineNumber: 238,
+                    columnNumber: 15
+                }, this),
+                isEnabled: true
+            });
+            // Discount Card - Always available when coachId is provided
+            if (props.coachId) {
                 methods.push({
                     id: 'discount-card',
                     name: t('Use discount card') || 'Use discount card',
@@ -7954,16 +7963,22 @@ function PaymentHandlerWithCredits(props) {
                         size: 24
                     }, void 0, false, {
                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                        lineNumber: 237,
+                        lineNumber: 247,
                         columnNumber: 17
                     }, this),
-                    isEnabled: Boolean(props.coachId)
+                    isEnabled: true
                 });
             }
             setPaymentMethods(methods);
             const availableMethods = methods.filter((m)=>m.isEnabled);
+            // If no methods are available, check if it's because of restrictions
             if (availableMethods.length === 0) {
-                setError(t('noPaymentMethodsAvailable'));
+                // If we have allowedPaymentMethods but none are enabled, show helpful error
+                if (props.allowedPaymentMethods && props.allowedPaymentMethods.length > 0) {
+                    setError(t('noPaymentMethodsAvailable') + '. Please configure payment methods in admin settings or contact support.');
+                } else {
+                    setError(t('noPaymentMethodsAvailable'));
+                }
             } else if (availableMethods.length === 1) {
                 // Only one method available, use it directly
                 setSelectedMethod(availableMethods[0].id);
@@ -8167,7 +8182,7 @@ function PaymentHandlerWithCredits(props) {
                             className: "w-16 h-16 border-4 border-[#D91CD2] border-t-transparent rounded-full animate-spin mx-auto mb-4"
                         }, void 0, false, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 480,
+                            lineNumber: 496,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -8175,7 +8190,7 @@ function PaymentHandlerWithCredits(props) {
                             children: t('Processing Payment')
                         }, void 0, false, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 481,
+                            lineNumber: 497,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8183,7 +8198,7 @@ function PaymentHandlerWithCredits(props) {
                             children: t('Please wait while we process your payment. Do not close this window.')
                         }, void 0, false, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 482,
+                            lineNumber: 498,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8193,31 +8208,31 @@ function PaymentHandlerWithCredits(props) {
                                     className: "w-2 h-2 bg-[#D91CD2] rounded-full animate-pulse"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 486,
+                                    lineNumber: 502,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: t('Secure transaction in progress')
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 487,
+                                    lineNumber: 503,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 485,
+                            lineNumber: 501,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                    lineNumber: 475,
+                    lineNumber: 491,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 474,
+                lineNumber: 490,
                 columnNumber: 9
             }, this),
             (showMethodSelection || isLoading || error) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8247,7 +8262,7 @@ function PaymentHandlerWithCredits(props) {
                                             children: t('Step 2: Choose Payment Method')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 505,
+                                            lineNumber: 521,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8255,13 +8270,13 @@ function PaymentHandlerWithCredits(props) {
                                             children: props.title
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 506,
+                                            lineNumber: 522,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 504,
+                                    lineNumber: 520,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -8271,18 +8286,18 @@ function PaymentHandlerWithCredits(props) {
                                         size: 24
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                        lineNumber: 512,
+                                        lineNumber: 528,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 508,
+                                    lineNumber: 524,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 503,
+                            lineNumber: 519,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8296,7 +8311,7 @@ function PaymentHandlerWithCredits(props) {
                                             className: "w-8 h-8 border-2 border-[#D91CD2] border-t-transparent rounded-full animate-spin mx-auto mb-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 521,
+                                            lineNumber: 537,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8304,13 +8319,13 @@ function PaymentHandlerWithCredits(props) {
                                             children: t('loadingPaymentOptions')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 522,
+                                            lineNumber: 538,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 520,
+                                    lineNumber: 536,
                                     columnNumber: 19
                                 }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "text-center py-8",
@@ -8320,7 +8335,7 @@ function PaymentHandlerWithCredits(props) {
                                             children: error
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 526,
+                                            lineNumber: 542,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -8329,13 +8344,13 @@ function PaymentHandlerWithCredits(props) {
                                             children: t('close')
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 527,
+                                            lineNumber: 543,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 525,
+                                    lineNumber: 541,
                                     columnNumber: 19
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "space-y-4 sm:space-y-6",
@@ -8348,7 +8363,7 @@ function PaymentHandlerWithCredits(props) {
                                                     children: props.description
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 538,
+                                                    lineNumber: 554,
                                                     columnNumber: 23
                                                 }, this),
                                                 discountCardResult && discountCardResult.valid ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8361,7 +8376,7 @@ function PaymentHandlerWithCredits(props) {
                                                                     size: 16
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 542,
+                                                                    lineNumber: 558,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -8373,13 +8388,13 @@ function PaymentHandlerWithCredits(props) {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 543,
+                                                                    lineNumber: 559,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 541,
+                                                            lineNumber: 557,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8390,7 +8405,7 @@ function PaymentHandlerWithCredits(props) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 547,
+                                                            lineNumber: 563,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8401,7 +8416,7 @@ function PaymentHandlerWithCredits(props) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 550,
+                                                            lineNumber: 566,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -8413,13 +8428,13 @@ function PaymentHandlerWithCredits(props) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 553,
+                                                            lineNumber: 569,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 540,
+                                                    lineNumber: 556,
                                                     columnNumber: 25
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "text-xl sm:text-2xl font-bold text-[#D91CD2] mt-4",
@@ -8429,13 +8444,13 @@ function PaymentHandlerWithCredits(props) {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 562,
+                                                    lineNumber: 578,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 537,
+                                            lineNumber: 553,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8454,7 +8469,7 @@ function PaymentHandlerWithCredits(props) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 571,
+                                                            lineNumber: 587,
                                                             columnNumber: 25
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -8463,13 +8478,13 @@ function PaymentHandlerWithCredits(props) {
                                                             children: showReferralInput ? t('Hide') : t('Have a referral code?')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 574,
+                                                            lineNumber: 590,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 570,
+                                                    lineNumber: 586,
                                                     columnNumber: 23
                                                 }, this),
                                                 showReferralInput && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8495,7 +8510,7 @@ function PaymentHandlerWithCredits(props) {
                                                                     className: `w-full px-3 py-3 sm:px-4 sm:py-2 bg-gray-800 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 text-base sm:text-sm ${referralValidated === true ? 'border-green-500' : referralValidated === false ? 'border-red-500' : 'border-gray-600'}`
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 585,
+                                                                    lineNumber: 601,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 referralValidated === true && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8505,12 +8520,12 @@ function PaymentHandlerWithCredits(props) {
                                                                         size: 18
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                        lineNumber: 607,
+                                                                        lineNumber: 623,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 606,
+                                                                    lineNumber: 622,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 referralValidated === false && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8520,18 +8535,18 @@ function PaymentHandlerWithCredits(props) {
                                                                         size: 18
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                        lineNumber: 612,
+                                                                        lineNumber: 628,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 611,
+                                                                    lineNumber: 627,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 584,
+                                                            lineNumber: 600,
                                                             columnNumber: 27
                                                         }, this),
                                                         referralValidated === true && referralUserInfo && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8542,7 +8557,7 @@ function PaymentHandlerWithCredits(props) {
                                                                     className: "flex-shrink-0"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 619,
+                                                                    lineNumber: 635,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -8554,13 +8569,13 @@ function PaymentHandlerWithCredits(props) {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 620,
+                                                                    lineNumber: 636,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 618,
+                                                            lineNumber: 634,
                                                             columnNumber: 29
                                                         }, this),
                                                         referralValidated === false && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8571,32 +8586,32 @@ function PaymentHandlerWithCredits(props) {
                                                                     className: "flex-shrink-0"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 626,
+                                                                    lineNumber: 642,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     children: t('Invalid referral code')
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 627,
+                                                                    lineNumber: 643,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 625,
+                                                            lineNumber: 641,
                                                             columnNumber: 29
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 583,
+                                                    lineNumber: 599,
                                                     columnNumber: 25
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 569,
+                                            lineNumber: 585,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8614,7 +8629,7 @@ function PaymentHandlerWithCredits(props) {
                                                                     children: method.icon
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 646,
+                                                                    lineNumber: 662,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8625,7 +8640,7 @@ function PaymentHandlerWithCredits(props) {
                                                                             children: method.name
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                            lineNumber: 650,
+                                                                            lineNumber: 666,
                                                                             columnNumber: 31
                                                                         }, this),
                                                                         method.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8633,7 +8648,7 @@ function PaymentHandlerWithCredits(props) {
                                                                             children: method.description
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                            lineNumber: 652,
+                                                                            lineNumber: 668,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         isProcessingPayment && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8641,53 +8656,53 @@ function PaymentHandlerWithCredits(props) {
                                                                             children: method.id === 'credits' ? t('processing') : t('Processing payment...')
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                            lineNumber: 655,
+                                                                            lineNumber: 671,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                                    lineNumber: 649,
+                                                                    lineNumber: 665,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 645,
+                                                            lineNumber: 661,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "w-4 h-4 rounded-full border-2 border-gray-500 flex-shrink-0"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                            lineNumber: 661,
+                                                            lineNumber: 677,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, method.id, true, {
                                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                                    lineNumber: 637,
+                                                    lineNumber: 653,
                                                     columnNumber: 25
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                            lineNumber: 635,
+                                            lineNumber: 651,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                    lineNumber: 535,
+                                    lineNumber: 551,
                                     columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                lineNumber: 518,
+                                lineNumber: 534,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 517,
+                            lineNumber: 533,
                             columnNumber: 13
                         }, this),
                         !isLoading && !error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -8699,23 +8714,23 @@ function PaymentHandlerWithCredits(props) {
                                 children: t('cancel')
                             }, void 0, false, {
                                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                                lineNumber: 673,
+                                lineNumber: 689,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                            lineNumber: 672,
+                            lineNumber: 688,
                             columnNumber: 15
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                    lineNumber: 496,
+                    lineNumber: 512,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 495,
+                lineNumber: 511,
                 columnNumber: 9
             }, this),
             selectedMethod === 'stripe' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$StripePaymentModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -8731,7 +8746,7 @@ function PaymentHandlerWithCredits(props) {
                 userId: props.userId
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 688,
+                lineNumber: 704,
                 columnNumber: 9
             }, this),
             selectedMethod === 'paypal' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$PaypalPaymentModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -8747,7 +8762,7 @@ function PaymentHandlerWithCredits(props) {
                 userId: props.userId
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 704,
+                lineNumber: 720,
                 columnNumber: 9
             }, this),
             selectedMethod === 'twint' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$TwintPaymentModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -8773,7 +8788,7 @@ function PaymentHandlerWithCredits(props) {
                 }
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 720,
+                lineNumber: 736,
                 columnNumber: 9
             }, this),
             isConfirmationOpen && purchaseItem && confirmationPaymentMethod && !isProcessingPayment && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$PurchaseConfirmationModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -8790,7 +8805,7 @@ function PaymentHandlerWithCredits(props) {
                 title: t('confirmPurchaseTitle')
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 746,
+                lineNumber: 762,
                 columnNumber: 9
             }, this),
             showGiftCardScanner && user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$GiftCardScanner$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -8804,7 +8819,7 @@ function PaymentHandlerWithCredits(props) {
                 transactionType: props.transactionType
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 763,
+                lineNumber: 779,
                 columnNumber: 9
             }, this),
             showDiscountCardScanner && user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$DiscountCardScanner$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -8816,7 +8831,7 @@ function PaymentHandlerWithCredits(props) {
                 orderAmount: props.amount
             }, void 0, false, {
                 fileName: "[project]/src/components/PaymentHandlerWithCredits.tsx",
-                lineNumber: 777,
+                lineNumber: 793,
                 columnNumber: 9
             }, this)
         ]
@@ -9395,11 +9410,15 @@ function CourseDetail() {
         });
     };
     const [userSubscription, setUserSubscription] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [hasPurchasedOffer, setHasPurchasedOffer] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [bookingType, setBookingType] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('subscription');
     const [availableTokenPackages, setAvailableTokenPackages] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [selectedTokenPackage, setSelectedTokenPackage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [showTokenSelector, setShowTokenSelector] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [showBookingOptions, setShowBookingOptions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showSubscriptionDatePicker, setShowSubscriptionDatePicker] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [selectedScheduleForBooking, setSelectedScheduleForBooking] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [selectedDateForSubscription, setSelectedDateForSubscription] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         loadCourseData();
     // If you need to check if courseContent is an array, do so without assignment
@@ -9410,6 +9429,7 @@ function CourseDetail() {
         if (user && course) {
             checkUserCourseStatus();
             loadUserSubscription();
+            loadUserOfferPurchase();
             loadUserTokenPackages();
         }
     }, [
@@ -9452,6 +9472,19 @@ function CourseDetail() {
             }
         } catch (error) {
             console.error('Error loading user subscription:', error);
+        }
+    };
+    const loadUserOfferPurchase = async ()=>{
+        if (!user?.id) return;
+        try {
+            const hasActive = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$database$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["offerPurchaseService"].hasActivePurchase(user.id);
+            setHasPurchasedOffer(hasActive);
+            // If user has purchased an offer, set booking type to subscription
+            if (hasActive && !userSubscription) {
+                setBookingType('subscription');
+            }
+        } catch (error) {
+            console.error('Error loading user offer purchase:', error);
         }
     };
     const loadUserTokenPackages = async ()=>{
@@ -9612,9 +9645,9 @@ function CourseDetail() {
             router.push('/login');
             return;
         }
-        // If user has subscription, book directly with subscription
+        // If user has subscription, show date picker instead of booking directly
         if (bookingType === 'subscription' && userSubscription) {
-            bookWithSubscription();
+            setShowSubscriptionDatePicker(true);
             return;
         }
         // If user has tokens, show token selector
@@ -9678,20 +9711,41 @@ function CourseDetail() {
             setIsLoading(false);
         }
     };
-    const bookWithSubscription = async ()=>{
-        if (!course || !user || !userSubscription) return;
+    const bookWithSubscription = async (selectedDate)=>{
+        if (!course || !user) return;
+        // User must have either subscription or purchased offer
+        if (!userSubscription && !hasPurchasedOffer) {
+            alert('You need an active subscription or offer purchase to book with this method');
+            return;
+        }
         try {
             setIsLoading(true);
-            // Use the new subscription-aware booking method
-            await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$database$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["bookingService"].createWithSubscription({
-                courseId: course.id,
-                studentId: user.id,
-                coachId: course.coachId,
-                status: 'confirmed',
-                paymentStatus: 'completed',
-                paymentAmount: 0,
-                scheduledDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // Next week
-            }, course.id, course.title, course.coachName);
+            setShowSubscriptionDatePicker(false);
+            // Use the selected date or default to next week
+            const scheduledDate = selectedDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+            // If user has subscription, use subscription booking method
+            if (userSubscription && userSubscription.status === 'active') {
+                await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$database$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["bookingService"].createWithSubscription({
+                    courseId: course.id,
+                    studentId: user.id,
+                    coachId: course.coachId,
+                    status: 'confirmed',
+                    paymentStatus: 'completed',
+                    paymentAmount: 0,
+                    scheduledDate
+                }, course.id, course.title, course.coachName);
+            } else if (hasPurchasedOffer) {
+                // User has purchased offer but no subscription - create booking with 0 payment
+                await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$database$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["bookingService"].create({
+                    courseId: course.id,
+                    studentId: user.id,
+                    coachId: course.coachId,
+                    status: 'confirmed',
+                    paymentStatus: 'completed',
+                    paymentAmount: 0,
+                    scheduledDate
+                });
+            }
             // Update course student count
             await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$database$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["courseService"].update(course.id, {
                 currentStudents: course.currentStudents + 1
@@ -9700,16 +9754,17 @@ function CourseDetail() {
             await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$database$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["notificationService"].create({
                 userId: user.id,
                 title: 'Course Booked Successfully!',
-                message: `You have successfully booked "${course.title}" using your subscription. Check your dashboard for details.`,
+                message: `You have successfully booked "${course.title}" using your subscription/offer. Check your dashboard for details.`,
                 type: 'booking',
                 read: false
             });
             // Reload data
             await loadCourseData();
             await loadUserSubscription();
+            await loadUserOfferPurchase();
         } catch (error) {
-            console.error('Subscription booking error:', error);
-            alert(error instanceof Error ? error.message : 'Failed to book course with subscription');
+            console.error('Subscription/offer booking error:', error);
+            alert(error instanceof Error ? error.message : 'Failed to book course');
         } finally{
             setIsLoading(false);
         }
@@ -9900,12 +9955,12 @@ function CourseDetail() {
                 className: "w-12 h-12 border-2 border-[#D91CD2] border-t-transparent rounded-full animate-spin"
             }, void 0, false, {
                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                lineNumber: 655,
+                lineNumber: 700,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-            lineNumber: 654,
+            lineNumber: 699,
             columnNumber: 7
         }, this);
     }
@@ -9920,7 +9975,7 @@ function CourseDetail() {
                         children: t('Course Not Found')
                     }, void 0, false, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 664,
+                        lineNumber: 709,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9929,18 +9984,18 @@ function CourseDetail() {
                         children: "Go Back"
                     }, void 0, false, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 665,
+                        lineNumber: 710,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                lineNumber: 663,
+                lineNumber: 708,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-            lineNumber: 662,
+            lineNumber: 707,
             columnNumber: 7
         }, this);
     }
@@ -9956,20 +10011,20 @@ function CourseDetail() {
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FiArrowLeft"], {}, void 0, false, {
                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                lineNumber: 681,
+                                lineNumber: 726,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: t('Back to Courses')
                             }, void 0, false, {
                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                lineNumber: 682,
+                                lineNumber: 727,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 677,
+                        lineNumber: 722,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -9981,7 +10036,7 @@ function CourseDetail() {
                                 className: "w-full h-56 sm:h-64 md:h-80 lg:h-96 object-cover rounded-lg"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                lineNumber: 687,
+                                lineNumber: 732,
                                 columnNumber: 11
                             }, this),
                             course.videoLink && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -9998,17 +10053,17 @@ function CourseDetail() {
                                                 d: "M8 5v14l11-7z"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                lineNumber: 705,
+                                                lineNumber: 750,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 700,
+                                            lineNumber: 745,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                        lineNumber: 699,
+                                        lineNumber: 744,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10019,13 +10074,13 @@ function CourseDetail() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                        lineNumber: 708,
+                                        lineNumber: 753,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                lineNumber: 695,
+                                lineNumber: 740,
                                 columnNumber: 13
                             }, this),
                             course.boosted && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10033,7 +10088,7 @@ function CourseDetail() {
                                 children: "BOOSTED"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                lineNumber: 715,
+                                lineNumber: 760,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10041,13 +10096,13 @@ function CourseDetail() {
                                 children: t(`${course.difficulty}`)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                lineNumber: 719,
+                                lineNumber: 764,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 686,
+                        lineNumber: 731,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10062,7 +10117,7 @@ function CourseDetail() {
                                             children: course.title
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 732,
+                                            lineNumber: 777,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10072,24 +10127,24 @@ function CourseDetail() {
                                                         line,
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 737,
+                                                            lineNumber: 782,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, index, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 735,
+                                                    lineNumber: 780,
                                                     columnNumber: 19
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 733,
+                                            lineNumber: 778,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                    lineNumber: 731,
+                                    lineNumber: 776,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10106,7 +10161,7 @@ function CourseDetail() {
                                                             size: 14
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 747,
+                                                            lineNumber: 792,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -10119,13 +10174,13 @@ function CourseDetail() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 748,
+                                                            lineNumber: 793,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 746,
+                                                    lineNumber: 791,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10136,7 +10191,7 @@ function CourseDetail() {
                                                             size: 14
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 751,
+                                                            lineNumber: 796,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -10148,13 +10203,13 @@ function CourseDetail() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 752,
+                                                            lineNumber: 797,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 750,
+                                                    lineNumber: 795,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10165,7 +10220,7 @@ function CourseDetail() {
                                                             size: 14
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 755,
+                                                            lineNumber: 800,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -10177,13 +10232,13 @@ function CourseDetail() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 756,
+                                                            lineNumber: 801,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 754,
+                                                    lineNumber: 799,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10194,7 +10249,7 @@ function CourseDetail() {
                                                             size: 14
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 759,
+                                                            lineNumber: 804,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -10206,19 +10261,19 @@ function CourseDetail() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 760,
+                                                            lineNumber: 805,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 758,
+                                                    lineNumber: 803,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 745,
+                                            lineNumber: 790,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10232,7 +10287,7 @@ function CourseDetail() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 765,
+                                                    lineNumber: 810,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -10240,13 +10295,13 @@ function CourseDetail() {
                                                     children: t('per class')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 768,
+                                                    lineNumber: 813,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 764,
+                                            lineNumber: 809,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10257,7 +10312,7 @@ function CourseDetail() {
                                                     children: t('Instructor')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 773,
+                                                    lineNumber: 818,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10270,12 +10325,12 @@ function CourseDetail() {
                                                                 children: course.coachName.split(' ').map((n)=>n[0]).join('')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                lineNumber: 776,
+                                                                lineNumber: 821,
                                                                 columnNumber: 21
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 775,
+                                                            lineNumber: 820,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10286,7 +10341,7 @@ function CourseDetail() {
                                                                     children: course.coachName
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 781,
+                                                                    lineNumber: 826,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -10294,28 +10349,28 @@ function CourseDetail() {
                                                                     children: t('Professional Dance Coach')
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 782,
+                                                                    lineNumber: 827,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 780,
+                                                            lineNumber: 825,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 774,
+                                                    lineNumber: 819,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 772,
+                                            lineNumber: 817,
                                             columnNumber: 15
                                         }, this),
-                                        schedules.length > 0 && user && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        schedules.length > 0 && user && !userSubscription && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "p-3 sm:p-4 bg-gray-900/70 rounded-lg border border-gray-800",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10326,7 +10381,7 @@ function CourseDetail() {
                                                             children: t('Upcoming Sessions - Reserve Your Helmet')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 791,
+                                                            lineNumber: 836,
                                                             columnNumber: 21
                                                         }, this),
                                                         schedules.length > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -10335,13 +10390,13 @@ function CourseDetail() {
                                                             children: showAllSessions ? t('Show Less') : t('Show All')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 793,
+                                                            lineNumber: 838,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 790,
+                                                    lineNumber: 835,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10360,7 +10415,7 @@ function CourseDetail() {
                                                                             size: 14
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 814,
+                                                                            lineNumber: 859,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -10373,13 +10428,13 @@ function CourseDetail() {
                                                                             })
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 815,
+                                                                            lineNumber: 860,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 813,
+                                                                    lineNumber: 858,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10390,7 +10445,7 @@ function CourseDetail() {
                                                                             size: 14
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 822,
+                                                                            lineNumber: 867,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -10410,13 +10465,13 @@ function CourseDetail() {
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 823,
+                                                                            lineNumber: 868,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 821,
+                                                                    lineNumber: 866,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 schedule.location && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10427,20 +10482,20 @@ function CourseDetail() {
                                                                             size: 14
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 831,
+                                                                            lineNumber: 876,
                                                                             columnNumber: 31
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             children: schedule.location
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 832,
+                                                                            lineNumber: 877,
                                                                             columnNumber: 31
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 830,
+                                                                    lineNumber: 875,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -10474,76 +10529,58 @@ function CourseDetail() {
                                                                             size: 14
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 859,
+                                                                            lineNumber: 904,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             children: t('Reserve Helmet')
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 860,
+                                                                            lineNumber: 905,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 837,
+                                                                    lineNumber: 882,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, schedule.id, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 811,
+                                                            lineNumber: 856,
                                                             columnNumber: 25
                                                         }, this);
                                                     })
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 801,
+                                                    lineNumber: 846,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 789,
+                                            lineNumber: 834,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "space-y-3 sm:space-y-4",
                                             children: [
-                                                user && userSubscription && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "bg-green-500/20 border border-green-500 rounded-lg p-3 sm:p-4",
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                children: [
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                        className: "text-green-400 font-medium text-sm sm:text-base",
-                                                                        children: t('Active Subscription')
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                        lineNumber: 877,
-                                                                        columnNumber: 25
-                                                                    }, this),
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                        className: "text-xs sm:text-sm text-gray-300",
-                                                                        children: userSubscription.planName
-                                                                    }, void 0, false, {
-                                                                        fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                        lineNumber: 878,
-                                                                        columnNumber: 25
-                                                                    }, this)
-                                                                ]
-                                                            }, void 0, true, {
-                                                                fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                lineNumber: 876,
-                                                                columnNumber: 23
-                                                            }, this),
-                                                            userSubscription.planType === 'session_pack' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "sm:text-right",
-                                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                    className: "text-green-400 font-medium text-sm sm:text-base",
+                                                user && (userSubscription && userSubscription.status === 'active' || hasPurchasedOffer) ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "text-center mb-4",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                                    className: "text-xl font-bold text-white mb-2",
+                                                                    children: t('Choose your next session')
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                    lineNumber: 922,
+                                                                    columnNumber: 23
+                                                                }, this),
+                                                                userSubscription && userSubscription.planType === 'session_pack' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                    className: "text-sm text-gray-400",
                                                                     children: [
                                                                         userSubscription.remainingSessions,
                                                                         " ",
@@ -10551,163 +10588,234 @@ function CourseDetail() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 882,
-                                                                    columnNumber: 27
-                                                                }, this)
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                lineNumber: 881,
-                                                                columnNumber: 25
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                        lineNumber: 875,
-                                                        columnNumber: 21
-                                                    }, this)
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 874,
-                                                    columnNumber: 19
-                                                }, this),
-                                                user && (userSubscription || availableTokenPackages.length > 0) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "space-y-3",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                            className: "text-sm sm:text-base font-medium",
-                                                            children: t('How would you like to book?')
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 894,
-                                                            columnNumber: 21
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "grid grid-cols-1 gap-2 sm:gap-3",
-                                                            children: [
-                                                                userSubscription && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                    onClick: ()=>setBookingType('subscription'),
-                                                                    className: `px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${bookingType === 'subscription' ? 'bg-[#D91CD2] text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`,
-                                                                    disabled: userSubscription.planType === 'session_pack' && (!userSubscription.remainingSessions || userSubscription.remainingSessions <= 0),
-                                                                    children: [
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                            className: "block font-medium",
-                                                                            children: t('Use Subscription')
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 909,
-                                                                            columnNumber: 27
-                                                                        }, this),
-                                                                        userSubscription.planType === 'session_pack' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                            className: "block text-xs sm:text-sm opacity-75 mt-1",
-                                                                            children: [
-                                                                                userSubscription.remainingSessions || 0,
-                                                                                " ",
-                                                                                t('left')
-                                                                            ]
-                                                                        }, void 0, true, {
-                                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 911,
-                                                                            columnNumber: 29
-                                                                        }, this)
-                                                                    ]
-                                                                }, void 0, true, {
-                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 897,
+                                                                    lineNumber: 924,
                                                                     columnNumber: 25
                                                                 }, this),
-                                                                availableTokenPackages.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                    onClick: ()=>setBookingType('tokens'),
-                                                                    className: `px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${bookingType === 'tokens' ? 'bg-[#D91CD2] text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`,
-                                                                    disabled: availableTokenPackages.every((pkg)=>pkg.remainingTokens < course.sessions),
-                                                                    children: [
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                            className: "block font-medium",
-                                                                            children: t('Use Tokens')
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 928,
-                                                                            columnNumber: 27
-                                                                        }, this),
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                            className: "block text-xs sm:text-sm opacity-75 mt-1",
-                                                                            children: [
-                                                                                availableTokenPackages.reduce((total, pkg)=>total + pkg.remainingTokens, 0),
-                                                                                " ",
-                                                                                t('tokens available')
-                                                                            ]
-                                                                        }, void 0, true, {
-                                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 929,
-                                                                            columnNumber: 27
-                                                                        }, this)
-                                                                    ]
-                                                                }, void 0, true, {
+                                                                hasPurchasedOffer && !userSubscription && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                    className: "text-sm text-gray-400",
+                                                                    children: t('You have an active subscription')
+                                                                }, void 0, false, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 919,
+                                                                    lineNumber: 929,
                                                                     columnNumber: 25
-                                                                }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                    onClick: ()=>setBookingType('pay_per_session'),
-                                                                    className: `px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${bookingType === 'pay_per_session' ? 'bg-[#D91CD2] text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`,
-                                                                    children: [
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                            className: "block font-medium",
-                                                                            children: t('Pay Per Session')
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 943,
-                                                                            columnNumber: 25
-                                                                        }, this),
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                            className: "block text-xs sm:text-sm opacity-75 mt-1",
-                                                                            children: [
-                                                                                "CHF ",
-                                                                                course.totalPrice,
-                                                                                " (",
-                                                                                course.sessions,
-                                                                                " ",
-                                                                                t('sessions'),
-                                                                                "))"
-                                                                            ]
-                                                                        }, void 0, true, {
-                                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                            lineNumber: 944,
-                                                                            columnNumber: 25
-                                                                        }, this)
-                                                                    ]
-                                                                }, void 0, true, {
-                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 935,
-                                                                    columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 895,
+                                                            lineNumber: 921,
+                                                            columnNumber: 21
+                                                        }, this),
+                                                        schedules.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "space-y-3 max-h-96 overflow-y-auto",
+                                                            children: schedules.filter((schedule)=>{
+                                                                const scheduleDate = schedule.startTime instanceof Date ? schedule.startTime : schedule.startTime.toDate();
+                                                                return scheduleDate >= new Date();
+                                                            }).slice(0, 10).map((schedule)=>{
+                                                                const scheduleDate = schedule.startTime instanceof Date ? schedule.startTime : schedule.startTime.toDate();
+                                                                const endTime = schedule.endTime instanceof Date ? schedule.endTime : schedule.endTime.toDate();
+                                                                const isSelected = selectedDateForSubscription?.getTime() === scheduleDate.getTime();
+                                                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                    onClick: ()=>{
+                                                                        setSelectedScheduleForBooking(schedule);
+                                                                        setSelectedDateForSubscription(scheduleDate);
+                                                                    },
+                                                                    disabled: isLoading || course.currentStudents >= course.maxStudents,
+                                                                    className: `w-full p-4 rounded-lg transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed ${isSelected ? 'bg-purple-600/20 border-2 border-purple-500' : 'bg-gray-800 hover:bg-gray-700 border border-gray-700'}`,
+                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "flex items-center justify-between",
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                children: [
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                                        className: "text-white font-medium",
+                                                                                        children: scheduleDate.toLocaleDateString('en-US', {
+                                                                                            weekday: 'long',
+                                                                                            year: 'numeric',
+                                                                                            month: 'long',
+                                                                                            day: 'numeric'
+                                                                                        })
+                                                                                    }, void 0, false, {
+                                                                                        fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                                        lineNumber: 971,
+                                                                                        columnNumber: 37
+                                                                                    }, this),
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                                        className: "text-gray-400 text-sm mt-1",
+                                                                                        children: [
+                                                                                            scheduleDate.toLocaleTimeString('en-US', {
+                                                                                                hour: '2-digit',
+                                                                                                minute: '2-digit'
+                                                                                            }),
+                                                                                            " - ",
+                                                                                            endTime.toLocaleTimeString('en-US', {
+                                                                                                hour: '2-digit',
+                                                                                                minute: '2-digit'
+                                                                                            })
+                                                                                        ]
+                                                                                    }, void 0, true, {
+                                                                                        fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                                        lineNumber: 979,
+                                                                                        columnNumber: 37
+                                                                                    }, this)
+                                                                                ]
+                                                                            }, void 0, true, {
+                                                                                fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                                lineNumber: 970,
+                                                                                columnNumber: 35
+                                                                            }, this),
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FiCalendar"], {
+                                                                                className: `${isSelected ? 'text-purple-400' : 'text-gray-400'}`,
+                                                                                size: 20
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                                lineNumber: 989,
+                                                                                columnNumber: 35
+                                                                            }, this)
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                        lineNumber: 969,
+                                                                        columnNumber: 33
+                                                                    }, this)
+                                                                }, schedule.id, false, {
+                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                    lineNumber: 956,
+                                                                    columnNumber: 31
+                                                                }, this);
+                                                            })
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                            lineNumber: 937,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            onClick: ()=>{
+                                                                if (selectedDateForSubscription && selectedScheduleForBooking) {
+                                                                    bookWithSubscription(selectedDateForSubscription);
+                                                                } else {
+                                                                    setShowSubscriptionDatePicker(true);
+                                                                }
+                                                            },
+                                                            disabled: course.currentStudents >= course.maxStudents || !selectedDateForSubscription && schedules.length === 0,
+                                                            className: "w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed py-3 sm:py-4 text-sm sm:text-base font-medium",
+                                                            children: course.currentStudents >= course.maxStudents ? t('Fully Booked') : !selectedDateForSubscription ? t('Select a date first') : t('Reserve helmet') || 'Reserve helmet'
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                            lineNumber: 998,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 893,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    onClick: handleBookCourse,
-                                                    disabled: course.currentStudents >= course.maxStudents || bookingType === 'subscription' && userSubscription?.planType === 'session_pack' && (!userSubscription.remainingSessions || userSubscription.remainingSessions <= 0) || bookingType === 'tokens' && availableTokenPackages.every((pkg)=>pkg.remainingTokens < course.sessions),
-                                                    className: "w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed py-3 sm:py-4 text-sm sm:text-base font-medium",
-                                                    children: course.currentStudents >= course.maxStudents ? t('Fully Booked') : bookingType === 'subscription' && userSubscription ? userSubscription.planType === 'session_pack' ? `${t('Book with Subscription')} (${userSubscription.remainingSessions} ${t('left')})` : t('Book with Annual Subscription') : bookingType === 'tokens' && availableTokenPackages.length > 0 ? `${t('Book with Tokens')} (${course.sessions} ${t('tokens needed')})` : `${t('Book Now')} - CHF ${course.totalPrice}`
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 952,
-                                                    columnNumber: 17
-                                                }, this),
+                                                }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                    children: [
+                                                        user && availableTokenPackages.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "space-y-3",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                    className: "text-sm sm:text-base font-medium",
+                                                                    children: t('How would you like to book?')
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                    lineNumber: 1022,
+                                                                    columnNumber: 25
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "grid grid-cols-1 gap-2 sm:gap-3",
+                                                                    children: [
+                                                                        availableTokenPackages.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                            onClick: ()=>setBookingType('tokens'),
+                                                                            className: `px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${bookingType === 'tokens' ? 'bg-[#D91CD2] text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`,
+                                                                            disabled: availableTokenPackages.every((pkg)=>pkg.remainingTokens < course.sessions),
+                                                                            children: [
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                    className: "block font-medium",
+                                                                                    children: t('Use Tokens')
+                                                                                }, void 0, false, {
+                                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                                    lineNumber: 1034,
+                                                                                    columnNumber: 31
+                                                                                }, this),
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                    className: "block text-xs sm:text-sm opacity-75 mt-1",
+                                                                                    children: [
+                                                                                        availableTokenPackages.reduce((total, pkg)=>total + pkg.remainingTokens, 0),
+                                                                                        " ",
+                                                                                        t('tokens available')
+                                                                                    ]
+                                                                                }, void 0, true, {
+                                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                                    lineNumber: 1035,
+                                                                                    columnNumber: 31
+                                                                                }, this)
+                                                                            ]
+                                                                        }, void 0, true, {
+                                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                            lineNumber: 1025,
+                                                                            columnNumber: 29
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                            onClick: ()=>setBookingType('pay_per_session'),
+                                                                            className: `px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${bookingType === 'pay_per_session' ? 'bg-[#D91CD2] text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`,
+                                                                            children: [
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                    className: "block font-medium",
+                                                                                    children: t('Pay Per Session')
+                                                                                }, void 0, false, {
+                                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                                    lineNumber: 1049,
+                                                                                    columnNumber: 29
+                                                                                }, this),
+                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                    className: "block text-xs sm:text-sm opacity-75 mt-1",
+                                                                                    children: [
+                                                                                        "CHF ",
+                                                                                        course.totalPrice,
+                                                                                        " (",
+                                                                                        course.sessions,
+                                                                                        " ",
+                                                                                        t('sessions'),
+                                                                                        "))"
+                                                                                    ]
+                                                                                }, void 0, true, {
+                                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                                    lineNumber: 1050,
+                                                                                    columnNumber: 29
+                                                                                }, this)
+                                                                            ]
+                                                                        }, void 0, true, {
+                                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                            lineNumber: 1041,
+                                                                            columnNumber: 27
+                                                                        }, this)
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                    lineNumber: 1023,
+                                                                    columnNumber: 25
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                            lineNumber: 1021,
+                                                            columnNumber: 23
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                            onClick: handleBookCourse,
+                                                            disabled: course.currentStudents >= course.maxStudents || bookingType === 'tokens' && availableTokenPackages.every((pkg)=>pkg.remainingTokens < course.sessions),
+                                                            className: "w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed py-3 sm:py-4 text-sm sm:text-base font-medium",
+                                                            children: course.currentStudents >= course.maxStudents ? t('Fully Booked') : bookingType === 'tokens' && availableTokenPackages.length > 0 ? `${t('Book with Tokens')} (${course.sessions} ${t('tokens needed')})` : `${t('Book Now')} - CHF ${course.totalPrice}`
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                            lineNumber: 1058,
+                                                            columnNumber: 21
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$CourseBoost$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                                     course: course,
                                                     onBoostSuccess: loadCourseData
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 976,
+                                                    lineNumber: 1078,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10726,20 +10834,20 @@ function CourseDetail() {
                                                                     className: "flex-shrink-0"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 992,
+                                                                    lineNumber: 1094,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     children: t('Copy Link')
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 993,
+                                                                    lineNumber: 1095,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 983,
+                                                            lineNumber: 1085,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -10755,49 +10863,49 @@ function CourseDetail() {
                                                                     className: "flex-shrink-0"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 1005,
+                                                                    lineNumber: 1107,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                     children: t('WhatsApp')
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                    lineNumber: 1006,
+                                                                    lineNumber: 1108,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 996,
+                                                            lineNumber: 1098,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 982,
+                                                    lineNumber: 1084,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 871,
+                                            lineNumber: 916,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                    lineNumber: 744,
+                                    lineNumber: 789,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                            lineNumber: 730,
+                            lineNumber: 775,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 729,
+                        lineNumber: 774,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10821,14 +10929,14 @@ function CourseDetail() {
                                             className: "inline-block"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 1027,
+                                            lineNumber: 1129,
                                             columnNumber: 17
                                         }, this),
                                         "Community Chat"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                    lineNumber: 1026,
+                                    lineNumber: 1128,
                                     columnNumber: 15
                                 }, this),
                                 isSpecial: true,
@@ -10846,7 +10954,7 @@ function CourseDetail() {
                                         className: "absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-[#D91CD2] to-[#7000FF] rounded-full animate-pulse"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                        lineNumber: 1050,
+                                        lineNumber: 1152,
                                         columnNumber: 15
                                     }, this),
                                     tab.label,
@@ -10854,18 +10962,18 @@ function CourseDetail() {
                                         className: "absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                        lineNumber: 1054,
+                                        lineNumber: 1156,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, tab.id, true, {
                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                lineNumber: 1035,
+                                lineNumber: 1137,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 1015,
+                        lineNumber: 1117,
                         columnNumber: 9
                     }, this),
                     activeTab === 'overview' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -10887,7 +10995,7 @@ function CourseDetail() {
                                         children: t('What You\'ll Learn')
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                        lineNumber: 1068,
+                                        lineNumber: 1170,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -10899,24 +11007,24 @@ function CourseDetail() {
                                                 ]
                                             }, idx, true, {
                                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                lineNumber: 1072,
+                                                lineNumber: 1174,
                                                 columnNumber: 19
                                             }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                                             children: t('No course content available.')
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 1075,
+                                            lineNumber: 1177,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                        lineNumber: 1069,
+                                        lineNumber: 1171,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                lineNumber: 1067,
+                                lineNumber: 1169,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10927,7 +11035,7 @@ function CourseDetail() {
                                         children: t('Class Details')
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                        lineNumber: 1081,
+                                        lineNumber: 1183,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -10941,7 +11049,7 @@ function CourseDetail() {
                                                                 children: t('Category:')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                lineNumber: 1084,
+                                                                lineNumber: 1186,
                                                                 columnNumber: 22
                                                             }, this),
                                                             " ",
@@ -10949,7 +11057,7 @@ function CourseDetail() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                        lineNumber: 1084,
+                                                        lineNumber: 1186,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -10958,7 +11066,7 @@ function CourseDetail() {
                                                                 children: t('Duration:')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                lineNumber: 1085,
+                                                                lineNumber: 1187,
                                                                 columnNumber: 22
                                                             }, this),
                                                             " ",
@@ -10968,7 +11076,7 @@ function CourseDetail() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                        lineNumber: 1085,
+                                                        lineNumber: 1187,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -10977,7 +11085,7 @@ function CourseDetail() {
                                                                 children: t('Max Students:')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                lineNumber: 1086,
+                                                                lineNumber: 1188,
                                                                 columnNumber: 22
                                                             }, this),
                                                             " ",
@@ -10985,13 +11093,13 @@ function CourseDetail() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                        lineNumber: 1086,
+                                                        lineNumber: 1188,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                lineNumber: 1083,
+                                                lineNumber: 1185,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11002,7 +11110,7 @@ function CourseDetail() {
                                                                 children: t('Difficulty:')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                lineNumber: 1089,
+                                                                lineNumber: 1191,
                                                                 columnNumber: 22
                                                             }, this),
                                                             " ",
@@ -11010,7 +11118,7 @@ function CourseDetail() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                        lineNumber: 1089,
+                                                        lineNumber: 1191,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11019,38 +11127,38 @@ function CourseDetail() {
                                                                 children: t('Equipment:')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                                lineNumber: 1091,
+                                                                lineNumber: 1193,
                                                                 columnNumber: 22
                                                             }, this),
                                                             t('None required')
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                        lineNumber: 1091,
+                                                        lineNumber: 1193,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                lineNumber: 1088,
+                                                lineNumber: 1190,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                        lineNumber: 1082,
+                                        lineNumber: 1184,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                lineNumber: 1080,
+                                lineNumber: 1182,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 1062,
+                        lineNumber: 1164,
                         columnNumber: 11
                     }, this),
                     activeTab === 'reviews' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -11071,7 +11179,7 @@ function CourseDetail() {
                                         children: t('Share Your Experience')
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                        lineNumber: 1104,
+                                        lineNumber: 1206,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11079,7 +11187,7 @@ function CourseDetail() {
                                         children: "Have you taken this course? Help others by leaving a review and rating!"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                        lineNumber: 1105,
+                                        lineNumber: 1207,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11087,13 +11195,13 @@ function CourseDetail() {
                                         children: "Note: You can only leave a review after completing the course, and you can only review each course once."
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                        lineNumber: 1108,
+                                        lineNumber: 1210,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                lineNumber: 1103,
+                                lineNumber: 1205,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ReviewSystem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -11102,13 +11210,13 @@ function CourseDetail() {
                                 showReviews: true
                             }, void 0, false, {
                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                lineNumber: 1113,
+                                lineNumber: 1215,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 1099,
+                        lineNumber: 1201,
                         columnNumber: 11
                     }, this),
                     activeTab === 'chat' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -11126,12 +11234,12 @@ function CourseDetail() {
                             courseName: course.title
                         }, void 0, false, {
                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                            lineNumber: 1127,
+                            lineNumber: 1229,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 1122,
+                        lineNumber: 1224,
                         columnNumber: 11
                     }, this),
                     user && course && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$CardSelectionStep$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -11146,7 +11254,7 @@ function CourseDetail() {
                         transactionType: "course"
                     }, void 0, false, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 1133,
+                        lineNumber: 1235,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$PaymentHandlerWithCredits$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -11173,8 +11281,198 @@ function CourseDetail() {
                         preAppliedDiscountCardCode: selectedDiscountCardCode
                     }, void 0, false, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 1147,
+                        lineNumber: 1249,
                         columnNumber: 9
+                    }, this),
+                    showSubscriptionDatePicker && course && userSubscription && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                        initial: {
+                            opacity: 0
+                        },
+                        animate: {
+                            opacity: 1
+                        },
+                        exit: {
+                            opacity: 0
+                        },
+                        className: "fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4",
+                        onClick: (e)=>e.target === e.currentTarget && setShowSubscriptionDatePicker(false),
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
+                            initial: {
+                                scale: 0.9,
+                                opacity: 0
+                            },
+                            animate: {
+                                scale: 1,
+                                opacity: 1
+                            },
+                            exit: {
+                                scale: 0.9,
+                                opacity: 0
+                            },
+                            className: "bg-gray-900 rounded-xl w-full max-w-md border border-gray-700 shadow-2xl",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center justify-between p-6 border-b border-gray-700",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                                    className: "text-xl font-bold text-white",
+                                                    children: t('Choose your next session')
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                    lineNumber: 1291,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    className: "text-gray-400 text-sm mt-1",
+                                                    children: t('Select a date to reserve with your subscription')
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                    lineNumber: 1292,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                            lineNumber: 1290,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: ()=>setShowSubscriptionDatePicker(false),
+                                            className: "p-2 hover:bg-gray-800 rounded-lg transition-colors",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FiX"], {
+                                                className: "text-gray-400",
+                                                size: 20
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                lineNumber: 1300,
+                                                columnNumber: 19
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                            lineNumber: 1296,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                    lineNumber: 1289,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "p-6 max-h-[60vh] overflow-y-auto",
+                                    children: schedules.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "space-y-3",
+                                        children: schedules.filter((schedule)=>{
+                                            const scheduleDate = schedule.startTime instanceof Date ? schedule.startTime : schedule.startTime.toDate();
+                                            return scheduleDate >= new Date();
+                                        }).slice(0, 10).map((schedule)=>{
+                                            const scheduleDate = schedule.startTime instanceof Date ? schedule.startTime : schedule.startTime.toDate();
+                                            const endTime = schedule.endTime instanceof Date ? schedule.endTime : schedule.endTime.toDate();
+                                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: ()=>{
+                                                    setSelectedScheduleForBooking(schedule);
+                                                    bookWithSubscription(scheduleDate);
+                                                },
+                                                disabled: isLoading,
+                                                className: "w-full p-4 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "flex items-center justify-between",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                    className: "text-white font-medium",
+                                                                    children: scheduleDate.toLocaleDateString('en-US', {
+                                                                        weekday: 'long',
+                                                                        year: 'numeric',
+                                                                        month: 'long',
+                                                                        day: 'numeric'
+                                                                    })
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                    lineNumber: 1336,
+                                                                    columnNumber: 33
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                    className: "text-gray-400 text-sm mt-1",
+                                                                    children: [
+                                                                        scheduleDate.toLocaleTimeString('en-US', {
+                                                                            hour: '2-digit',
+                                                                            minute: '2-digit'
+                                                                        }),
+                                                                        " - ",
+                                                                        endTime.toLocaleTimeString('en-US', {
+                                                                            hour: '2-digit',
+                                                                            minute: '2-digit'
+                                                                        })
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                                    lineNumber: 1344,
+                                                                    columnNumber: 33
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                            lineNumber: 1335,
+                                                            columnNumber: 31
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fi$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FiCalendar"], {
+                                                            className: "text-purple-400",
+                                                            size: 20
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                            lineNumber: 1354,
+                                                            columnNumber: 31
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                    lineNumber: 1334,
+                                                    columnNumber: 29
+                                                }, this)
+                                            }, schedule.id, false, {
+                                                fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                                lineNumber: 1325,
+                                                columnNumber: 27
+                                            }, this);
+                                        })
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                        lineNumber: 1307,
+                                        columnNumber: 19
+                                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "text-center py-8",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-gray-400",
+                                            children: t('No upcoming sessions available')
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                            lineNumber: 1362,
+                                            columnNumber: 21
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                        lineNumber: 1361,
+                                        columnNumber: 19
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                                    lineNumber: 1305,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                            lineNumber: 1282,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/courses/[courseId]/page.tsx",
+                        lineNumber: 1275,
+                        columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$TokenSelectionModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                         isOpen: showTokenSelector,
@@ -11194,7 +11492,7 @@ function CourseDetail() {
                         sessionsRequired: course.sessions
                     }, void 0, false, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 1172,
+                        lineNumber: 1371,
                         columnNumber: 9
                     }, this),
                     showBookingOptions && course && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$motion$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["motion"].div, {
@@ -11234,7 +11532,7 @@ function CourseDetail() {
                                                     children: t('Book Course')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 1208,
+                                                    lineNumber: 1407,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11242,13 +11540,13 @@ function CourseDetail() {
                                                     children: t('Choose how you want to proceed')
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 1209,
+                                                    lineNumber: 1408,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 1207,
+                                            lineNumber: 1406,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -11259,18 +11557,18 @@ function CourseDetail() {
                                                 size: 20
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                lineNumber: 1217,
+                                                lineNumber: 1416,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 1213,
+                                            lineNumber: 1412,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                    lineNumber: 1206,
+                                    lineNumber: 1405,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11284,7 +11582,7 @@ function CourseDetail() {
                                                     children: course.title
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 1224,
+                                                    lineNumber: 1423,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11298,7 +11596,7 @@ function CourseDetail() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 1226,
+                                                            lineNumber: 1425,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -11309,13 +11607,13 @@ function CourseDetail() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 1227,
+                                                            lineNumber: 1426,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 1225,
+                                                    lineNumber: 1424,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11329,7 +11627,7 @@ function CourseDetail() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 1230,
+                                                            lineNumber: 1429,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -11337,19 +11635,19 @@ function CourseDetail() {
                                                             children: course.sessions
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 1231,
+                                                            lineNumber: 1430,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 1229,
+                                                    lineNumber: 1428,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 1223,
+                                            lineNumber: 1422,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -11363,20 +11661,20 @@ function CourseDetail() {
                                                             size: 20
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 1240,
+                                                            lineNumber: 1439,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             children: t('Offers')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 1241,
+                                                            lineNumber: 1440,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 1236,
+                                                    lineNumber: 1435,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -11387,26 +11685,26 @@ function CourseDetail() {
                                                             size: 20
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 1248,
+                                                            lineNumber: 1447,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             children: t('Finalize your reservation')
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                            lineNumber: 1249,
+                                                            lineNumber: 1448,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                                    lineNumber: 1244,
+                                                    lineNumber: 1443,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 1235,
+                                            lineNumber: 1434,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -11414,30 +11712,30 @@ function CourseDetail() {
                                             children: t('Subscribe to get access to multiple courses, or proceed with a one-time payment for this course.')
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                            lineNumber: 1253,
+                                            lineNumber: 1452,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                                    lineNumber: 1222,
+                                    lineNumber: 1421,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                            lineNumber: 1199,
+                            lineNumber: 1398,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                        lineNumber: 1192,
+                        lineNumber: 1391,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                lineNumber: 675,
+                lineNumber: 720,
                 columnNumber: 7
             }, this),
             showVideoModal && course?.videoLink && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$VideoModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -11447,7 +11745,7 @@ function CourseDetail() {
                 onClose: ()=>setShowVideoModal(false)
             }, void 0, false, {
                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                lineNumber: 1264,
+                lineNumber: 1463,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Toast$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -11460,13 +11758,13 @@ function CourseDetail() {
                     })
             }, void 0, false, {
                 fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-                lineNumber: 1273,
+                lineNumber: 1472,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/courses/[courseId]/page.tsx",
-        lineNumber: 674,
+        lineNumber: 719,
         columnNumber: 5
     }, this);
 }
