@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FiPlus, FiEdit3, FiTrash2, FiUsers, FiStar,FiClock, FiDollarSign, FiSearch, FiUpload, FiImage, FiCalendar, FiGrid, FiPlay, FiCopy, FiShare2 } from 'react-icons/fi';
+import { FiPlus, FiEdit3, FiTrash2, FiUsers, FiStar, FiClock, FiDollarSign, FiSearch, FiUpload, FiImage, FiCalendar, FiGrid, FiPlay, FiCopy, FiShare2 } from 'react-icons/fi';
 import { Course } from '@/types';
 import { courseService, danceCategoryService } from '@/lib/database';
 import { useAuth } from '@/lib/auth';
@@ -88,7 +88,7 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
     if (editingCourse) {
       // Properly handle courseContent as array
       let courseContentArray: string[] = [];
-      
+
       if (Array.isArray(editingCourse.courseContent)) {
         // If it's already an array, use it directly
         courseContentArray = editingCourse.courseContent.filter(item => item && item.trim() !== '');
@@ -100,7 +100,7 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
         // If it's a single string, make it an array
         courseContentArray = [editingCourse.courseContent];
       }
-      
+
       // Ensure at least one empty field for editing
       if (courseContentArray.length === 0) {
         courseContentArray = [''];
@@ -139,17 +139,17 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
     try {
       const categoriesData = await danceCategoryService.getAll();
       const defaultCategories = [
-        'Afrobeat', 'Hip-Hop', 'Contemporary', 'Salsa', 'Bachata', 
+        'Afrobeat', 'Hip-Hop', 'Contemporary', 'Salsa', 'Bachata',
         'Kizomba', 'Jazz', 'Ballet', 'Breakdance', 'Latin'
       ];
-      
+
       const customCategories = categoriesData.map(cat => ('name' in cat ? cat.name : '')).filter(Boolean);
       const allCategories = [...new Set([...defaultCategories, ...customCategories])];
       setCategories(allCategories as string[]);
     } catch (error) {
       console.error('Error loading categories:', error);
       setCategories([
-        'Afrobeat', 'Hip-Hop', 'Contemporary', 'Salsa', 'Bachata', 
+        'Afrobeat', 'Hip-Hop', 'Contemporary', 'Salsa', 'Bachata',
         'Kizomba', 'Jazz', 'Ballet', 'Breakdance', 'Latin'
       ]);
     }
@@ -179,14 +179,14 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
     try {
       const formData = new FormData();
       formData.append('file', file);
-      
+
       const response = await fetch('/api/cloudinary/upload', {
         method: 'POST',
         body: formData,
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to upload image');
       }
@@ -201,11 +201,11 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
-    
+
     setIsLoading(true);
     try {
       let imageUrl = formData.imageUrl;
-      
+
       // Upload image to Cloudinary if selected
       if (courseImage) {
         try {
@@ -217,7 +217,7 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
           return;
         }
       }
-      
+
       const courseData = {
         title: formData.title,
         description: formData.description,
@@ -263,7 +263,7 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
   const handleEdit = (course: Course) => {
     // Normalize courseContent to always be an array
     let courseContentArray: string[] = [];
-    
+
     if (Array.isArray(course.courseContent)) {
       courseContentArray = course.courseContent.filter(item => item && item.trim() !== '');
     } else if (course.courseContent && typeof course.courseContent === 'object') {
@@ -272,17 +272,17 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
     } else if (course.courseContent && typeof course.courseContent === 'string') {
       courseContentArray = [course.courseContent];
     }
-    
+
     // Ensure at least one empty field for editing
     if (courseContentArray.length === 0) {
       courseContentArray = [''];
     }
-    
+
     const normalizedCourse = {
       ...course,
       courseContent: courseContentArray
     };
-    
+
     setEditingCourse(normalizedCourse);
     setIsModalOpen(true);
   };
@@ -358,7 +358,7 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
 
   const handleAddCategory = async () => {
     if (!newCategoryName.trim()) return;
-    
+
     setIsAddingCategory(true);
     try {
       await danceCategoryService.create({
@@ -366,7 +366,7 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
         description: `Custom dance category: ${newCategoryName}`,
         createdBy: user?.id || 'unknown'
       });
-      
+
       await loadCategories();
       setFormData(prev => ({ ...prev, category: newCategoryName.trim() }));
       setShowCategoryModal(false);
@@ -387,7 +387,7 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
     }
   };
 
-  const filteredCourses = courses.filter(course => 
+  const filteredCourses = courses.filter(course =>
     course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     course.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
     course.difficulty.toLowerCase().includes(searchTerm.toLowerCase())
@@ -416,22 +416,20 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
             <div className="flex bg-black/40 rounded-lg p-1">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${
-                  viewMode === 'grid'
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${viewMode === 'grid'
                     ? 'bg-[#D91CD2] text-white'
                     : 'text-gray-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <FiGrid size={16} />
                 {t('grid')}
               </button>
               <button
                 onClick={() => setViewMode('calendar')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${
-                  viewMode === 'calendar'
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-2 ${viewMode === 'calendar'
                     ? 'bg-[#D91CD2] text-white'
                     : 'text-gray-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <FiCalendar size={16} />
                 {t('calendar')}
@@ -511,7 +509,7 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
                       </button>
                     </div>
                   </div>
-                  
+
                   <div className="p-3 flex-1 flex flex-col space-y-2">
                     {/* Course title as link */}
                     <a
@@ -522,9 +520,9 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
                     >
                       {course.title}
                     </a>
-                    
+
                     <p className="text-gray-400 text-xs lg:text-sm line-clamp-2 flex-1">{course.description}</p>
-                    
+
                     {/* Course Info Grid - Compact with Icons */}
                     <div className="grid grid-cols-2 gap-1 text-xs">
                       <div className="flex items-center text-gray-300">
@@ -551,7 +549,7 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
                         </span>
                       </div>
                     </div>
-                    
+
                     {/* Stats and Rating */}
                     <div className="flex items-center justify-between text-xs">
                       <div className="flex items-center">
@@ -562,14 +560,13 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
                         ${course.totalPrice}
                       </span>
                     </div>
-                    
+
                     {/* Difficulty and Category */}
                     <div className="flex items-center justify-between gap-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium flex-1 text-center ${
-                        course.difficulty === 'Beginner' ? 'bg-green-500/20 text-green-400' :
-                        course.difficulty === 'Intermediate' ? 'bg-yellow-500/20 text-yellow-400' :
-                        'bg-red-500/20 text-red-400'
-                      }`}>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium flex-1 text-center ${course.difficulty === 'Beginner' ? 'bg-green-500/20 text-green-400' :
+                          course.difficulty === 'Intermediate' ? 'bg-yellow-500/20 text-yellow-400' :
+                            'bg-red-500/20 text-red-400'
+                        }`}>
                         {t(course.difficulty.toLowerCase())}
                       </span>
                       <span className="text-xs bg-[#D91CD2]/20 text-[#D91CD2] px-2 py-1 rounded flex-1 text-center">
@@ -620,284 +617,284 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
           <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="bg-black border border-[#D91CD2]/20 rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-black border border-[#D91CD2]/20 rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto"
           >
-        <h3 className="text-xl font-bold gradient-text mb-6">
-          {editingCourse ? t('editCourse') : t('addNewCourse')}
-        </h3>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-white mb-2">{t('title')}</label>
-            <input
-          type="text"
-          value={formData.title}
-          onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-          required
-          className="input-primary w-full"
-          placeholder={t('courseTitle')}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-white mb-2">{t('description')}</label>
-            <textarea
-          value={formData.description}
-          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-          required
-          className="input-primary w-full h-24"
-          placeholder={t('courseDescription')}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-white mb-2">{t('videoLink')} ({t('optional')})</label>
-            <input
-          type="url"
-          value={formData.videoLink}
-          onChange={(e) => setFormData(prev => ({ ...prev, videoLink: e.target.value }))}
-          className="input-primary w-full"
-          placeholder="https://youtube.com/watch?v=... or direct video URL"
-            />
-            <p className="text-gray-400 text-xs mt-1">
-          {t('addYouTubeLink')}
-            </p>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-white mb-2">{t('category')}</label>
-            <div className="flex gap-2">
-          <select
-            value={formData.category}
-            onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-            required
-            className="input-primary flex-1"
-          >
-            {categories.map(category => (
-              <option key={category} value={category}>{category}</option>
-            ))}
-          </select>
-          <button
-            type="button"
-            onClick={() => setShowCategoryModal(true)}
-            className="px-3 py-2 bg-[#D91CD2]/20 text-[#D91CD2] rounded-lg hover:bg-[#D91CD2]/30 transition-colors text-sm whitespace-nowrap"
-          >
-            {t('addNew')}
-          </button>
-            </div>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-white mb-2">{t('difficulty')}</label>
-            <select
-          value={formData.difficulty}
-          onChange={(e) => setFormData(prev => ({ ...prev, difficulty: e.target.value as 'Beginner' | 'Intermediate' | 'Advanced' }))}
-          required
-          className="input-primary w-full"
-            >
-          <option value="Beginner">{t('beginner')}</option>
-          <option value="Intermediate">{t('intermediate')}</option>
-          <option value="Advanced">{t('advanced')}</option>
-            </select>
-          </div>
-          
-          <div className="flex gap-4 items-center">
-            <div className="flex-1 flex flex-col">
-          <label className="block text-xs font-medium text-white mb-2">{t('pricePerSession')} ($)</label>
-          <input
-            type="number"
-            value={formData.price}
-            onChange={(e) => setFormData(prev => ({ ...prev, price: Number(e.target.value) }))}
-            required
-            min="0"
-            step="0.01"
-            className="input-primary w-full"
-          />
-            </div>
-            <div className="flex-1 flex flex-col">
-          <label className="block text-sm font-small text-white mb-2">{t('numberOfSessions')}</label>
-          <input
-            type="number"
-            value={formData.sessions}
-            onChange={(e) => setFormData(prev => ({ ...prev, sessions: Number(e.target.value) }))}
-            required
-            min="1"
-            className="input-primary w-full"
-          />
-          <div className="text-xs text-gray-400 mt-1">
-            {t('total')}: ${(formData.price * formData.sessions).toFixed(2)}
-          </div>
-            </div>
-            <div className="flex-1 flex flex-col">
-          <label className="block text-sm font-medium text-white mb-2">{t('duration')} ({t('min')})</label>
-          <input
-            type="number"
-            value={formData.duration}
-            onChange={(e) => setFormData(prev => ({ ...prev, duration: Number(e.target.value) }))}
-            required
-            min="15"
-            step="5"
-            className="input-primary w-full"
-          />
-            </div>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-white mb-2">{t('maxStudents')}</label>
-            <input
-          type="number"
-          value={formData.maxStudents}
-          onChange={(e) => setFormData(prev => ({ ...prev, maxStudents: Number(e.target.value) }))}
-          required
-          min="1"
-          className="input-primary w-full"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-white mb-2">{t('whatYouWillLearn')}</label>
-            <div className="space-y-2 max-h-40 overflow-y-auto">
-              {formData.courseContent.map((content, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={content}
-                    onChange={(e) => {
-                      const newContent = [...formData.courseContent];
-                      newContent[index] = e.target.value;
-                      setFormData(prev => ({ ...prev, courseContent: newContent }));
-                    }}
-                    className="input-primary w-full text-sm"
-                    placeholder={`${t('learningPoint')} ${index + 1}`}
-                  />
-                  {formData.courseContent.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newContent = formData.courseContent.filter((_, i) => i !== index);
-                        setFormData(prev => ({ ...prev, courseContent: newContent }));
-                      }}
-                      className="p-2 bg-red-500/50 rounded-full hover:bg-red-500/70 transition-colors flex-shrink-0"
-                      title={t('remove')}
-                    >
-                      <FiTrash2 size={14} className="text-white" />
-                    </button>
-                  )}
+            <h3 className="text-xl font-bold gradient-text mb-6">
+              {editingCourse ? t('editCourse') : t('addNewCourse')}
+            </h3>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">{t('title')}</label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  required
+                  className="input-primary w-full"
+                  placeholder={t('courseTitle')}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">{t('description')}</label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  required
+                  className="input-primary w-full h-24"
+                  placeholder={t('courseDescription')}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">{t('videoLink')} ({t('optional')})</label>
+                <input
+                  type="url"
+                  value={formData.videoLink}
+                  onChange={(e) => setFormData(prev => ({ ...prev, videoLink: e.target.value }))}
+                  className="input-primary w-full"
+                  placeholder="https://youtube.com/watch?v=... or direct video URL"
+                />
+                <p className="text-gray-400 text-xs mt-1">
+                  {t('addYouTubeLink')}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">{t('category')}</label>
+                <div className="flex gap-2">
+                  <select
+                    value={formData.category}
+                    onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                    required
+                    className="input-primary flex-1"
+                  >
+                    {categories.map(category => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => setShowCategoryModal(true)}
+                    className="px-3 py-2 bg-[#D91CD2]/20 text-[#D91CD2] rounded-lg hover:bg-[#D91CD2]/30 transition-colors text-sm whitespace-nowrap"
+                  >
+                    {t('addNew')}
+                  </button>
                 </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => {
-                  setFormData(prev => ({
-                    ...prev,
-                    courseContent: [...prev.courseContent, '']
-                  }));
-                }}
-                className="btn-secondary text-sm w-full mt-2 py-2"
-              >
-                + {t('addLearningPoint')}
-              </button>
-              
-            </div>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-white mb-2">{t('courseImage')}</label>
-            <div className="space-y-4">
-          {(courseImagePreview || formData.imageUrl) ? (
-            <div className="relative">
-              <img 
-            src={courseImagePreview || formData.imageUrl} 
-            alt="Course preview" 
-            className="w-full h-40 object-cover rounded-lg"
-              />
-              <button
-            type="button"
-            onClick={() => {
-              if (courseImagePreview) {
-                URL.revokeObjectURL(courseImagePreview);
-                setCourseImagePreview(null);
-              }
-              setCourseImage(null);
-              setFormData(prev => ({ ...prev, imageUrl: '' }));
-              if (fileInputRef.current) {
-                fileInputRef.current.value = '';
-              }
-            }}
-            className="absolute top-2 right-2 bg-red-500/70 hover:bg-red-500 p-1 rounded-full text-white"
-              >
-            <FiTrash2 size={16} />
-              </button>
-            </div>
-          ) : (
-            <div 
-              onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-gray-500/30 rounded-lg h-40 flex flex-col items-center justify-center cursor-pointer hover:border-[#D91CD2]/50 transition-colors"
-            >
-              <FiImage size={32} className="text-gray-400 mb-2" />
-              <p className="text-gray-400 text-sm">{t('clickToUpload')}</p>
-              <p className="text-gray-500 text-xs mt-1">{t('imageFormats')}</p>
-            </div>
-          )}
-          
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImageChange}
-            accept="image/jpeg, image/png, image/gif"
-            className="hidden"
-          />
-          
-          <div className="flex items-center">
-            <span className="text-gray-400 text-sm mr-2">{t('orEnterImageUrl')}:</span>
-            <input
-              type="url"
-              value={formData.imageUrl}
-              onChange={(e) => {
-            // Clear file input if URL is provided
-            if (courseImagePreview) {
-              URL.revokeObjectURL(courseImagePreview);
-              setCourseImagePreview(null);
-            }
-            setCourseImage(null);
-            setFormData(prev => ({ ...prev, imageUrl: e.target.value }));
-              }}
-              className="input-primary flex-1"
-              placeholder="https://example.com/image.jpg"
-            />
-          </div>
-            </div>
-          </div>
-          
-          {/* Show created date if editing */}
-          {editingCourse && editingCourse.createdAt && (
-            <div>
-          <label className="block text-sm font-medium text-white mb-2">{t('createdAt')}</label>
-          <div className="input-primary w-full bg-gray-800 text-gray-400 cursor-not-allowed">
-            {formatDate(editingCourse.createdAt)}
-          </div>
-            </div>
-          )}
-          
-          <div className="flex justify-end space-x-4 pt-4">
-            <button
-          type="button"
-          onClick={() => setIsModalOpen(false)}
-          className="btn-secondary"
-            >
-          {t('cancel')}
-            </button>
-            <button
-          type="submit"
-          disabled={isLoading}
-          className="btn-primary"
-            >
-          {isLoading ? t('saving') : t('saveCourse')}
-            </button>
-          </div>
-        </form>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">{t('difficulty')}</label>
+                <select
+                  value={formData.difficulty}
+                  onChange={(e) => setFormData(prev => ({ ...prev, difficulty: e.target.value as 'Beginner' | 'Intermediate' | 'Advanced' }))}
+                  required
+                  className="input-primary w-full"
+                >
+                  <option value="Beginner">{t('beginner')}</option>
+                  <option value="Intermediate">{t('intermediate')}</option>
+                  <option value="Advanced">{t('advanced')}</option>
+                </select>
+              </div>
+
+              <div className="flex gap-4 items-center">
+                <div className="flex-1 flex flex-col">
+                  <label className="block text-xs font-medium text-white mb-2">{t('pricePerSession')} ($)</label>
+                  <input
+                    type="number"
+                    value={formData.price}
+                    onChange={(e) => setFormData(prev => ({ ...prev, price: Number(e.target.value) }))}
+                    required
+                    min="0"
+                    step="0.01"
+                    className="input-primary w-full"
+                  />
+                </div>
+                <div className="flex-1 flex flex-col">
+                  <label className="block text-sm font-small text-white mb-2">{t('numberOfSessions')}</label>
+                  <input
+                    type="number"
+                    value={formData.sessions}
+                    onChange={(e) => setFormData(prev => ({ ...prev, sessions: Number(e.target.value) }))}
+                    required
+                    min="1"
+                    className="input-primary w-full"
+                  />
+                  <div className="text-xs text-gray-400 mt-1">
+                    {t('total')}: ${(formData.price * formData.sessions).toFixed(2)}
+                  </div>
+                </div>
+                <div className="flex-1 flex flex-col">
+                  <label className="block text-sm font-medium text-white mb-2">{t('duration')} ({t('min')})</label>
+                  <input
+                    type="number"
+                    value={formData.duration}
+                    onChange={(e) => setFormData(prev => ({ ...prev, duration: Number(e.target.value) }))}
+                    required
+                    min="15"
+                    step="5"
+                    className="input-primary w-full"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">{t('maxStudents')}</label>
+                <input
+                  type="number"
+                  value={formData.maxStudents}
+                  onChange={(e) => setFormData(prev => ({ ...prev, maxStudents: Number(e.target.value) }))}
+                  required
+                  min="1"
+                  className="input-primary w-full"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">{t('whatYouWillLearn')}</label>
+                <div className="space-y-2 max-h-40 overflow-y-auto">
+                  {formData.courseContent.map((content, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={content}
+                        onChange={(e) => {
+                          const newContent = [...formData.courseContent];
+                          newContent[index] = e.target.value;
+                          setFormData(prev => ({ ...prev, courseContent: newContent }));
+                        }}
+                        className="input-primary w-full text-sm"
+                        placeholder={`${t('learningPoint')} ${index + 1}`}
+                      />
+                      {formData.courseContent.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newContent = formData.courseContent.filter((_, i) => i !== index);
+                            setFormData(prev => ({ ...prev, courseContent: newContent }));
+                          }}
+                          className="p-2 bg-red-500/50 rounded-full hover:bg-red-500/70 transition-colors flex-shrink-0"
+                          title={t('remove')}
+                        >
+                          <FiTrash2 size={14} className="text-white" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData(prev => ({
+                        ...prev,
+                        courseContent: [...prev.courseContent, '']
+                      }));
+                    }}
+                    className="btn-secondary text-sm w-full mt-2 py-2"
+                  >
+                    + {t('addLearningPoint')}
+                  </button>
+
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white mb-2">{t('courseImage')}</label>
+                <div className="space-y-4">
+                  {(courseImagePreview || formData.imageUrl) ? (
+                    <div className="relative">
+                      <img
+                        src={courseImagePreview || formData.imageUrl}
+                        alt="Course preview"
+                        className="w-full h-40 object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (courseImagePreview) {
+                            URL.revokeObjectURL(courseImagePreview);
+                            setCourseImagePreview(null);
+                          }
+                          setCourseImage(null);
+                          setFormData(prev => ({ ...prev, imageUrl: '' }));
+                          if (fileInputRef.current) {
+                            fileInputRef.current.value = '';
+                          }
+                        }}
+                        className="absolute top-2 right-2 bg-red-500/70 hover:bg-red-500 p-1 rounded-full text-white"
+                      >
+                        <FiTrash2 size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      className="border-2 border-dashed border-gray-500/30 rounded-lg h-40 flex flex-col items-center justify-center cursor-pointer hover:border-[#D91CD2]/50 transition-colors"
+                    >
+                      <FiImage size={32} className="text-gray-400 mb-2" />
+                      <p className="text-gray-400 text-sm">{t('clickToUpload')}</p>
+                      <p className="text-gray-500 text-xs mt-1">{t('imageFormats')}</p>
+                    </div>
+                  )}
+
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageChange}
+                    accept="image/jpeg, image/png, image/gif"
+                    className="hidden"
+                  />
+
+                  <div className="flex flex-col space-y-2">
+                    <span className="text-gray-400 text-sm">{t('orEnterImageUrl')}:</span>
+                    <input
+                      type="url"
+                      value={formData.imageUrl}
+                      onChange={(e) => {
+                        // Clear file input if URL is provided
+                        if (courseImagePreview) {
+                          URL.revokeObjectURL(courseImagePreview);
+                          setCourseImagePreview(null);
+                        }
+                        setCourseImage(null);
+                        setFormData(prev => ({ ...prev, imageUrl: e.target.value }));
+                      }}
+                      className="input-primary w-full pl-3"
+                      placeholder="https://example.com/image.jpg"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Show created date if editing */}
+              {editingCourse && editingCourse.createdAt && (
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">{t('createdAt')}</label>
+                  <div className="input-primary w-full bg-gray-800 text-gray-400 cursor-not-allowed">
+                    {formatDate(editingCourse.createdAt)}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-4 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="btn-secondary"
+                >
+                  {t('cancel')}
+                </button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="btn-primary"
+                >
+                  {isLoading ? t('saving') : t('saveCourse')}
+                </button>
+              </div>
+            </form>
           </motion.div>
         </div>
       )}
@@ -911,7 +908,7 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
             className="bg-black border border-[#D91CD2]/20 rounded-lg p-6 w-full max-w-sm"
           >
             <h3 className="text-xl font-bold gradient-text mb-4">{t('addDanceCategory')}</h3>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-white mb-2">{t('categoryName')}</label>
@@ -924,7 +921,7 @@ export default function CourseManagement({ onSelectCourse }: CourseManagementPro
                   onKeyPress={(e) => e.key === 'Enter' && handleAddCategory()}
                 />
               </div>
-              
+
               <div className="flex justify-end space-x-3">
                 <button
                   type="button"

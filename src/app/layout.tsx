@@ -48,7 +48,7 @@ export const metadata: Metadata = {
         media: "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)",
       },
       {
-        url: "/favicon.svg", 
+        url: "/favicon.svg",
         media: "(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)",
       },
       {

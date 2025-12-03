@@ -56,6 +56,7 @@ export async function POST(request: NextRequest) {
       cardType,
       expirationDate,
       maxUsage,
+      courseSessions, // Array of session IDs for this course
       code: providedCode, // Optional: for duplication
       qrCodeImage: providedQrCodeImage // Optional: for duplication
     } = body;
@@ -205,7 +206,8 @@ export async function POST(request: NextRequest) {
       updatedAt: serverTimestamp(),
       ...(userEmail ? { userEmail } : {}),
       ...(courseId ? { courseId } : {}),
-      ...(cardType ? { cardType } : {})
+      ...(cardType ? { cardType } : {}),
+      ...(courseSessions && Array.isArray(courseSessions) ? { courseSessions } : {})
     };
 
     // Add expiration date if provided (convert to Firestore Timestamp)
@@ -255,7 +257,8 @@ export async function POST(request: NextRequest) {
       updatedAt: new Date(),
       ...(firestoreData.userEmail ? { userEmail: firestoreData.userEmail } : {}),
       ...(firestoreData.courseId ? { courseId: firestoreData.courseId } : {}),
-      ...(firestoreData.cardType ? { cardType: firestoreData.cardType } : {})
+      ...(firestoreData.cardType ? { cardType: firestoreData.cardType } : {}),
+      ...(firestoreData.courseSessions ? { courseSessions: firestoreData.courseSessions } : {})
     };
 
     console.log('=== Discount Card Creation Completed Successfully ===');

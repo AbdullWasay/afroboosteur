@@ -65,8 +65,9 @@ export default function CourseDetail() {
   };
   const [userSubscription, setUserSubscription] = useState<UserSubscription | null>(null);
   const [hasPurchasedOffer, setHasPurchasedOffer] = useState(false);
+  const [hasValidDiscountCard, setHasValidDiscountCard] = useState(false);
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
-  const [bookingType, setBookingType] = useState<'subscription' | 'pay_per_session' | 'tokens'>('subscription');
+  const [bookingType, setBookingType] = useState<'subscription' | 'pay_per_session' | 'tokens'>('pay_per_session');
   const [availableTokenPackages, setAvailableTokenPackages] = useState<StudentTokenPackage[]>([]);
   const [selectedTokenPackage, setSelectedTokenPackage] = useState<StudentTokenPackage | null>(null);
   const [showTokenSelector, setShowTokenSelector] = useState(false);
@@ -89,6 +90,7 @@ export default function CourseDetail() {
       checkUserCourseStatus();
       loadUserSubscription(); // This checks both subscription and offer purchases
       loadUserTokenPackages();
+      loadUserDiscountCards();
       loadUserHelmetReservations();
     }
   }, [user, course]);
@@ -137,14 +139,19 @@ export default function CourseDetail() {
       const status = await checkUserSubscriptionStatus(user.id);
       setUserSubscription(status.subscription);
       setHasActiveSubscription(status.hasActiveSubscription);
-
+      
       // Refine offer status: only consider offers that are valid for this coach.
+      // Initialize to false - will only be set to true if we find a valid coach-specific offer
       let hasCoachOffer = false;
       try {
         const purchases = await offerPurchaseService.getByUser(user.id);
         const now = new Date();
-
-        const getExpirationDate = (raw: any): Date | null => {
+        
+        // If no purchases at all, definitely no offer
+        if (!purchases || purchases.length === 0) {
+          hasCoachOffer = false;
+        } else {
+          const getExpirationDate = (raw: any): Date | null => {
           if (!raw) return null;
           if (raw instanceof Date) return raw;
           if (raw?.toDate && typeof raw.toDate === 'function') {
@@ -158,16 +165,56 @@ export default function CourseDetail() {
           return new Date(raw);
         };
 
+        // Strict validation: only count purchases that:
+        // 1. Have status 'completed'
+        // 2. Have a valid, non-empty coachId
+        // 3. coachId exactly matches the course's coachId
+        // 4. Are not expired (if expirationDate exists)
         hasCoachOffer = purchases.some((p: any) => {
-          if (p.status !== 'completed') return false;
-          // If the purchase is linked to a specific coach, it only applies to that coach
-          if (p.coachId && p.coachId !== course.coachId) return false;
+          // Must be completed
+          if (p.status !== 'completed') {
+            return false;
+          }
+          
+          // Must have a valid coachId (not null, undefined, or empty string)
+          if (!p.coachId || typeof p.coachId !== 'string' || p.coachId.trim() === '') {
+            return false;
+          }
+          
+          // coachId must exactly match the course's coachId
+          if (p.coachId !== course.coachId) {
+            return false;
+          }
 
+          // Check expiration date if it exists
           const exp = getExpirationDate(p.expirationDate);
-          // If there's no expiration date, treat it as active (legacy behavior)
-          if (!exp) return true;
-          return exp >= now;
+          if (exp) {
+            // If expiration date exists, it must be in the future
+            return exp >= now;
+          }
+          
+          // If no expiration date, treat as active (legacy behavior)
+          return true;
         });
+        
+        // Debug logging
+        if (purchases.length > 0) {
+          console.log('Offer purchases check:', {
+            userId: user.id,
+            courseId: course.id,
+            courseCoachId: course.coachId,
+            totalPurchases: purchases.length,
+            purchases: purchases.map((p: any) => ({
+              id: p.id,
+              status: p.status,
+              coachId: p.coachId,
+              expirationDate: p.expirationDate,
+              matches: p.status === 'completed' && p.coachId === course.coachId
+            })),
+            hasCoachOffer
+          });
+        }
+        } // End else block
       } catch (offerError) {
         console.error('Error checking coach-specific offers:', offerError);
       }
@@ -175,9 +222,9 @@ export default function CourseDetail() {
       setHasPurchasedOffer(hasCoachOffer);
       
       // Default to subscription booking only if user has:
-      // - a globally active subscription, OR
-      // - an active offer that matches this coach
-      if (status.hasActiveSubscription || hasCoachOffer) {
+      // - an active offer that matches this coach (coach-specific)
+      // Note: We only check coach-specific offers, not global subscriptions
+      if (hasCoachOffer) {
         setBookingType('subscription');
       } else {
         setBookingType('pay_per_session');
@@ -199,6 +246,58 @@ export default function CourseDetail() {
       }
     } catch (error) {
       console.error('Error loading user token packages:', error);
+    }
+  };
+
+  const loadUserDiscountCards = async () => {
+    if (!user?.id || !course) return;
+    try {
+      const response = await fetch(`/api/discount-cards/user-cards?userId=${user.id}&coachId=${course.coachId}`);
+      if (!response.ok) {
+        console.error('Error fetching discount cards');
+        return;
+      }
+      
+      const data = await response.json();
+      const discountCards = data.discountCards || [];
+      
+      const now = new Date();
+      
+      // Check if user has a valid discount card for this specific course
+      const hasValidCard = discountCards.some((card: any) => {
+        // Card must be active
+        if (!card.isActive) return false;
+        
+        // Check expiration date
+        if (card.expirationDate) {
+          const expDate = card.expirationDate?.toDate?.() || new Date(card.expirationDate);
+          if (expDate < now) return false;
+        }
+        
+        // Check usage limit
+        if (card.usageLimit && card.timesUsed >= card.usageLimit && card.usageLimit !== -1) {
+          return false;
+        }
+        
+        // Check if card is for this specific course
+        if (card.courseId === course.id) {
+          // If card has courseSessions, check if any sessions match the course's sessions
+          // For now, if courseId matches, it's valid
+          // In the future, we could also check if the specific session is in courseSessions
+          return true;
+        }
+        
+        return false;
+      });
+      
+      setHasValidDiscountCard(hasValidCard);
+      
+      // If user has a valid discount card for this course, they can reserve helmet
+      if (hasValidCard) {
+        setBookingType('subscription');
+      }
+    } catch (error) {
+      console.error('Error loading user discount cards:', error);
     }
   };
 
@@ -380,8 +479,8 @@ export default function CourseDetail() {
       return;
     }
 
-    // If user has subscription, show date picker instead of booking directly
-    if (bookingType === 'subscription' && userSubscription) {
+    // If user has coach-specific offer, show date picker instead of booking directly
+    if (bookingType === 'subscription' && (hasPurchasedOffer || hasValidDiscountCard)) {
       setShowSubscriptionDatePicker(true);
       return;
     }
@@ -467,9 +566,9 @@ export default function CourseDetail() {
   const bookWithSubscription = async (selectedDate?: Date) => {
     if (!course || !user) return;
     
-    // User must have either subscription or purchased offer
-    if (!userSubscription && !hasPurchasedOffer) {
-      alert('You need an active subscription or offer purchase to book with this method');
+    // User must have a purchased offer or discount card for this course
+    if (!hasPurchasedOffer && !hasValidDiscountCard) {
+      alert('You need an active offer purchase or discount card for this course to book with this method');
       return;
     }
 
@@ -480,24 +579,8 @@ export default function CourseDetail() {
       // Use the selected date or default to next week
       const scheduledDate = selectedDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 
-      // If user has subscription, use subscription booking method
-      if (hasActiveSubscription && userSubscription) {
-      await bookingService.createWithSubscription(
-        {
-          courseId: course.id,
-          studentId: user.id,
-          coachId: course.coachId,
-          status: 'confirmed',
-          paymentStatus: 'completed',
-          paymentAmount: 0, // No direct payment required
-            scheduledDate
-        },
-        course.id,
-        course.title,
-        course.coachName
-      );
-      } else if (hasPurchasedOffer) {
-        // User has purchased offer but no subscription - create booking with 0 payment
+      // User has purchased offer or discount card for this course - create booking with 0 payment
+      if (hasPurchasedOffer || hasValidDiscountCard) {
         await bookingService.create({
           courseId: course.id,
           studentId: user.id,
@@ -871,93 +954,12 @@ export default function CourseDetail() {
                 </div>
               </div>
 
-              {/* Schedule Information & Helmet Reservation - Only show for users WITHOUT subscription */}
-              {schedules.length > 0 && user && !userSubscription && (
-                <div className="p-3 sm:p-4 bg-gray-900/70 rounded-lg border border-gray-800">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="font-semibold text-sm sm:text-base">{t('Upcoming Sessions - Reserve Your Helmet')}</h3>
-                    {schedules.length > 1 && (
-                      <button
-                        onClick={() => setShowAllSessions(!showAllSessions)}
-                        className="text-[#D91CD2] text-xs sm:text-sm hover:underline"
-                      >
-                        {showAllSessions ? t('Show Less') : t('Show All')}
-                      </button>
-                    )}
-                  </div>
-                  <div className="space-y-3 max-h-96 overflow-y-auto">
-                    {schedules.slice(0, showAllSessions ? schedules.length : 1).map((schedule) => {
-                      const startTime = schedule.startTime instanceof Date
-                        ? schedule.startTime
-                        : schedule.startTime.toDate();
-                      const endTime = schedule.endTime instanceof Date
-                        ? schedule.endTime
-                        : schedule.endTime.toDate();
-
-                      return (
-                        <div key={schedule.id} className="flex flex-col space-y-2 pb-3 border-b border-gray-700 last:border-0 last:pb-0">
-                          {/* Date */}
-                          <div className="flex items-center text-gray-300 text-xs sm:text-sm">
-                            <FiCalendar className="mr-2 text-[#D91CD2] flex-shrink-0" size={14} />
-                            <span className="font-medium">
-                              {startTime.toLocaleDateString('fr-FR', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-                            </span>
-                          </div>
-
-                          {/* Time */}
-                          <div className="flex items-center text-gray-300 text-xs sm:text-sm">
-                            <FiClock className="mr-2 text-[#D91CD2] flex-shrink-0" size={14} />
-                            <span className="font-medium">
-                              {startTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false })} - {endTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false })}
-                            </span>
-                          </div>
-
-                          {/* Location */}
-                          {schedule.location && (
-                            <div className="flex items-center text-gray-300 text-xs sm:text-sm">
-                              <FiMapPin className="mr-2 text-[#D91CD2] flex-shrink-0" size={14} />
-                              <span>{schedule.location}</span>
-                            </div>
-                          )}
-
-                          {/* Helmet Reservation Button */}
-                          <button
-                            onClick={async () => {
-                              try {
-                                const response = await fetch('/api/helmet-reservations/create', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({ userId: user.id, scheduleId: schedule.id }),
-                                });
-                                const data = await response.json();
-                                if (response.ok) {
-                                  showToast(t('Helmet Reserved!'), 'success');
-                                  loadCourseData();
-                                } else {
-                                  showToast(data.error || t('Failed to reserve helmet'), 'error');
-                                }
-                              } catch (error) {
-                                console.error('Reservation error:', error);
-                                showToast(t('Failed to reserve helmet'), 'error');
-                              }
-                            }}
-                            className="w-full btn-primary text-xs sm:text-sm py-2 flex items-center justify-center space-x-2 mt-2"
-                          >
-                            <FiCheckCircle size={14} />
-                            <span>{t('Reserve Helmet')}</span>
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
 
 
               {/* Action Buttons */}
               <div className="space-y-3 sm:space-y-4">
-                {/* For users with active subscription or purchased offer - Only show date selection */}
-                {user && (hasActiveSubscription || hasPurchasedOffer) ? (
+                {/* Reservation and Helmet Booking - ONLY shown if user has active subscription/offer for THIS coach */}
+                {user && (hasPurchasedOffer || hasValidDiscountCard) ? (
                   <>
                     {/* Title: "Choose your next session" */}
                     <div className="text-center mb-4">
@@ -1129,60 +1131,63 @@ export default function CourseDetail() {
                   </>
                 ) : (
                   <>
-                    {/* Booking Type Selection - Only for users WITHOUT subscription */}
+                    {/* Booking Type Selection - Only for users WITHOUT coach-specific offer */}
                     {user && availableTokenPackages.length > 0 && (
                       <div className="space-y-3">
                         <p className="text-sm sm:text-base font-medium">{t('How would you like to book?')}</p>
                         <div className="grid grid-cols-1 gap-2 sm:gap-3">
-                      {availableTokenPackages.length > 0 && (
-                        <button
-                          onClick={() => setBookingType('tokens')}
-                          className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${
-                            bookingType === 'tokens'
-                              ? 'bg-[#D91CD2] text-white'
-                              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                          }`}
-                          disabled={availableTokenPackages.every(pkg => pkg.remainingTokens < course.sessions)}
-                        >
-                          <span className="block font-medium">{t('Use Tokens')}</span>
-                          <span className="block text-xs sm:text-sm opacity-75 mt-1">
-                            {availableTokenPackages.reduce((total, pkg) => total + pkg.remainingTokens, 0)} {t('tokens available')}
-                          </span>
-                        </button>
-                      )}
+                          {availableTokenPackages.length > 0 && (
+                            <button
+                              onClick={() => setBookingType('tokens')}
+                              className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${
+                                bookingType === 'tokens'
+                                  ? 'bg-[#D91CD2] text-white'
+                                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                              }`}
+                              disabled={availableTokenPackages.every(pkg => pkg.remainingTokens < course.sessions)}
+                            >
+                              <span className="block font-medium">{t('Use Tokens')}</span>
+                              <span className="block text-xs sm:text-sm opacity-75 mt-1">
+                                {availableTokenPackages.reduce((total, pkg) => total + pkg.remainingTokens, 0)} {t('tokens available')}
+                              </span>
+                            </button>
+                          )}
 
-                      <button
-                        onClick={() => setBookingType('pay_per_session')}
-                        className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${
-                          bookingType === 'pay_per_session'
-                            ? 'bg-[#D91CD2] text-white'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                        }`}
-                      >
-                        <span className="block font-medium">{t('Pay Per Session')}</span>
-                        <span className="block text-xs sm:text-sm opacity-75 mt-1">
-                          CHF {course.totalPrice} ({course.sessions} {t('sessions')}))
-                        </span>
-                      </button>
-                    </div>
-                  </div>
-                )}
+                          <button
+                            onClick={() => setBookingType('pay_per_session')}
+                            className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${
+                              bookingType === 'pay_per_session'
+                                ? 'bg-[#D91CD2] text-white'
+                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            }`}
+                          >
+                            <span className="block font-medium">{t('Pay Per Session')}</span>
+                            <span className="block text-xs sm:text-sm opacity-75 mt-1">
+                              CHF {course.totalPrice} ({course.sessions} {t('sessions')}))
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
 
-                <button
-                  onClick={handleBookCourse}
-                  disabled={
-                    course.currentStudents >= course.maxStudents ||
-                    (bookingType === 'tokens' && availableTokenPackages.every(pkg => pkg.remainingTokens < course.sessions))
-                  }
-                  className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed py-3 sm:py-4 text-sm sm:text-base font-medium"
-                >
-                  {course.currentStudents >= course.maxStudents 
-                    ? t('Fully Booked')
-                      : bookingType === 'tokens' && availableTokenPackages.length > 0
-                        ? `${t('Book with Tokens')} (${course.sessions} ${t('tokens needed')})`
-                        : `${t('Book Now')} - CHF ${course.totalPrice}`
-                  }
-                </button>
+                    {/* Book Now Button - Always shown when user doesn't have coach-specific offer or discount card */}
+                    {!hasPurchasedOffer && !hasValidDiscountCard && (
+                    <button
+                      onClick={handleBookCourse}
+                      disabled={
+                        course.currentStudents >= course.maxStudents ||
+                        (bookingType === 'tokens' && availableTokenPackages.every(pkg => pkg.remainingTokens < course.sessions))
+                      }
+                      className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed py-3 sm:py-4 text-sm sm:text-base font-medium"
+                    >
+                      {course.currentStudents >= course.maxStudents 
+                        ? t('Fully Booked')
+                        : bookingType === 'tokens' && availableTokenPackages.length > 0
+                          ? `${t('Book with Tokens')} (${course.sessions} ${t('tokens needed')})`
+                          : `${t('Book Now')} - CHF ${course.totalPrice}`
+                      }
+                    </button>
+                    )}
                   </>
                 )}
 
@@ -1384,7 +1389,7 @@ export default function CourseDetail() {
         />
 
         {/* Subscription Date Picker Modal */}
-        {showSubscriptionDatePicker && course && userSubscription && (
+        {showSubscriptionDatePicker && course && (hasPurchasedOffer || hasValidDiscountCard) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

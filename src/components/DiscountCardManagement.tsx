@@ -149,6 +149,8 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
     userEmail?: string;
     userName?: string;
     courseId?: string;
+    courseIds?: string[];
+    courseSessions?: Record<string, string[]>; // Map of courseId to array of session IDs
     recurringSchedule?: string[];
     advantageType: 'free' | 'special_price' | 'percentage_discount';
     value?: number;
@@ -194,6 +196,33 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
         return;
       }
       
+      // If courseIds array is provided, create one card per course with course-session mappings
+      if (cardData.courseIds && cardData.courseIds.length > 0) {
+        const promises = cardData.courseIds.map(async (courseId) => {
+          // Get sessions for this course if available
+          const courseSessions = cardData.courseSessions?.[courseId] || [];
+          
+          const oldFormatData = {
+            memberEmail: cardData.userEmail,
+            courseId: courseId,
+            discountPercentage,
+            title: cardTitle,
+            expirationDate: cardData.expirationDate,
+            description: cardData.description || '',
+            maxUsage: 1, // Default to 1
+            cardType: 'course' as const,
+            advantageType: cardData.advantageType,
+            specialPrice: cardData.advantageType === 'special_price' ? cardData.value : undefined,
+            courseSessions: courseSessions.length > 0 ? courseSessions : undefined,
+          };
+          return handleCreateCard(oldFormatData);
+        });
+        
+        await Promise.all(promises);
+        return;
+      }
+
+      // Single card creation (for student or single course)
       const oldFormatData = {
         memberEmail: cardData.userEmail,
         courseId: cardData.courseId,

@@ -27,6 +27,8 @@ interface SimplifiedDiscountCardModalProps {
     userEmail?: string;
     userName?: string;
     courseId?: string;
+    courseIds?: string[];
+    courseSessions?: Record<string, string[]>; // Map of courseId to array of session IDs
     recurringSchedule?: string[];
     advantageType: 'free' | 'special_price' | 'percentage_discount';
     value?: number;
@@ -54,8 +56,13 @@ export default function SimplifiedDiscountCardModal({
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [courseSchedules, setCourseSchedules] = useState<CourseSchedule[]>([]);
   const [selectedSchedules, setSelectedSchedules] = useState<string[]>([]);
+  // Map of courseId to array of selected schedule IDs for that course
+  const [courseSessionsMap, setCourseSessionsMap] = useState<Record<string, string[]>>({});
+  // Map of courseId to its schedules
+  const [allCourseSchedules, setAllCourseSchedules] = useState<Record<string, CourseSchedule[]>>({});
   const [advantageType, setAdvantageType] = useState<'free' | 'special_price' | 'percentage_discount'>('free');
   const [value, setValue] = useState<number>(0);
   const [expirationDate, setExpirationDate] = useState('');
@@ -77,7 +84,59 @@ export default function SimplifiedDiscountCardModal({
     loadCourses();
   }, [coachId]);
 
-  // Load course schedules when course is selected
+  // Load schedules for all selected courses
+  useEffect(() => {
+    const loadAllSchedules = async () => {
+      if (selectedCourses.length === 0) {
+        setAllCourseSchedules({});
+        setCourseSessionsMap({});
+        return;
+      }
+
+      const schedulesMap: Record<string, CourseSchedule[]> = {};
+      
+      try {
+        await Promise.all(
+          selectedCourses.map(async (course) => {
+            if (!schedulesMap[course.id]) {
+              try {
+                const schedules = await scheduleService.getByCourse(course.id);
+                schedulesMap[course.id] = schedules;
+              } catch (error) {
+                console.error(`Error loading schedules for course ${course.id}:`, error);
+                schedulesMap[course.id] = [];
+              }
+            }
+          })
+        );
+        
+        setAllCourseSchedules(schedulesMap);
+        
+        // Initialize courseSessionsMap for new courses
+        setCourseSessionsMap(prev => {
+          const newMap = { ...prev };
+          selectedCourses.forEach(course => {
+            if (!newMap[course.id]) {
+              newMap[course.id] = [];
+            }
+          });
+          // Remove entries for courses that are no longer selected
+          Object.keys(newMap).forEach(courseId => {
+            if (!selectedCourses.some(c => c.id === courseId)) {
+              delete newMap[courseId];
+            }
+          });
+          return newMap;
+        });
+      } catch (error) {
+        console.error('Error loading schedules:', error);
+      }
+    };
+    
+    loadAllSchedules();
+  }, [selectedCourses]);
+
+  // Load course schedules when first course is selected (for backward compatibility)
   useEffect(() => {
     const loadSchedules = async () => {
       if (!selectedCourse?.id) {
@@ -97,6 +156,7 @@ export default function SimplifiedDiscountCardModal({
     loadSchedules();
   }, [selectedCourse]);
 
+
   // Initialize form if editing
   useEffect(() => {
     if (editingCard) {
@@ -111,11 +171,18 @@ export default function SimplifiedDiscountCardModal({
         }).catch(() => {});
       }
       
-      // Load course if exists
+      // Load course(s) if exists
       if (editingCard.courseId) {
         const course = courses.find(c => c.id === editingCard.courseId);
         if (course) {
           setSelectedCourse(course);
+          setSelectedCourses([course]);
+        }
+      } else if (editingCard.courseIds && Array.isArray(editingCard.courseIds)) {
+        const selected = courses.filter(c => editingCard.courseIds.includes(c.id));
+        setSelectedCourses(selected);
+        if (selected.length > 0) {
+          setSelectedCourse(selected[0]);
         }
       }
       
@@ -194,6 +261,56 @@ export default function SimplifiedDiscountCardModal({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Get unique time slots for a specific course
+  const getTimeSlotsForCourse = (courseId: string) => {
+    const schedules = allCourseSchedules[courseId] || [];
+    if (schedules.length === 0) {
+      return [];
+    }
+    
+    const slotsMap = new Map<string, { id: string; label: string; schedule: CourseSchedule }>();
+    
+    schedules.forEach(schedule => {
+      const startTime = schedule.startTime instanceof Date 
+        ? schedule.startTime 
+        : (schedule.startTime as any)?.toDate?.() || new Date();
+      const endTime = schedule.endTime instanceof Date 
+        ? schedule.endTime 
+        : (schedule.endTime as any)?.toDate?.() || new Date();
+      
+      const dayName = startTime.toLocaleDateString('fr-FR', { weekday: 'long' });
+      const startTimeStr = startTime.toLocaleTimeString('fr-FR', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: false 
+      });
+      const endTimeStr = endTime.toLocaleTimeString('fr-FR', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: false 
+      });
+      
+      const slotKey = `${dayName}-${startTimeStr}-${endTimeStr}`;
+      const slotId = schedule.id;
+      
+      if (!slotsMap.has(slotKey)) {
+        slotsMap.set(slotKey, {
+          id: slotId,
+          label: `${dayName} – ${startTimeStr} - ${endTimeStr}`,
+          schedule
+        });
+      }
+    });
+    
+    return Array.from(slotsMap.values()).sort((a, b) => {
+      const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const dayA = days.indexOf(a.label.split(' – ')[0]);
+      const dayB = days.indexOf(b.label.split(' – ')[0]);
+      if (dayA !== dayB && dayA !== -1 && dayB !== -1) return dayA - dayB;
+      return a.label.localeCompare(b.label);
+    });
+  };
+
   // Get unique schedule time slots from course schedules
   const getUniqueTimeSlots = (): Array<{id: string; label: string; schedule: CourseSchedule}> => {
     const slotsMap = new Map<string, {id: string; label: string; schedule: CourseSchedule}>();
@@ -250,12 +367,20 @@ export default function SimplifiedDiscountCardModal({
       newErrors.student = t('Please select a student');
     }
     
-    if (!selectedCourse) {
-      newErrors.course = t('Please select a course');
+    if (selectedCourses.length === 0) {
+      newErrors.course = t('Please select at least one course');
     }
     
-    if (selectedSchedules.length === 0) {
-      newErrors.schedule = t('Please select at least one recurring schedule');
+    // Validate that each selected course has at least one session selected
+    if (selectedCourses.length > 0) {
+      const coursesWithoutSessions = selectedCourses.filter(course => {
+        const sessions = courseSessionsMap[course.id] || [];
+        return sessions.length === 0;
+      });
+      
+      if (coursesWithoutSessions.length > 0) {
+        newErrors.schedule = t('Please select at least one session for each selected course');
+      }
     }
     
     if (!expirationDate) {
@@ -281,11 +406,22 @@ export default function SimplifiedDiscountCardModal({
     setIsLoading(true);
     
     try {
+      // Build course-session mappings
+      const courseSessions: Record<string, string[]> = {};
+      selectedCourses.forEach(course => {
+        const sessions = courseSessionsMap[course.id] || [];
+        if (sessions.length > 0) {
+          courseSessions[course.id] = sessions;
+        }
+      });
+
       await onSubmit({
         userId: selectedStudent?.id,
         userEmail: selectedStudent?.email,
         userName: selectedStudent ? `${selectedStudent.firstName} ${selectedStudent.lastName}` : undefined,
-        courseId: selectedCourse?.id,
+        courseId: selectedCourses.length === 1 ? selectedCourses[0].id : undefined,
+        courseIds: selectedCourses.length > 1 ? selectedCourses.map(c => c.id) : undefined,
+        courseSessions: Object.keys(courseSessions).length > 0 ? courseSessions : undefined,
         recurringSchedule: selectedSchedules,
         advantageType,
         value: advantageType !== 'free' ? value : undefined,
@@ -398,34 +534,156 @@ export default function SimplifiedDiscountCardModal({
             </div>
           </div>
 
-          {/* 2. Course */}
+          {/* 2. Course - Multi-select */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              {t('Course')} <span className="text-red-400">*</span>
+              {t('Courses')} <span className="text-red-400">*</span> ({selectedCourses.length} {t('selected')})
             </label>
-            <select
-              value={selectedCourse?.id || ''}
-              onChange={(e) => {
-                const course = courses.find(c => c.id === e.target.value);
-                setSelectedCourse(course || null);
-                setSelectedSchedules([]);
-              }}
-              className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
-            >
-              <option value="">{t('Select a course') || 'Select a course'}</option>
-              {courses.map((course) => (
-                <option key={course.id} value={course.id}>
-                  {course.title}
-                </option>
-              ))}
-            </select>
+            <div className={`max-h-60 overflow-y-auto border rounded-lg p-3 bg-gray-800 ${
+              errors.course ? 'border-red-500' : 'border-gray-700'
+            }`}>
+              {courses.length === 0 ? (
+                <p className="text-gray-400 text-sm py-2">{t('No courses available')}</p>
+              ) : (
+                <div className="space-y-2">
+                  {courses.map((course) => {
+                    const isSelected = selectedCourses.some(c => c.id === course.id);
+                    return (
+                      <label
+                        key={course.id}
+                        className="flex items-center space-x-3 p-2 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              const newSelectedCourses = [...selectedCourses, course];
+                              setSelectedCourses(newSelectedCourses);
+                              // If this is the first course selected, set it as selectedCourse for schedule loading
+                              if (selectedCourses.length === 0) {
+                                setSelectedCourse(course);
+                              }
+                            } else {
+                              const newSelectedCourses = selectedCourses.filter(c => c.id !== course.id);
+                              setSelectedCourses(newSelectedCourses);
+                              // If we removed the currently selected course, update selectedCourse
+                              if (selectedCourse?.id === course.id) {
+                                if (newSelectedCourses.length > 0) {
+                                  setSelectedCourse(newSelectedCourses[0]);
+                                } else {
+                                  setSelectedCourse(null);
+                                  setSelectedSchedules([]);
+                                }
+                              }
+                            }
+                            // Clear error when course is selected
+                            if (errors.course) {
+                              setErrors(prev => {
+                                const newErrors = { ...prev };
+                                delete newErrors.course;
+                                return newErrors;
+                              });
+                            }
+                          }}
+                          className="w-4 h-4 text-purple-600 bg-gray-800 border-gray-600 rounded focus:ring-purple-500"
+                        />
+                        <div className="flex-1">
+                          <p className="text-white font-medium">{course.title}</p>
+                          {course.description && (
+                            <p className="text-gray-400 text-xs mt-0.5 line-clamp-1">
+                              {course.description}
+                            </p>
+                          )}
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
             {errors.course && (
               <p className="mt-1 text-sm text-red-400">{errors.course}</p>
             )}
+            {selectedCourses.length > 0 && (
+              <p className="text-gray-400 text-xs mt-1">
+                {t('{{count}} course(s) selected', { count: selectedCourses.length })}
+              </p>
+            )}
           </div>
 
-          {/* 3. Recurring Schedule */}
-          {selectedCourse && timeSlots.length > 0 && (
+          {/* 3. Sessions for each selected course */}
+          {selectedCourses.length > 0 && (
+            <div className="space-y-4">
+              {selectedCourses.map((course) => {
+                const timeSlots = getTimeSlotsForCourse(course.id);
+                const selectedSessions = courseSessionsMap[course.id] || [];
+                
+                return (
+                  <div key={course.id} className="border border-gray-700 rounded-lg p-4 bg-gray-800/50">
+                    <h3 className="text-white font-medium mb-3 flex items-center">
+                      <FiBook className="mr-2" size={16} />
+                      {course.title} - {t('Select Sessions')} <span className="text-red-400">*</span>
+                      {selectedSessions.length > 0 && (
+                        <span className="ml-2 text-sm text-gray-400">
+                          ({selectedSessions.length} {t('selected')})
+                        </span>
+                      )}
+                    </h3>
+                    {timeSlots.length === 0 ? (
+                      <p className="text-gray-400 text-sm py-2">{t('No sessions available for this course')}</p>
+                    ) : (
+                      <div className="space-y-2 max-h-48 overflow-y-auto">
+                        {timeSlots.map((slot) => {
+                          const isSelected = selectedSessions.includes(slot.id);
+                          return (
+                            <label
+                              key={slot.id}
+                              className="flex items-center space-x-3 p-2 hover:bg-gray-700/50 rounded cursor-pointer"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={(e) => {
+                                  setCourseSessionsMap(prev => {
+                                    const currentSessions = prev[course.id] || [];
+                                    if (e.target.checked) {
+                                      return {
+                                        ...prev,
+                                        [course.id]: [...currentSessions, slot.id]
+                                      };
+                                    } else {
+                                      return {
+                                        ...prev,
+                                        [course.id]: currentSessions.filter(id => id !== slot.id)
+                                      };
+                                    }
+                                  });
+                                  // Clear error when session is selected
+                                  if (errors.schedule) {
+                                    setErrors(prev => {
+                                      const newErrors = { ...prev };
+                                      delete newErrors.schedule;
+                                      return newErrors;
+                                    });
+                                  }
+                                }}
+                                className="w-4 h-4 text-purple-500 bg-gray-700 border-gray-600 rounded focus:ring-purple-500"
+                              />
+                              <span className="text-white text-sm">{slot.label}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* 3. Recurring Schedule (Legacy - keeping for backward compatibility) */}
+          {selectedCourse && timeSlots.length > 0 && selectedCourses.length === 0 && (
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 {t('Reschedule Class')} <span className="text-red-400">*</span>

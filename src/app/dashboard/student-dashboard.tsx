@@ -186,7 +186,7 @@ const StudentDashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="md:col-span-2">
+      <div className="md:col-span-2 min-w-0 overflow-hidden">
         {/* My Sessions */}
         {activeTab === 'sessions' && (
           <motion.div
@@ -260,6 +260,7 @@ const StudentDashboard = () => {
             variants={container}
             initial="hidden"
             animate="show"
+            className="w-full min-w-0 overflow-hidden"
           >
             <SessionOverview />
           </motion.div>

@@ -24,6 +24,7 @@ interface CreateDiscountCardModalProps {
   onSubmit: (cardData: {
     memberEmail?: string;
     courseId?: string;
+    courseIds?: string[];
     discountPercentage: number;
     expirationDate: string;
     description: string;
@@ -44,6 +45,7 @@ export default function CreateDiscountCardModal({
   const [formData, setFormData] = useState({
     memberEmail: '',
     courseId: '',
+    courseIds: [] as string[],
     discountPercentage: 10.0,
     expirationDate: '',
     description: '',
@@ -171,8 +173,8 @@ export default function CreateDiscountCardModal({
         newErrors.memberEmail = t('Please select a student');
       }
     } else {
-      if (!formData.courseId) {
-        newErrors.courseId = t('Please select a course');
+      if (!formData.courseIds || formData.courseIds.length === 0) {
+        newErrors.courseId = t('Please select at least one course');
       }
     }
 
@@ -221,14 +223,27 @@ export default function CreateDiscountCardModal({
 
     setIsLoading(true);
     try {
-      await onSubmit({
-        ...(activeTab === 'student' ? { memberEmail: formData.memberEmail } : { courseId: formData.courseId }),
-        discountPercentage: formData.discountPercentage,
-        expirationDate: formData.expirationDate,
-        description: formData.description,
-        maxUsage: formData.unlimitedUsage ? -1 : formData.maxUsage,
-        cardType: activeTab
-      });
+      if (activeTab === 'student') {
+        // For student tab, submit once
+        await onSubmit({
+          memberEmail: formData.memberEmail,
+          discountPercentage: formData.discountPercentage,
+          expirationDate: formData.expirationDate,
+          description: formData.description,
+          maxUsage: formData.unlimitedUsage ? -1 : formData.maxUsage,
+          cardType: activeTab
+        });
+      } else {
+        // For course tab, submit with all selected course IDs
+        await onSubmit({
+          courseIds: formData.courseIds,
+          discountPercentage: formData.discountPercentage,
+          expirationDate: formData.expirationDate,
+          description: formData.description,
+          maxUsage: formData.unlimitedUsage ? -1 : formData.maxUsage,
+          cardType: activeTab
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -418,29 +433,74 @@ export default function CreateDiscountCardModal({
                 </div>
               )}
 
-              {/* Course Selection (only for course tab) */}
+              {/* Course Selection (only for course tab) - Multi-select */}
               {activeTab === 'course' && (
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     <FiBook className="inline mr-2" size={16} />
-                    {t('Select Course')} *
+                    {t('Select Courses')} * ({formData.courseIds.length} {t('selected')})
                   </label>
-                  <select
-                    value={formData.courseId}
-                    onChange={(e) => handleInputChange('courseId', e.target.value)}
-                    className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-white focus:outline-none focus:border-purple-500 ${
-                      errors.courseId ? 'border-red-500' : 'border-gray-600'
-                    }`}
-                  >
-                    <option value="">{t('Choose a course')}</option>
-                    {courses.map((course) => (
-                      <option key={course.id} value={course.id}>
-                        {course.title}
-                      </option>
-                    ))}
-                  </select>
+                  <div className={`max-h-60 overflow-y-auto border rounded-lg p-3 bg-gray-800 ${
+                    errors.courseId ? 'border-red-500' : 'border-gray-600'
+                  }`}>
+                    {courses.length === 0 ? (
+                      <p className="text-gray-400 text-sm py-2">{t('No courses available')}</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {courses.map((course) => {
+                          const isSelected = formData.courseIds.includes(course.id);
+                          return (
+                            <label
+                              key={course.id}
+                              className="flex items-center space-x-3 p-2 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setFormData(prev => ({
+                                      ...prev,
+                                      courseIds: [...prev.courseIds, course.id]
+                                    }));
+                                  } else {
+                                    setFormData(prev => ({
+                                      ...prev,
+                                      courseIds: prev.courseIds.filter(id => id !== course.id)
+                                    }));
+                                  }
+                                  // Clear error when course is selected
+                                  if (errors.courseId) {
+                                    setErrors(prev => {
+                                      const newErrors = { ...prev };
+                                      delete newErrors.courseId;
+                                      return newErrors;
+                                    });
+                                  }
+                                }}
+                                className="w-4 h-4 text-purple-600 bg-gray-800 border-gray-600 rounded focus:ring-purple-500"
+                              />
+                              <div className="flex-1">
+                                <p className="text-white font-medium">{course.title}</p>
+                                {course.description && (
+                                  <p className="text-gray-400 text-xs mt-0.5 line-clamp-1">
+                                    {course.description}
+                                  </p>
+                                )}
+                              </div>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                   {errors.courseId && (
                     <p className="text-red-400 text-sm mt-1">{errors.courseId}</p>
+                  )}
+                  {formData.courseIds.length > 0 && (
+                    <p className="text-gray-400 text-xs mt-1">
+                      {t('{{count}} course(s) selected', { count: formData.courseIds.length })}
+                    </p>
                   )}
                 </div>
               )}
@@ -580,7 +640,11 @@ export default function CreateDiscountCardModal({
                         ? (selectedUser 
                             ? `${selectedUser.firstName} ${selectedUser.lastName}` 
                             : (formData.memberEmail || t('Not specified')))
-                        : (courses.find(c => c.id === formData.courseId)?.title || t('Not specified'))
+                        : formData.courseIds.length > 0
+                          ? formData.courseIds.length === 1
+                            ? (courses.find(c => c.id === formData.courseIds[0])?.title || t('Not specified'))
+                            : t('{{count}} courses', { count: formData.courseIds.length })
+                          : t('Not specified')
                       }
                     </span>
                   </div>

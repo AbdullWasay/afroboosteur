@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
   FiPlus,
@@ -17,14 +17,17 @@ import {
   FiX,
   FiCode,
   FiCopy,
-  FiFilter
+  FiFilter,
+  FiSearch,
+  FiLoader
 } from 'react-icons/fi';
 import { useAuth } from '@/lib/auth';
 import Card from '@/components/Card';
 import { useTranslation } from 'react-i18next';
-import { GiftCard, GiftCardTransaction } from '@/types';
+import { GiftCard, GiftCardTransaction, User } from '@/types';
 import Image from 'next/image';
 import QRCode from 'qrcode';
+import { directMessageService } from '@/lib/database';
 
 interface GiftCardManagementProps {
   className?: string;
@@ -57,6 +60,14 @@ export default function GiftCardManagement({ className = '', userType }: GiftCar
 
   const [generatingQR, setGeneratingQR] = useState(false);
   const [duplicatingCardId, setDuplicatingCardId] = useState<string | null>(null);
+  
+  // User search state for email tab
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const statusFilters = [
     { value: 'all', label: t('All Cards') },
@@ -71,6 +82,70 @@ export default function GiftCardManagement({ className = '', userType }: GiftCar
       loadTransactions();
     }
   }, [user]);
+
+  // Handle click outside to close search results
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSearchResults(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Search users by name or email
+  const searchUsers = async (term: string) => {
+    if (!term || term.length < 2) {
+      setSearchResults([]);
+      setShowSearchResults(false);
+      return;
+    }
+
+    try {
+      setIsSearching(true);
+      const results = await directMessageService.searchUsers(term, user?.id || '', 10);
+      setSearchResults(results);
+      setShowSearchResults(true);
+    } catch (error) {
+      console.error('Error searching users:', error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Handle search input change
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    if (value.length >= 2) {
+      searchUsers(value);
+    } else {
+      setSearchResults([]);
+      setShowSearchResults(false);
+    }
+  };
+
+  // Handle user selection
+  const handleUserSelect = (user: User) => {
+    setSelectedUser(user);
+    setCardForm(prev => ({ ...prev, recipientEmail: user.email }));
+    setSearchTerm(`${user.firstName} ${user.lastName}`);
+    setShowSearchResults(false);
+    setSearchResults([]);
+  };
+
+  // Clear selected user
+  const handleClearUser = () => {
+    setSelectedUser(null);
+    setCardForm(prev => ({ ...prev, recipientEmail: '' }));
+    setSearchTerm('');
+    setSearchResults([]);
+    setShowSearchResults(false);
+  };
 
   const loadGiftCards = async () => {
     if (!user) return;
@@ -199,6 +274,10 @@ export default function GiftCardManagement({ className = '', userType }: GiftCar
           sendViaEmail: false,
           recipientEmail: ''
         });
+        setSelectedUser(null);
+        setSearchTerm('');
+        setSearchResults([]);
+        setShowSearchResults(false);
       }
     } catch (error) {
       console.error('Error creating gift card:', error);
@@ -395,6 +474,10 @@ export default function GiftCardManagement({ className = '', userType }: GiftCar
           sendViaEmail: false,
           recipientEmail: ''
         });
+        setSelectedUser(null);
+        setSearchTerm('');
+        setSearchResults([]);
+        setShowSearchResults(false);
         alert(t('Gift card updated successfully!'));
       } else {
         const errorData = await response.json();
@@ -1172,7 +1255,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
               {!selectedCard && (
                 <div className="flex space-x-2 mb-6 border-b border-gray-700">
                   <button
-                    onClick={() => setCardForm(prev => ({ ...prev, sendViaEmail: false, recipientEmail: '' }))}
+                    onClick={() => {
+                      setCardForm(prev => ({ ...prev, sendViaEmail: false, recipientEmail: '' }));
+                      setSelectedUser(null);
+                      setSearchTerm('');
+                      setSearchResults([]);
+                      setShowSearchResults(false);
+                    }}
                     className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${!cardForm.sendViaEmail
                       ? 'border-purple-500 text-purple-400'
                       : 'border-transparent text-gray-400 hover:text-white'
@@ -1181,7 +1270,13 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                     {t('Create Card')}
                   </button>
                   <button
-                    onClick={() => setCardForm(prev => ({ ...prev, sendViaEmail: true }))}
+                    onClick={() => {
+                      setCardForm(prev => ({ ...prev, sendViaEmail: true }));
+                      setSelectedUser(null);
+                      setSearchTerm('');
+                      setSearchResults([]);
+                      setShowSearchResults(false);
+                    }}
                     className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 ${cardForm.sendViaEmail
                       ? 'border-purple-500 text-purple-400'
                       : 'border-transparent text-gray-400 hover:text-white'
@@ -1193,20 +1288,97 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
               )}
 
               <div className="space-y-4">
-                {/* Email field - only shown in second tab */}
+                {/* User search field - only shown in second tab */}
                 {cardForm.sendViaEmail && (
-                  <div>
+                  <div ref={searchRef} className="relative">
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      {t('Recipient Email')} *
+                      {t('Recipient')} *
                     </label>
-                    <input
-                      type="email"
-                      value={cardForm.recipientEmail || ''}
-                      onChange={(e) => setCardForm(prev => ({ ...prev, recipientEmail: e.target.value }))}
-                      className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                      placeholder="recipient@example.com"
-                      required={cardForm.sendViaEmail}
-                    />
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <FiSearch className="text-gray-400" size={16} />
+                      </div>
+                      <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => handleSearchChange(e.target.value)}
+                        placeholder={t('Search by name or email...')}
+                        className="w-full pl-10 pr-10 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        disabled={!!selectedUser}
+                        required={cardForm.sendViaEmail}
+                      />
+                      {selectedUser && (
+                        <button
+                          type="button"
+                          onClick={handleClearUser}
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                        >
+                          <FiX className="text-gray-400 hover:text-white" size={16} />
+                        </button>
+                      )}
+                    </div>
+                    
+                    {/* Search Results Dropdown */}
+                    {showSearchResults && searchResults.length > 0 && (
+                      <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        {isSearching && (
+                          <div className="p-3 text-center text-gray-400">
+                            <FiLoader className="animate-spin inline mr-2" size={16} />
+                            {t('Searching...')}
+                          </div>
+                        )}
+                        {!isSearching && searchResults.map((user) => (
+                          <button
+                            key={user.id}
+                            type="button"
+                            onClick={() => handleUserSelect(user)}
+                            className="w-full text-left px-4 py-3 hover:bg-gray-700 transition-colors border-b border-gray-700 last:border-b-0"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="text-white font-medium">
+                                  {user.firstName} {user.lastName}
+                                </p>
+                                <p className="text-gray-400 text-sm">{user.email}</p>
+                              </div>
+                              {user.role && (
+                                <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded">
+                                  {user.role}
+                                </span>
+                              )}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {/* Selected User Display */}
+                    {selectedUser && (
+                      <div className="mt-2 p-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-white font-medium">
+                              {selectedUser.firstName} {selectedUser.lastName}
+                            </p>
+                            <p className="text-gray-400 text-sm">{selectedUser.email}</p>
+                          </div>
+                          <FiCheckCircle className="text-purple-400" size={20} />
+                        </div>
+                      </div>
+                    )}
+                    
+                    {searchTerm.length > 0 && searchTerm.length < 2 && (
+                      <p className="text-gray-400 text-xs mt-1">
+                        {t('Type at least 2 characters to search')}
+                      </p>
+                    )}
+                    
+                    {showSearchResults && !isSearching && searchResults.length === 0 && searchTerm.length >= 2 && (
+                      <p className="text-gray-400 text-xs mt-1">
+                        {t('No users found')}
+                      </p>
+                    )}
+                    
                     <p className="text-xs text-gray-500 mt-1">
                       {t('The gift card will be sent to this email address')}
                     </p>
@@ -1358,6 +1530,10 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                       sendViaEmail: false,
                       recipientEmail: ''
                     });
+                    setSelectedUser(null);
+                    setSearchTerm('');
+                    setSearchResults([]);
+                    setShowSearchResults(false);
                   }}
                   className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
                 >
@@ -1366,7 +1542,7 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                 <button
                   type="button"
                   onClick={selectedCard ? handleUpdateCard : handleCreateCard}
-                  disabled={!cardForm.amount || generatingQR || (cardForm.sendViaEmail && !cardForm.recipientEmail)}
+                  disabled={!cardForm.amount || generatingQR || (cardForm.sendViaEmail && (!selectedUser && !cardForm.recipientEmail))}
                   className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                 >
                   {generatingQR ? (

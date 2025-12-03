@@ -33,7 +33,7 @@ export default function SessionOverview() {
         sessionUsageService.getByUserId(user?.id || ''),
         userSubscriptionService.getActiveByUserId(user?.id || '')
       ]);
-      
+
       setSessions(sessionsData);
       setSubscription(subscriptionData);
     } catch (error) {
@@ -50,31 +50,31 @@ export default function SessionOverview() {
 
   const getFilteredSessions = () => {
     let filtered = sessions;
-    
+
     // Filter by status
     if (filter !== 'all') {
       filtered = filtered.filter(session => session.status === filter);
     }
-    
+
     // Filter by time range
     if (timeRange !== 'all') {
       const now = new Date();
       const cutoffDate = new Date();
-      
+
       if (timeRange === 'week') {
         cutoffDate.setDate(now.getDate() - 7);
       } else if (timeRange === 'month') {
         cutoffDate.setMonth(now.getMonth() - 1);
       }
-      
+
       filtered = filtered.filter(session => {
-        const sessionDate = session.sessionDate instanceof Timestamp 
-          ? session.sessionDate.toDate() 
+        const sessionDate = session.sessionDate instanceof Timestamp
+          ? session.sessionDate.toDate()
           : new Date(session.sessionDate);
         return sessionDate >= cutoffDate;
       });
     }
-    
+
     return filtered;
   };
 
@@ -109,7 +109,7 @@ export default function SessionOverview() {
     const attendedSessions = sessions.filter(s => s.status === 'attended').length;
     const missedSessions = sessions.filter(s => s.status === 'missed').length;
     const cancelledSessions = sessions.filter(s => s.status === 'cancelled').length;
-    
+
     return {
       total: totalSessions,
       attended: attendedSessions,
@@ -135,13 +135,13 @@ export default function SessionOverview() {
             <FiPackage className="text-[#D91CD2]" size={24} />
             <h2 className="text-2xl font-bold">{t('yourSubscription')}</h2>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="bg-gray-800 rounded-lg p-4">
               <p className="text-sm text-gray-400 mb-1">{t('planType')}</p>
               <p className="text-lg font-semibold capitalize">{subscription.planName}</p>
             </div>
-            
+
             {subscription.planType === 'session_pack' && (
               <>
                 <div className="bg-gray-800 rounded-lg p-4">
@@ -150,21 +150,21 @@ export default function SessionOverview() {
                     {subscription.remainingSessions || 0}
                   </p>
                 </div>
-                
+
                 <div className="bg-gray-800 rounded-lg p-4">
                   <p className="text-sm text-gray-400 mb-1">{t('sessionsUsed')}</p>
                   <p className="text-lg font-semibold">
                     {(subscription.totalSessions || 0) - (subscription.remainingSessions || 0)}
                   </p>
                 </div>
-                
+
                 <div className="bg-gray-800 rounded-lg p-4">
                   <p className="text-sm text-gray-400 mb-1">{t('totalSessions')}</p>
                   <p className="text-lg font-semibold">{subscription.totalSessions || 0}</p>
                 </div>
               </>
             )}
-            
+
             {subscription.planType === 'annual' && subscription.endDate && (
               <div className="bg-gray-800 rounded-lg p-4 md:col-span-3">
                 <p className="text-sm text-gray-400 mb-1">{t('validUntil')}</p>
@@ -174,7 +174,7 @@ export default function SessionOverview() {
               </div>
             )}
           </div>
-          
+
           {subscription.planType === 'session_pack' && subscription.totalSessions && (
             <div className="mt-4">
               <div className="flex items-center justify-between mb-2">
@@ -184,10 +184,10 @@ export default function SessionOverview() {
                 </span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-2">
-                <div 
+                <div
                   className="bg-[#D91CD2] h-2 rounded-full transition-all duration-300"
-                  style={{ 
-                    width: `${((subscription.totalSessions - (subscription.remainingSessions || 0)) / subscription.totalSessions * 100)}%` 
+                  style={{
+                    width: `${((subscription.totalSessions - (subscription.remainingSessions || 0)) / subscription.totalSessions * 100)}%`
                   }}
                 ></div>
               </div>
@@ -202,28 +202,28 @@ export default function SessionOverview() {
           <FiTrendingDown className="text-[#D91CD2]" size={24} />
           <h2 className="text-2xl font-bold">{t('sessionStatistics')}</h2>
         </div>
-        
+
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="bg-gray-800 rounded-lg p-4 text-center">
             <p className="text-2xl font-bold text-[#D91CD2]">{stats.total}</p>
             <p className="text-sm text-gray-400">{t('totalSessions')}</p>
           </div>
-          
+
           <div className="bg-gray-800 rounded-lg p-4 text-center">
             <p className="text-2xl font-bold text-green-400">{stats.attended}</p>
             <p className="text-sm text-gray-400">{t('attended')}</p>
           </div>
-          
+
           <div className="bg-gray-800 rounded-lg p-4 text-center">
             <p className="text-2xl font-bold text-red-400">{stats.missed}</p>
             <p className="text-sm text-gray-400">{t('missed')}</p>
           </div>
-          
+
           <div className="bg-gray-800 rounded-lg p-4 text-center">
             <p className="text-2xl font-bold text-yellow-400">{stats.cancelled}</p>
             <p className="text-sm text-gray-400">{t('cancelled')}</p>
           </div>
-          
+
           <div className="bg-gray-800 rounded-lg p-4 text-center">
             <p className="text-2xl font-bold text-blue-400">{stats.attendanceRate}%</p>
             <p className="text-sm text-gray-400">{t('attendanceRate')}</p>
@@ -233,29 +233,29 @@ export default function SessionOverview() {
 
       {/* Session History */}
       <Card>
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
           <div className="flex items-center space-x-3">
             <FiClock className="text-[#D91CD2]" size={24} />
             <h2 className="text-2xl font-bold">{t('sessionHistory')}</h2>
           </div>
-          
-          <div className="flex space-x-2">
+
+          <div className="grid grid-cols-2 gap-2 w-full md:w-auto">
             {/* Time Range Filter */}
             <select
               value={timeRange}
               onChange={(e) => setTimeRange(e.target.value as 'week' | 'month' | 'all')}
-              className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm"
+              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm"
             >
               <option value="week">{t('lastWeek')}</option>
               <option value="month">{t('lastMonth')}</option>
               <option value="all">{t('allTime')}</option>
             </select>
-            
+
             {/* Status Filter */}
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value as 'all' | 'attended' | 'missed' | 'cancelled')}
-              className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm"
+              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm"
             >
               <option value="all">{t('allSessions')}</option>
               <option value="attended">{t('attended')}</option>
@@ -292,13 +292,13 @@ export default function SessionOverview() {
                         {t(session.status)}
                       </span>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-medium">{session.courseName}</h4>
                       <p className="text-sm text-gray-400">{t('withCoach', { coachName: session.coachName })}</p>
                     </div>
                   </div>
-                  
+
                   <div className="text-right">
                     <div className="flex items-center space-x-2 text-sm text-gray-400">
                       <FiCalendar size={14} />
