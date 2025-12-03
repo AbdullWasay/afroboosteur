@@ -97,63 +97,29 @@ export default function CreatePublicationModal({ onClose, onSuccess, publication
     }
 
     try {
-      // Get Cloudinary config
-      const configResponse = await fetch('/api/cloudinary/config', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!configResponse.ok) {
-        throw new Error('Failed to get upload configuration');
-      }
-
-      const { cloudName, uploadPreset } = await configResponse.json();
-
-      // Upload directly to Cloudinary with progress tracking (unsigned)
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', uploadPreset);
-      formData.append('resource_type', 'auto'); // Auto-detect resource type
-      formData.append('folder', 'afroboosteur'); // Keep consistent folder structure
 
-      // Use XMLHttpRequest for progress tracking
-      const xhr = new XMLHttpRequest();
-      
-      return new Promise((resolve, reject) => {
-        xhr.upload.addEventListener('progress', (e) => {
-          if (e.lengthComputable) {
-            const progress = Math.round((e.loaded / e.total) * 100);
-            setUploadProgress(progress);
-          }
-        });
-
-        xhr.addEventListener('load', () => {
-          if (xhr.status === 200) {
-            try {
-              const uploadData = JSON.parse(xhr.responseText);
-              resolve({
-                url: uploadData.secure_url,
-                width: uploadData.width || 0,
-                height: uploadData.height || 0,
-              });
-            } catch (error) {
-              reject(new Error('Failed to parse upload response'));
-            }
-          } else {
-            reject(new Error(`Upload failed with status: ${xhr.status}`));
-          }
-        });
-
-        xhr.addEventListener('error', () => {
-          reject(new Error('Upload failed'));
-        });
-
-        xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`);
-        xhr.send(formData);
+      const response = await fetch('/api/cloudinary/upload', {
+        method: 'POST',
+        body: formData,
       });
-      
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Upload failed with status: ${response.status}`);
+      }
+
+      const uploadData: any = await response.json();
+
+      // The upload route returns the full Cloudinary result, including secure_url, width, height
+      setUploadProgress(100);
+
+      return {
+        url: uploadData.secure_url || uploadData.url,
+        width: uploadData.width || 0,
+        height: uploadData.height || 0,
+      };
     } catch (error) {
       console.error('Error uploading to Cloudinary:', error);
       throw new Error('Failed to upload file: ' + (error instanceof Error ? error.message : 'Unknown error'));
