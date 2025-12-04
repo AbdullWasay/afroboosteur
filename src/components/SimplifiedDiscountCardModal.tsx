@@ -13,7 +13,8 @@ import {
   FiSearch,
   FiDollarSign,
   FiPercent,
-  FiGift
+  FiGift,
+  FiChevronDown
 } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import QRCode from 'qrcode';
@@ -67,8 +68,10 @@ export default function SimplifiedDiscountCardModal({
   const [value, setValue] = useState<number>(0);
   const [expirationDate, setExpirationDate] = useState('');
   const [description, setDescription] = useState('');
+  const [showCourseDropdown, setShowCourseDropdown] = useState(false);
   
   const searchRef = useRef<HTMLDivElement>(null);
+  const courseDropdownRef = useRef<HTMLDivElement>(null);
 
   // Load courses
   useEffect(() => {
@@ -255,6 +258,9 @@ export default function SimplifiedDiscountCardModal({
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setShowSearchResults(false);
+      }
+      if (courseDropdownRef.current && !courseDropdownRef.current.contains(event.target as Node)) {
+        setShowCourseDropdown(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -534,81 +540,97 @@ export default function SimplifiedDiscountCardModal({
             </div>
           </div>
 
-          {/* 2. Course - Multi-select */}
+          {/* 2. Course - Multi-select Dropdown */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              {t('Courses')} <span className="text-red-400">*</span> ({selectedCourses.length} {t('selected')})
+              {t('Courses')} <span className="text-red-400">*</span>
             </label>
-            <div className={`max-h-60 overflow-y-auto border rounded-lg p-3 bg-gray-800 ${
-              errors.course ? 'border-red-500' : 'border-gray-700'
-            }`}>
-              {courses.length === 0 ? (
-                <p className="text-gray-400 text-sm py-2">{t('No courses available')}</p>
-              ) : (
-                <div className="space-y-2">
-                  {courses.map((course) => {
-                    const isSelected = selectedCourses.some(c => c.id === course.id);
-                    return (
-                      <label
-                        key={course.id}
-                        className="flex items-center space-x-3 p-2 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              const newSelectedCourses = [...selectedCourses, course];
-                              setSelectedCourses(newSelectedCourses);
-                              // If this is the first course selected, set it as selectedCourse for schedule loading
-                              if (selectedCourses.length === 0) {
-                                setSelectedCourse(course);
-                              }
-                            } else {
-                              const newSelectedCourses = selectedCourses.filter(c => c.id !== course.id);
-                              setSelectedCourses(newSelectedCourses);
-                              // If we removed the currently selected course, update selectedCourse
-                              if (selectedCourse?.id === course.id) {
-                                if (newSelectedCourses.length > 0) {
-                                  setSelectedCourse(newSelectedCourses[0]);
+            <div className="relative" ref={courseDropdownRef}>
+              <button
+                type="button"
+                onClick={() => setShowCourseDropdown(!showCourseDropdown)}
+                className={`w-full px-4 py-3 bg-gray-800 border rounded-lg text-left flex items-center justify-between transition-colors ${
+                  errors.course ? 'border-red-500' : 'border-gray-700 hover:border-gray-600'
+                }`}
+              >
+                <span className="text-white">
+                  {selectedCourses.length === 0
+                    ? t('Select courses...')
+                    : `${selectedCourses.length} ${t('course(s) selected')}`
+                  }
+                </span>
+                <FiChevronDown
+                  className={`text-gray-400 transition-transform ${showCourseDropdown ? 'rotate-180' : ''}`}
+                  size={20}
+                />
+              </button>
+              
+              {showCourseDropdown && (
+                <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                  {courses.length === 0 ? (
+                    <p className="text-gray-400 text-sm py-3 px-4">{t('No courses available')}</p>
+                  ) : (
+                    <div className="p-2 space-y-1">
+                      {courses.map((course) => {
+                        const isSelected = selectedCourses.some(c => c.id === course.id);
+                        return (
+                          <label
+                            key={course.id}
+                            className="flex items-center space-x-3 p-2 hover:bg-gray-700 rounded-lg cursor-pointer transition-colors"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  const newSelectedCourses = [...selectedCourses, course];
+                                  setSelectedCourses(newSelectedCourses);
+                                  // If this is the first course selected, set it as selectedCourse for schedule loading
+                                  if (selectedCourses.length === 0) {
+                                    setSelectedCourse(course);
+                                  }
                                 } else {
-                                  setSelectedCourse(null);
-                                  setSelectedSchedules([]);
+                                  const newSelectedCourses = selectedCourses.filter(c => c.id !== course.id);
+                                  setSelectedCourses(newSelectedCourses);
+                                  // If we removed the currently selected course, update selectedCourse
+                                  if (selectedCourse?.id === course.id) {
+                                    if (newSelectedCourses.length > 0) {
+                                      setSelectedCourse(newSelectedCourses[0]);
+                                    } else {
+                                      setSelectedCourse(null);
+                                      setSelectedSchedules([]);
+                                    }
+                                  }
                                 }
-                              }
-                            }
-                            // Clear error when course is selected
-                            if (errors.course) {
-                              setErrors(prev => {
-                                const newErrors = { ...prev };
-                                delete newErrors.course;
-                                return newErrors;
-                              });
-                            }
-                          }}
-                          className="w-4 h-4 text-purple-600 bg-gray-800 border-gray-600 rounded focus:ring-purple-500"
-                        />
-                        <div className="flex-1">
-                          <p className="text-white font-medium">{course.title}</p>
-                          {course.description && (
-                            <p className="text-gray-400 text-xs mt-0.5 line-clamp-1">
-                              {course.description}
-                            </p>
-                          )}
-                        </div>
-                      </label>
-                    );
-                  })}
+                                // Clear error when course is selected
+                                if (errors.course) {
+                                  setErrors(prev => {
+                                    const newErrors = { ...prev };
+                                    delete newErrors.course;
+                                    return newErrors;
+                                  });
+                                }
+                              }}
+                              className="w-4 h-4 text-purple-600 bg-gray-800 border-gray-600 rounded focus:ring-purple-500"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-white font-medium truncate">{course.title}</p>
+                              {course.description && (
+                                <p className="text-gray-400 text-xs mt-0.5 line-clamp-1">
+                                  {course.description}
+                                </p>
+                              )}
+                            </div>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
             {errors.course && (
               <p className="mt-1 text-sm text-red-400">{errors.course}</p>
-            )}
-            {selectedCourses.length > 0 && (
-              <p className="text-gray-400 text-xs mt-1">
-                {t('{{count}} course(s) selected', { count: selectedCourses.length })}
-              </p>
             )}
           </div>
 
