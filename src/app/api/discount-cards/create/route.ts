@@ -207,7 +207,12 @@ export async function POST(request: NextRequest) {
       ...(userEmail ? { userEmail } : {}),
       ...(courseId ? { courseId } : {}),
       ...(cardType ? { cardType } : {}),
-      ...(courseSessions && Array.isArray(courseSessions) ? { courseSessions } : {})
+      // Handle courseSessions - can be array (legacy) or Record<string, string[]> (new format)
+      ...(courseSessions ? { 
+        courseSessions: Array.isArray(courseSessions) 
+          ? courseSessions 
+          : (typeof courseSessions === 'object' ? courseSessions : undefined)
+      } : {})
     };
 
     // Add expiration date if provided (convert to Firestore Timestamp)

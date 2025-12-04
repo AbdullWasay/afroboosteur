@@ -110,6 +110,10 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
                        (typeof card.maxUsage === 'number' ? card.maxUsage : null),
             discountPercentage: typeof card.discountPercentage === 'number' ? card.discountPercentage : 0,
             courseName,
+            // Preserve courseSessions and courseIds for editing
+            courseSessions: card.courseSessions || undefined,
+            courseIds: card.courseIds || undefined,
+            recurringSchedule: card.recurringSchedule || undefined,
           };
         })) : [];
 
@@ -223,6 +227,11 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
       }
 
       // Single card creation (for student or single course)
+      // Get sessions for the single course if available
+      const courseSessions = cardData.courseId && cardData.courseSessions?.[cardData.courseId] 
+        ? cardData.courseSessions[cardData.courseId] 
+        : undefined;
+      
       const oldFormatData = {
         memberEmail: cardData.userEmail,
         courseId: cardData.courseId,
@@ -234,6 +243,7 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
         cardType: cardData.courseId ? 'course' as const : 'student' as const,
         advantageType: cardData.advantageType, // Store for future use
         specialPrice: cardData.advantageType === 'special_price' ? cardData.value : undefined,
+        courseSessions: courseSessions && courseSessions.length > 0 ? { [cardData.courseId!]: courseSessions } : undefined,
       };
       
       await handleCreateCard(oldFormatData);
@@ -254,24 +264,40 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
     cardType: 'student' | 'course';
     advantageType?: 'free' | 'special_price' | 'percentage_discount';
     specialPrice?: number;
+    courseSessions?: Record<string, string[]>; // Map of courseId to array of session IDs
   }) => {
     try {
+      const requestBody: any = {
+        coachId,
+        title: cardData.title || `${cardData.discountPercentage}% Discount Card`,
+        description: cardData.description,
+        discountPercentage: cardData.discountPercentage,
+        userEmail: cardData.memberEmail,
+        courseId: cardData.courseId,
+        cardType: cardData.cardType,
+        expirationDate: cardData.expirationDate,
+        maxUsage: cardData.maxUsage,
+      };
+      
+      // Add courseSessions if provided
+      if (cardData.courseSessions) {
+        // For single course, extract the sessions array for that course
+        // The API can handle both array (legacy) and Record<string, string[]> (new format)
+        if (cardData.courseId && cardData.courseSessions[cardData.courseId]) {
+          // Send as Record format for consistency
+          requestBody.courseSessions = cardData.courseSessions;
+        } else {
+          // Send the full Record if no specific courseId match
+          requestBody.courseSessions = cardData.courseSessions;
+        }
+      }
+      
       const response = await fetch('/api/discount-cards/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          coachId,
-          title: cardData.title || `${cardData.discountPercentage}% Discount Card`,
-          description: cardData.description,
-          discountPercentage: cardData.discountPercentage,
-          userEmail: cardData.memberEmail,
-          courseId: cardData.courseId,
-          cardType: cardData.cardType,
-          expirationDate: cardData.expirationDate,
-          maxUsage: cardData.maxUsage,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (response.ok) {
@@ -475,6 +501,8 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
     userEmail?: string;
     userName?: string;
     courseId?: string;
+    courseIds?: string[];
+    courseSessions?: Record<string, string[]>; // Map of courseId to array of session IDs
     recurringSchedule?: string[];
     advantageType: 'free' | 'special_price' | 'percentage_discount';
     value?: number;
@@ -485,25 +513,55 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
 
     try {
       // Map the new format to the old format for API compatibility
-      const discountPercentage = cardData.advantageType === 'percentage_discount' 
-        ? (cardData.value || 0)
-        : (editingCard.discountPercentage || 0);
+      let discountPercentage = editingCard.discountPercentage || 0;
+      
+      if (cardData.advantageType === 'percentage_discount') {
+        discountPercentage = cardData.value || 0;
+      } else if (cardData.advantageType === 'free') {
+        discountPercentage = 100;
+      } else if (cardData.advantageType === 'special_price') {
+        // For special_price, keep the existing discount percentage or use 100%
+        discountPercentage = editingCard.discountPercentage || 100;
+      }
+
+      // Build course-session mappings if courseSessions is provided
+      const courseSessionsData = cardData.courseSessions && Object.keys(cardData.courseSessions).length > 0
+        ? cardData.courseSessions
+        : undefined;
+
+      // Determine courseId(s) - prefer courseIds if multiple, otherwise use courseId
+      const courseIdsData = cardData.courseIds && cardData.courseIds.length > 0
+        ? cardData.courseIds
+        : (cardData.courseId ? [cardData.courseId] : undefined);
+
+      const updatePayload: any = {
+        cardId: editingCard.id,
+        description: cardData.description || '',
+        expirationDate: cardData.expirationDate,
+        discountPercentage: discountPercentage,
+      };
+
+      // Add optional fields only if they are provided
+      if (cardData.userEmail !== undefined) updatePayload.userEmail = cardData.userEmail;
+      if (cardData.userId !== undefined) updatePayload.userId = cardData.userId;
+      if (cardData.userName !== undefined) updatePayload.userName = cardData.userName;
+      if (cardData.courseId !== undefined) updatePayload.courseId = cardData.courseId;
+      if (courseIdsData !== undefined) {
+        if (courseIdsData.length === 1) {
+          updatePayload.courseId = courseIdsData[0];
+        } else {
+          updatePayload.courseIds = courseIdsData;
+        }
+      }
+      if (cardData.recurringSchedule !== undefined) updatePayload.recurringSchedule = cardData.recurringSchedule;
+      if (courseSessionsData !== undefined) updatePayload.courseSessions = courseSessionsData;
 
       const response = await fetch(`/api/discount-cards/${coachId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          cardId: editingCard.id,
-          title: editingCard.title, // Keep original title format or update
-          description: cardData.description || '',
-          expirationDate: cardData.expirationDate,
-          userEmail: cardData.userEmail,
-          courseId: cardData.courseId,
-          discountPercentage: discountPercentage,
-          recurringSchedule: cardData.recurringSchedule
-        })
+        body: JSON.stringify(updatePayload)
       });
 
       if (response.ok) {
@@ -512,12 +570,17 @@ export default function DiscountCardManagement({ coachId }: DiscountCardManageme
         setEditingCard(null);
         alert(t('Discount card updated successfully!'));
       } else {
-        const error = await response.json();
-        alert(t('Error updating discount card: {{message}}', { message: error.message || error.error || 'Unknown error' }));
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        console.error('Error updating discount card:', errorData);
+        alert(t('Error updating discount card: {{message}}', { 
+          message: errorData.message || errorData.error || 'Unknown error' 
+        }));
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating discount card:', error);
-      alert(t('Error updating discount card. Please try again.'));
+      alert(t('Error updating discount card: {{message}}', { 
+        message: error?.message || 'Please try again.' 
+      }));
     }
   };
 

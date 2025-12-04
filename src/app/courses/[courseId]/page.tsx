@@ -146,12 +146,12 @@ export default function CourseDetail() {
       try {
         const purchases = await offerPurchaseService.getByUser(user.id);
         const now = new Date();
-        
+
         // If no purchases at all, definitely no offer
         if (!purchases || purchases.length === 0) {
           hasCoachOffer = false;
         } else {
-          const getExpirationDate = (raw: any): Date | null => {
+        const getExpirationDate = (raw: any): Date | null => {
           if (!raw) return null;
           if (raw instanceof Date) return raw;
           if (raw?.toDate && typeof raw.toDate === 'function') {
@@ -190,7 +190,7 @@ export default function CourseDetail() {
           const exp = getExpirationDate(p.expirationDate);
           if (exp) {
             // If expiration date exists, it must be in the future
-            return exp >= now;
+          return exp >= now;
           }
           
           // If no expiration date, treat as active (legacy behavior)
@@ -1136,57 +1136,57 @@ export default function CourseDetail() {
                       <div className="space-y-3">
                         <p className="text-sm sm:text-base font-medium">{t('How would you like to book?')}</p>
                         <div className="grid grid-cols-1 gap-2 sm:gap-3">
-                          {availableTokenPackages.length > 0 && (
-                            <button
-                              onClick={() => setBookingType('tokens')}
-                              className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${
-                                bookingType === 'tokens'
-                                  ? 'bg-[#D91CD2] text-white'
-                                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                              }`}
-                              disabled={availableTokenPackages.every(pkg => pkg.remainingTokens < course.sessions)}
-                            >
-                              <span className="block font-medium">{t('Use Tokens')}</span>
-                              <span className="block text-xs sm:text-sm opacity-75 mt-1">
-                                {availableTokenPackages.reduce((total, pkg) => total + pkg.remainingTokens, 0)} {t('tokens available')}
-                              </span>
-                            </button>
-                          )}
+                      {availableTokenPackages.length > 0 && (
+                        <button
+                          onClick={() => setBookingType('tokens')}
+                          className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${
+                            bookingType === 'tokens'
+                              ? 'bg-[#D91CD2] text-white'
+                              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                          }`}
+                          disabled={availableTokenPackages.every(pkg => pkg.remainingTokens < course.sessions)}
+                        >
+                          <span className="block font-medium">{t('Use Tokens')}</span>
+                          <span className="block text-xs sm:text-sm opacity-75 mt-1">
+                            {availableTokenPackages.reduce((total, pkg) => total + pkg.remainingTokens, 0)} {t('tokens available')}
+                          </span>
+                        </button>
+                      )}
 
-                          <button
-                            onClick={() => setBookingType('pay_per_session')}
-                            className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${
-                              bookingType === 'pay_per_session'
-                                ? 'bg-[#D91CD2] text-white'
-                                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                            }`}
-                          >
-                            <span className="block font-medium">{t('Pay Per Session')}</span>
-                            <span className="block text-xs sm:text-sm opacity-75 mt-1">
-                              CHF {course.totalPrice} ({course.sessions} {t('sessions')}))
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    )}
+                      <button
+                        onClick={() => setBookingType('pay_per_session')}
+                        className={`px-3 sm:px-4 py-3 rounded-lg text-sm sm:text-base transition-colors ${
+                          bookingType === 'pay_per_session'
+                            ? 'bg-[#D91CD2] text-white'
+                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        }`}
+                      >
+                        <span className="block font-medium">{t('Pay Per Session')}</span>
+                        <span className="block text-xs sm:text-sm opacity-75 mt-1">
+                          CHF {course.totalPrice} ({course.sessions} {t('sessions')}))
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                     {/* Book Now Button - Always shown when user doesn't have coach-specific offer or discount card */}
                     {!hasPurchasedOffer && !hasValidDiscountCard && (
-                    <button
-                      onClick={handleBookCourse}
-                      disabled={
-                        course.currentStudents >= course.maxStudents ||
-                        (bookingType === 'tokens' && availableTokenPackages.every(pkg => pkg.remainingTokens < course.sessions))
-                      }
-                      className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed py-3 sm:py-4 text-sm sm:text-base font-medium"
-                    >
-                      {course.currentStudents >= course.maxStudents 
-                        ? t('Fully Booked')
-                        : bookingType === 'tokens' && availableTokenPackages.length > 0
-                          ? `${t('Book with Tokens')} (${course.sessions} ${t('tokens needed')})`
-                          : `${t('Book Now')} - CHF ${course.totalPrice}`
-                      }
-                    </button>
+                <button
+                  onClick={handleBookCourse}
+                  disabled={
+                    course.currentStudents >= course.maxStudents ||
+                    (bookingType === 'tokens' && availableTokenPackages.every(pkg => pkg.remainingTokens < course.sessions))
+                  }
+                  className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed py-3 sm:py-4 text-sm sm:text-base font-medium"
+                >
+                  {course.currentStudents >= course.maxStudents 
+                    ? t('Fully Booked')
+                      : bookingType === 'tokens' && availableTokenPackages.length > 0
+                        ? `${t('Book with Tokens')} (${course.sessions} ${t('tokens needed')})`
+                        : `${t('Book Now')} - CHF ${course.totalPrice}`
+                  }
+                </button>
                     )}
                   </>
                 )}

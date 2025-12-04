@@ -235,14 +235,14 @@ export default function CreateDiscountCardModal({
         });
       } else {
         // For course tab, submit with all selected course IDs
-        await onSubmit({
+      await onSubmit({
           courseIds: formData.courseIds,
-          discountPercentage: formData.discountPercentage,
-          expirationDate: formData.expirationDate,
-          description: formData.description,
-          maxUsage: formData.unlimitedUsage ? -1 : formData.maxUsage,
-          cardType: activeTab
-        });
+        discountPercentage: formData.discountPercentage,
+        expirationDate: formData.expirationDate,
+        description: formData.description,
+        maxUsage: formData.unlimitedUsage ? -1 : formData.maxUsage,
+        cardType: activeTab
+      });
       }
     } finally {
       setIsLoading(false);
@@ -441,7 +441,7 @@ export default function CreateDiscountCardModal({
                     {t('Select Courses')} * ({formData.courseIds.length} {t('selected')})
                   </label>
                   <div className={`max-h-60 overflow-y-auto border rounded-lg p-3 bg-gray-800 ${
-                    errors.courseId ? 'border-red-500' : 'border-gray-600'
+                      errors.courseId ? 'border-red-500' : 'border-gray-600'
                   }`}>
                     {courses.length === 0 ? (
                       <p className="text-gray-400 text-sm py-2">{t('No courses available')}</p>

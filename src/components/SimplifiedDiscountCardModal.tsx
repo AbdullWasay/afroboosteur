@@ -195,6 +195,11 @@ export default function SimplifiedDiscountCardModal({
       setExpirationDate(editingCard.expiryDate ? new Date(editingCard.expiryDate).toISOString().split('T')[0] : '');
       setDescription(editingCard.description || '');
       setSelectedSchedules(editingCard.recurringSchedule || []);
+      
+      // Initialize courseSessionsMap if courseSessions exists (will be refined when schedules load)
+      if (editingCard.courseSessions && typeof editingCard.courseSessions === 'object' && editingCard.courseSessions !== null) {
+        setCourseSessionsMap(editingCard.courseSessions);
+      }
     } else {
       // Set default expiration date (6 months from now)
       const sixMonthsFromNow = new Date();
@@ -202,6 +207,69 @@ export default function SimplifiedDiscountCardModal({
       setExpirationDate(sixMonthsFromNow.toISOString().split('T')[0]);
     }
   }, [editingCard, courses]);
+
+  // Load courseSessions from editingCard after schedules are loaded
+  useEffect(() => {
+    if (!editingCard) return;
+    
+    // Wait for schedules to be loaded for all selected courses
+    if (selectedCourses.length === 0) return;
+    
+    const allSchedulesLoaded = selectedCourses.every(course => 
+      allCourseSchedules[course.id] && allCourseSchedules[course.id].length >= 0
+    );
+    
+    if (!allSchedulesLoaded) return;
+    
+    const sessionsMap: Record<string, string[]> = {};
+    let hasSessionsToLoad = false;
+    
+    // First, try to load from courseSessions (new format: Record<courseId, sessionIds[]>)
+    if (editingCard.courseSessions && typeof editingCard.courseSessions === 'object' && editingCard.courseSessions !== null) {
+      hasSessionsToLoad = true;
+      Object.keys(editingCard.courseSessions).forEach(courseId => {
+        const sessionIds = editingCard.courseSessions[courseId];
+        if (Array.isArray(sessionIds) && sessionIds.length > 0) {
+          // Verify that these session IDs exist in the loaded schedules
+          const courseSchedules = allCourseSchedules[courseId] || [];
+          const validSessionIds = sessionIds.filter(sessionId => 
+            courseSchedules.some(schedule => schedule.id === sessionId)
+          );
+          if (validSessionIds.length > 0) {
+            sessionsMap[courseId] = validSessionIds;
+          }
+        }
+      });
+    }
+    
+    // If no courseSessions found, try legacy format: recurringSchedule for single course
+    if (!hasSessionsToLoad && editingCard.recurringSchedule && Array.isArray(editingCard.recurringSchedule) && editingCard.recurringSchedule.length > 0) {
+      hasSessionsToLoad = true;
+      // For legacy format, use the first selected course
+      const firstCourse = selectedCourses[0];
+      if (firstCourse) {
+        const courseSchedules = allCourseSchedules[firstCourse.id] || [];
+        const validSessionIds = editingCard.recurringSchedule.filter((sessionId: string) => 
+          courseSchedules.some(schedule => schedule.id === sessionId)
+        );
+        if (validSessionIds.length > 0) {
+          sessionsMap[firstCourse.id] = validSessionIds;
+        }
+      }
+    }
+    
+    // Update sessions map if we found sessions to load
+    if (hasSessionsToLoad && Object.keys(sessionsMap).length > 0) {
+      setCourseSessionsMap(prev => {
+        // Merge with existing, but prioritize loaded sessions
+        const merged = { ...prev };
+        Object.keys(sessionsMap).forEach(courseId => {
+          merged[courseId] = sessionsMap[courseId];
+        });
+        return merged;
+      });
+    }
+  }, [editingCard, allCourseSchedules, selectedCourses]);
 
   // Search users
   const searchUsers = async (term: string) => {
@@ -370,11 +438,11 @@ export default function SimplifiedDiscountCardModal({
     const newErrors: {[key: string]: string} = {};
     
     if (!selectedStudent) {
-      newErrors.student = t('Please select a student');
+      newErrors.student = t('Please select a student') || 'Veuillez sélectionner un étudiant';
     }
     
     if (selectedCourses.length === 0) {
-      newErrors.course = t('Please select at least one course');
+      newErrors.course = t('Please select at least one course') || 'Veuillez sélectionner au moins un cours';
     }
     
     // Validate that each selected course has at least one session selected
@@ -385,14 +453,14 @@ export default function SimplifiedDiscountCardModal({
       });
       
       if (coursesWithoutSessions.length > 0) {
-        newErrors.schedule = t('Please select at least one session for each selected course');
+        newErrors.schedule = t('Please select at least one session for each selected course') || 'Veuillez sélectionner au moins une session pour chaque cours sélectionné';
       }
     }
     
     if (!expirationDate) {
-      newErrors.expirationDate = t('Expiration date is required');
+      newErrors.expirationDate = t('Expiration date is required') || 'La date d\'expiration est requise';
     } else if (new Date(expirationDate) <= new Date()) {
-      newErrors.expirationDate = t('Expiration date must be in the future');
+      newErrors.expirationDate = t('Expiration date must be in the future') || 'La date d\'expiration doit être dans le futur';
     }
     
     if (advantageType === 'special_price' && (!value || value <= 0)) {
@@ -434,8 +502,12 @@ export default function SimplifiedDiscountCardModal({
         expirationDate,
         description: description.trim() || undefined
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting form:', error);
+      // Show error to user if not already handled by onSubmit
+      if (error?.message && !error.handled) {
+        alert(error.message);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -452,7 +524,7 @@ export default function SimplifiedDiscountCardModal({
       >
         <div className="sticky top-0 bg-gray-900 border-b border-gray-700 px-4 sm:px-6 py-4 flex items-center justify-between z-10">
           <h2 className="text-xl sm:text-2xl font-bold text-white">
-            {editingCard ? t('Edit Discount Card') : t('Create Discount Card')}
+            {editingCard ? 'Modifier la carte de réduction' : 'Créer une carte de réduction'}
           </h2>
           <button
             onClick={onClose}
@@ -466,7 +538,7 @@ export default function SimplifiedDiscountCardModal({
           {/* 1. Student (User) */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              {t('Student')} <span className="text-red-400">*</span>
+              Étudiant <span className="text-red-400">*</span>
             </label>
             <div className="relative" ref={searchRef}>
               <div className="relative">
@@ -480,7 +552,7 @@ export default function SimplifiedDiscountCardModal({
                       setSelectedStudent(null);
                     }
                   }}
-                  placeholder={t('Search by name or email') || 'Search by name or email'}
+                  placeholder="Rechercher par nom ou email"
                   className="w-full pl-10 pr-10 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
                 />
                 {selectedStudent && (
@@ -543,7 +615,7 @@ export default function SimplifiedDiscountCardModal({
           {/* 2. Course - Multi-select Dropdown */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              {t('Courses')} <span className="text-red-400">*</span>
+              Cours <span className="text-red-400">*</span>
             </label>
             <div className="relative" ref={courseDropdownRef}>
               <button
@@ -555,8 +627,8 @@ export default function SimplifiedDiscountCardModal({
               >
                 <span className="text-white">
                   {selectedCourses.length === 0
-                    ? t('Select courses...')
-                    : `${selectedCourses.length} ${t('course(s) selected')}`
+                    ? 'Sélectionner des cours...'
+                    : `${selectedCourses.length} cours sélectionné(s)`
                   }
                 </span>
                 <FiChevronDown
@@ -568,7 +640,7 @@ export default function SimplifiedDiscountCardModal({
               {showCourseDropdown && (
                 <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                   {courses.length === 0 ? (
-                    <p className="text-gray-400 text-sm py-3 px-4">{t('No courses available')}</p>
+                    <p className="text-gray-400 text-sm py-3 px-4">Aucun cours disponible</p>
                   ) : (
                     <div className="p-2 space-y-1">
                       {courses.map((course) => {
@@ -640,63 +712,69 @@ export default function SimplifiedDiscountCardModal({
               {selectedCourses.map((course) => {
                 const timeSlots = getTimeSlotsForCourse(course.id);
                 const selectedSessions = courseSessionsMap[course.id] || [];
+                const hasError = errors.schedule && selectedSessions.length === 0;
                 
                 return (
                   <div key={course.id} className="border border-gray-700 rounded-lg p-4 bg-gray-800/50">
                     <h3 className="text-white font-medium mb-3 flex items-center">
                       <FiBook className="mr-2" size={16} />
-                      {course.title} - {t('Select Sessions')} <span className="text-red-400">*</span>
+                      {course.title} - Sélectionner les sessions <span className="text-red-400">*</span>
                       {selectedSessions.length > 0 && (
                         <span className="ml-2 text-sm text-gray-400">
-                          ({selectedSessions.length} {t('selected')})
+                          ({selectedSessions.length} sélectionné(s))
                         </span>
                       )}
                     </h3>
                     {timeSlots.length === 0 ? (
-                      <p className="text-gray-400 text-sm py-2">{t('No sessions available for this course')}</p>
+                      <p className="text-gray-400 text-sm py-2">Aucune session disponible pour ce cours</p>
                     ) : (
-                      <div className="space-y-2 max-h-48 overflow-y-auto">
-                        {timeSlots.map((slot) => {
-                          const isSelected = selectedSessions.includes(slot.id);
-                          return (
-                            <label
-                              key={slot.id}
-                              className="flex items-center space-x-3 p-2 hover:bg-gray-700/50 rounded cursor-pointer"
-                            >
-                              <input
-                                type="checkbox"
-                                checked={isSelected}
-                                onChange={(e) => {
-                                  setCourseSessionsMap(prev => {
-                                    const currentSessions = prev[course.id] || [];
-                                    if (e.target.checked) {
-                                      return {
-                                        ...prev,
-                                        [course.id]: [...currentSessions, slot.id]
-                                      };
-                                    } else {
-                                      return {
-                                        ...prev,
-                                        [course.id]: currentSessions.filter(id => id !== slot.id)
-                                      };
-                                    }
-                                  });
-                                  // Clear error when session is selected
-                                  if (errors.schedule) {
-                                    setErrors(prev => {
-                                      const newErrors = { ...prev };
-                                      delete newErrors.schedule;
-                                      return newErrors;
+                      <>
+                        <div className={`space-y-2 max-h-48 overflow-y-auto ${hasError ? 'border border-red-500 rounded-lg p-2' : ''}`}>
+                          {timeSlots.map((slot) => {
+                            const isSelected = selectedSessions.includes(slot.id);
+                            return (
+                              <label
+                                key={slot.id}
+                                className="flex items-center space-x-3 p-2 hover:bg-gray-700/50 rounded cursor-pointer"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={isSelected}
+                                  onChange={(e) => {
+                                    setCourseSessionsMap(prev => {
+                                      const currentSessions = prev[course.id] || [];
+                                      if (e.target.checked) {
+                                        return {
+                                          ...prev,
+                                          [course.id]: [...currentSessions, slot.id]
+                                        };
+                                      } else {
+                                        return {
+                                          ...prev,
+                                          [course.id]: currentSessions.filter(id => id !== slot.id)
+                                        };
+                                      }
                                     });
-                                  }
-                                }}
-                                className="w-4 h-4 text-purple-500 bg-gray-700 border-gray-600 rounded focus:ring-purple-500"
-                              />
-                              <span className="text-white text-sm">{slot.label}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
+                                    // Clear error when session is selected
+                                    if (errors.schedule) {
+                                      setErrors(prev => {
+                                        const newErrors = { ...prev };
+                                        delete newErrors.schedule;
+                                        return newErrors;
+                                      });
+                                    }
+                                  }}
+                                  className="w-4 h-4 text-purple-500 bg-gray-700 border-gray-600 rounded focus:ring-purple-500"
+                                />
+                                <span className="text-white text-sm">{slot.label}</span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                        {hasError && (
+                          <p className="mt-2 text-sm text-red-400">{errors.schedule}</p>
+                        )}
+                      </>
                     )}
                   </div>
                 );
@@ -708,7 +786,7 @@ export default function SimplifiedDiscountCardModal({
           {selectedCourse && timeSlots.length > 0 && selectedCourses.length === 0 && (
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                {t('Reschedule Class')} <span className="text-red-400">*</span>
+                {t('Reschedule Class') || 'Réorganiser le cours'} <span className="text-red-400">*</span>
               </label>
               <div className="space-y-2 max-h-48 overflow-y-auto p-3 bg-gray-800/50 rounded-lg border border-gray-700">
                 {timeSlots.map((slot) => (
@@ -741,7 +819,7 @@ export default function SimplifiedDiscountCardModal({
           {/* 4. Advantage Type */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-3">
-              {t('Advantage Type')} <span className="text-red-400">*</span>
+              Type d'avantage <span className="text-red-400">*</span>
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <label className={`flex flex-col items-center p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -761,7 +839,7 @@ export default function SimplifiedDiscountCardModal({
                   className="sr-only"
                 />
                 <FiGift className="text-purple-400 mb-2" size={24} />
-                <span className="text-white font-medium text-sm">{t('Free')}</span>
+                <span className="text-white font-medium text-sm">{t('Free') || 'Gratuit'}</span>
               </label>
               
               <label className={`flex flex-col items-center p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -778,7 +856,7 @@ export default function SimplifiedDiscountCardModal({
                   className="sr-only"
                 />
                 <FiDollarSign className="text-purple-400 mb-2" size={24} />
-                <span className="text-white font-medium text-sm">{t('Special Price')}</span>
+                <span className="text-white font-medium text-sm">Prix spécial</span>
               </label>
               
               <label className={`flex flex-col items-center p-4 rounded-lg border-2 cursor-pointer transition-all ${
@@ -795,7 +873,7 @@ export default function SimplifiedDiscountCardModal({
                   className="sr-only"
                 />
                 <FiPercent className="text-purple-400 mb-2" size={24} />
-                <span className="text-white font-medium text-sm">{t('Percentage Discount')}</span>
+                <span className="text-white font-medium text-sm">Remise en pourcentage</span>
               </label>
             </div>
           </div>
@@ -805,8 +883,8 @@ export default function SimplifiedDiscountCardModal({
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 {advantageType === 'special_price' 
-                  ? t('Special Price (CHF)') 
-                  : t('Discount Percentage (%)')} 
+                  ? 'Prix spécial (CHF)'
+                  : 'Pourcentage de remise (%)'} 
                 <span className="text-red-400">*</span>
               </label>
               <div className="relative">
@@ -836,7 +914,7 @@ export default function SimplifiedDiscountCardModal({
           {/* 6. Expiration Date */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              {t('Expiration Date')} <span className="text-red-400">*</span>
+              Date d'expiration <span className="text-red-400">*</span>
             </label>
             <input
               type="date"
@@ -853,14 +931,14 @@ export default function SimplifiedDiscountCardModal({
           {/* 7. Description (optional) */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              {t('Description')} ({t('optional')})
+              Description (optionnel)
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
               className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 resize-none"
-              placeholder={t('Add a description...') || 'Add a description...'}
+              placeholder="Ajouter une description..."
             />
           </div>
 
@@ -871,7 +949,7 @@ export default function SimplifiedDiscountCardModal({
               onClick={onClose}
               className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
             >
-              {t('Cancel')}
+              Annuler
             </button>
             <button
               type="submit"
@@ -881,12 +959,12 @@ export default function SimplifiedDiscountCardModal({
               {isLoading ? (
                 <>
                   <FiLoader className="animate-spin" size={18} />
-                  <span>{t('Saving...')}</span>
+                  <span>Enregistrement...</span>
                 </>
               ) : (
                 <>
                   <FiCheckCircle size={18} />
-                  <span>{editingCard ? t('Update') : t('Create')}</span>
+                  <span>{editingCard ? 'Mettre à jour' : 'Créer'}</span>
                 </>
               )}
             </button>

@@ -1298,15 +1298,15 @@ ${card.isUsed && card.remainingAmount ? `💳 Remaining: ${card.remainingAmount}
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <FiSearch className="text-gray-400" size={16} />
                       </div>
-                      <input
+                    <input
                         type="text"
                         value={searchTerm}
                         onChange={(e) => handleSearchChange(e.target.value)}
                         placeholder={t('Search by name or email...')}
                         className="w-full pl-10 pr-10 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         disabled={!!selectedUser}
-                        required={cardForm.sendViaEmail}
-                      />
+                      required={cardForm.sendViaEmail}
+                    />
                       {selectedUser && (
                         <button
                           type="button"

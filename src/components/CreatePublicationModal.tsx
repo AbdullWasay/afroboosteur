@@ -117,8 +117,8 @@ export default function CreatePublicationModal({ onClose, onSuccess, publication
 
       return {
         url: uploadData.secure_url || uploadData.url,
-        width: uploadData.width || 0,
-        height: uploadData.height || 0,
+                width: uploadData.width || 0,
+                height: uploadData.height || 0,
       };
     } catch (error) {
       console.error('Error uploading to Cloudinary:', error);

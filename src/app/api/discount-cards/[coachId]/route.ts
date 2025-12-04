@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { query, where, getDocs, collection, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { query, where, getDocs, collection, doc, updateDoc, deleteDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export async function GET(
@@ -56,7 +56,23 @@ export async function PUT(
   try {
     const { coachId } = await context.params;
     const body = await request.json();
-    const { cardId, isActive, title, description, expirationDate, usageLimit } = body;
+    const { 
+      cardId, 
+      isActive, 
+      title, 
+      description, 
+      expirationDate, 
+      expiryDate,
+      usageLimit,
+      userEmail,
+      userId,
+      userName,
+      courseId,
+      courseIds,
+      discountPercentage,
+      recurringSchedule,
+      courseSessions
+    } = body;
 
     if (!cardId) {
       return NextResponse.json(
@@ -67,14 +83,37 @@ export async function PUT(
 
     // Update the discount card
     const updateData: any = {
-      updatedAt: new Date()
+      updatedAt: Timestamp.now()
     };
 
     if (typeof isActive === 'boolean') updateData.isActive = isActive;
     if (title) updateData.title = title;
     if (description !== undefined) updateData.description = description;
-    if (expirationDate) updateData.expirationDate = new Date(expirationDate);
+    
+    // Handle expiration date (support both expirationDate and expiryDate)
+    const expDate = expirationDate || expiryDate;
+    if (expDate) {
+      try {
+        const dateObj = new Date(expDate);
+        if (!isNaN(dateObj.getTime())) {
+          const timestamp = Timestamp.fromDate(dateObj);
+          updateData.expirationDate = timestamp;
+          updateData.expiryDate = timestamp; // Update both for compatibility
+        }
+      } catch (dateError) {
+        console.error('Error parsing expiration date:', dateError);
+      }
+    }
+    
     if (usageLimit !== undefined) updateData.usageLimit = usageLimit;
+    if (userEmail !== undefined) updateData.userEmail = userEmail;
+    if (userId !== undefined) updateData.userId = userId;
+    if (userName !== undefined) updateData.userName = userName;
+    if (courseId !== undefined) updateData.courseId = courseId;
+    if (courseIds !== undefined) updateData.courseIds = courseIds;
+    if (discountPercentage !== undefined) updateData.discountPercentage = discountPercentage;
+    if (recurringSchedule !== undefined) updateData.recurringSchedule = recurringSchedule;
+    if (courseSessions !== undefined) updateData.courseSessions = courseSessions;
 
     await updateDoc(doc(db, 'discount_cards', cardId), updateData);
 
@@ -86,7 +125,7 @@ export async function PUT(
   } catch (error) {
     console.error('Error updating discount card:', error);
     return NextResponse.json(
-      { error: 'Failed to update discount card' },
+      { error: 'Failed to update discount card', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
