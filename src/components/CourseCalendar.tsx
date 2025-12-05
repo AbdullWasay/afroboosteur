@@ -90,6 +90,13 @@ export default function CourseCalendar({ onBookCourse, showManagement = false }:
     message: string;
     onConfirm: () => void;
   }>({ show: false, type: 'delete', message: '', onConfirm: () => { } });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteFilters, setDeleteFilters] = useState<{
+    courseId?: string;
+    startDate?: string;
+    endDate?: string;
+  }>({});
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [formData, setFormData] = useState<ScheduleFormData>({
     courseId: '',
@@ -526,6 +533,67 @@ export default function CourseCalendar({ onBookCourse, showManagement = false }:
     }
   };
 
+  const handleBulkDeleteSchedules = async () => {
+    if (!deleteFilters.courseId && !deleteFilters.startDate && !deleteFilters.endDate) {
+      alert('Veuillez sélectionner au moins un filtre (cours ou plage de dates)');
+      return;
+    }
+
+    if (deleteFilters.startDate && deleteFilters.endDate) {
+      const start = new Date(deleteFilters.startDate);
+      const end = new Date(deleteFilters.endDate);
+      if (start > end) {
+        alert('La date de début doit être antérieure à la date de fin');
+        return;
+      }
+    }
+
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer ces sessions ? Cette action est irréversible.')) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      const requestBody = {
+        courseId: deleteFilters.courseId || undefined,
+        startDate: deleteFilters.startDate || undefined,
+        endDate: deleteFilters.endDate || undefined,
+        coachId: user?.id
+      };
+      
+      console.log('Deleting schedules with filters:', requestBody);
+      
+      const response = await fetch('/api/schedules/delete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const data = await response.json();
+      console.log('Delete response:', data);
+
+      if (response.ok) {
+        if (data.deletedCount === 0) {
+          alert(`Aucune session trouvée correspondant aux critères sélectionnés. Vérifiez les filtres et réessayez.`);
+        } else {
+          alert(`Sessions supprimées avec succès. ${data.deletedCount || 0} session(s) supprimée(s).`);
+        }
+        setShowDeleteModal(false);
+        setDeleteFilters({});
+        await loadData();
+      } else {
+        alert(data.error || 'Erreur lors de la suppression des sessions');
+      }
+    } catch (error) {
+      console.error('Error deleting schedules:', error);
+      alert('Erreur lors de la suppression des sessions');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   // Enhanced drag-and-drop functionality
   const handleDragStart = (schedule: CourseSchedule) => {
     setDraggedSchedule(schedule);
@@ -824,16 +892,25 @@ export default function CourseCalendar({ onBookCourse, showManagement = false }:
             <h2 className="text-xl sm:text-2xl font-bold gradient-text">{t('courseCalendar')}</h2>
 
             {showManagement && user?.role === 'coach' && (
-              <button
-                onClick={() => {
-                  resetForm();
-                  setIsModalOpen(true);
-                }}
-                className="btn-primary flex items-center justify-center space-x-2 w-full sm:w-auto"
-              >
-                <FiPlus size={20} />
-                <span>{t('scheduleCourse')}</span>
-              </button>
+              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                <button
+                  onClick={() => {
+                    resetForm();
+                    setIsModalOpen(true);
+                  }}
+                  className="btn-primary flex items-center justify-center space-x-2 w-full sm:w-auto"
+                >
+                  <FiPlus size={20} />
+                  <span>{t('scheduleCourse')}</span>
+                </button>
+                <button
+                  onClick={() => setShowDeleteModal(true)}
+                  className="btn-secondary flex items-center justify-center space-x-2 w-full sm:w-auto bg-red-600 hover:bg-red-700"
+                >
+                  <FiTrash2 size={20} />
+                  <span>Supprimer des sessions</span>
+                </button>
+              </div>
             )}
           </div>
 
@@ -1858,6 +1935,135 @@ export default function CourseCalendar({ onBookCourse, showManagement = false }:
                     {t('duplicate')}
                   </button>
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Schedules Modal */}
+      <AnimatePresence>
+        {showDeleteModal && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-gray-900 rounded-xl w-full max-w-md border border-gray-700 shadow-2xl"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-700">
+                <h2 className="text-xl font-bold text-white">Supprimer des sessions</h2>
+                <button
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setDeleteFilters({});
+                  }}
+                  className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+                >
+                  <FiX className="text-gray-400" size={20} />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 space-y-4">
+                <p className="text-gray-300 text-sm mb-4">
+                  Sélectionnez les filtres pour supprimer les sessions :
+                  <ul className="list-disc list-inside mt-2 space-y-1 text-xs text-gray-400">
+                    <li>Si vous sélectionnez uniquement un cours : toutes les sessions de ce cours seront supprimées</li>
+                    <li>Si vous sélectionnez uniquement une plage de dates : toutes les sessions de tous les cours dans cette plage seront supprimées</li>
+                    <li>Si vous sélectionnez les deux : les sessions du cours sélectionné dans la plage de dates seront supprimées</li>
+                  </ul>
+                </p>
+
+                {/* Course Selection */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Cours (optionnel)
+                  </label>
+                  <select
+                    value={deleteFilters.courseId || ''}
+                    onChange={(e) => setDeleteFilters({ ...deleteFilters, courseId: e.target.value || undefined })}
+                    className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                  >
+                    <option value="">Tous les cours</option>
+                    {courses.filter(c => c.coachId === user?.id).map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Date Range Selection */}
+                <div className="space-y-3">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Plage de dates (optionnel)
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs text-gray-400 mb-1">Date de début (optionnel)</label>
+                      <input
+                        type="date"
+                        value={deleteFilters.startDate || ''}
+                        onChange={(e) => setDeleteFilters({ ...deleteFilters, startDate: e.target.value || undefined })}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-400 mb-1">Date de fin (optionnel)</label>
+                      <input
+                        type="date"
+                        value={deleteFilters.endDate || ''}
+                        onChange={(e) => setDeleteFilters({ ...deleteFilters, endDate: e.target.value || undefined })}
+                        min={deleteFilters.startDate}
+                        className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-purple-500"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    Si vous ne sélectionnez pas de dates, toutes les sessions correspondant aux autres critères seront supprimées.
+                  </p>
+                </div>
+
+                {/* Warning */}
+                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 flex items-start space-x-2">
+                  <FiAlertTriangle className="text-red-400 flex-shrink-0 mt-0.5" size={18} />
+                  <p className="text-red-400 text-sm">
+                    Attention : Cette action est irréversible. Les sessions supprimées seront également retirées du calendrier et ne seront plus visibles pour les étudiants.
+                  </p>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="flex items-center justify-end space-x-3 p-6 border-t border-gray-700">
+                <button
+                  onClick={() => {
+                    setShowDeleteModal(false);
+                    setDeleteFilters({});
+                  }}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
+                  disabled={isDeleting}
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={handleBulkDeleteSchedules}
+                  disabled={isDeleting || (!deleteFilters.courseId && !deleteFilters.startDate && !deleteFilters.endDate)}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                >
+                  {isDeleting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>Suppression...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FiTrash2 size={18} />
+                      <span>Supprimer</span>
+                    </>
+                  )}
+                </button>
               </div>
             </motion.div>
           </div>

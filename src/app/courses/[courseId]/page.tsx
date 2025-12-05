@@ -351,6 +351,25 @@ export default function CourseDetail() {
       // Filter schedules for this course
       const courseSchedules = schedulesData.filter(s => s.courseId === courseId);
 
+      // Sort schedules by startTime (earliest first - most recent upcoming sessions at top)
+      courseSchedules.sort((a, b) => {
+        const getStartTime = (schedule: CourseSchedule): Date => {
+          if (schedule.startTime instanceof Date) {
+            return schedule.startTime;
+          } else if (schedule.startTime && typeof (schedule.startTime as any).toDate === 'function') {
+            return (schedule.startTime as any).toDate();
+          } else if (schedule.startTime && typeof schedule.startTime === 'object' && 'seconds' in schedule.startTime) {
+            return new Date((schedule.startTime as any).seconds * 1000);
+          } else {
+            return new Date(schedule.startTime as any);
+          }
+        };
+
+        const timeA = getStartTime(a).getTime();
+        const timeB = getStartTime(b).getTime();
+        return timeA - timeB; // Ascending order (earliest first)
+      });
+
       setCourse(courseData);
       setReviews(reviewsData);
       setSchedules(courseSchedules);
