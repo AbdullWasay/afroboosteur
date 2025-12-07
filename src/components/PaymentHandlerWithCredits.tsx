@@ -219,15 +219,14 @@ export default function PaymentHandlerWithCredits(props: PaymentHandlerWithCredi
         });
       }
 
-      // TWINT - Always show if Stripe is configured (like in course booking)
-      // TWINT uses Stripe infrastructure, so enable it if Stripe is configured
-      const stripeConfigured = stripeDoc.exists() && stripeDoc.data().isConfigured; // Stripe configured (even if not enabled)
-      if (stripeConfigured) {
+      // TWINT - Only show if Stripe is enabled (not just configured)
+      // TWINT uses Stripe infrastructure, so it should only be available when Stripe is enabled
+      if (stripeEnabled) {
         methods.push({
           id: 'twint',
           name: 'TWINT',
           icon: <span className="text-orange-500 font-bold text-lg">📱</span>,
-          isEnabled: true // Always enabled if Stripe is configured
+          isEnabled: true // Only enabled if Stripe is enabled
         });
       }
 

@@ -97,44 +97,81 @@ export async function POST(request: NextRequest) {
     // Get the base URL for redirects
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
-    // Create Stripe Checkout Session
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types,
-      mode: 'payment',
-      line_items: [
-        {
-          price_data: {
-            currency: currency.toLowerCase(),
-            product_data: { 
-              name: description || 'Payment',
-              description: `Payment for user ${userId}`
+    // Helper function to create checkout session
+    const createSession = async (
+      pmTypes: Stripe.Checkout.SessionCreateParams.PaymentMethodType[],
+      isFallback: boolean = false
+    ) => {
+      return await stripe.checkout.sessions.create({
+        payment_method_types: pmTypes,
+        mode: 'payment',
+        line_items: [
+          {
+            price_data: {
+              currency: currency.toLowerCase(),
+              product_data: { 
+                name: description || 'Payment',
+                description: `Payment for user ${userId}`
+              },
+              unit_amount: Math.round(amount * 100), // Convert to cents
             },
-            unit_amount: Math.round(amount * 100), // Convert to cents
+            quantity: 1,
           },
-          quantity: 1,
+        ],
+        metadata: {
+          userId,
+          source: 'dance-platform',
+          paymentMethod: isFallback ? 'card' : paymentMethod,
+          ...(isFallback && {
+            originalPaymentMethod: paymentMethod,
+            twintFallback: 'true'
+          }),
+          // Purchase context
+          ...(purchaseContext && {
+            purchaseType: purchaseContext.type,
+            courseId: purchaseContext.courseId || '',
+            productId: purchaseContext.productId || '',
+            tokenPackageId: purchaseContext.tokenPackageId || '',
+            businessId: purchaseContext.businessId || '',
+            coachId: purchaseContext.coachId || '',
+            referralCode: purchaseContext.referralCode || '',
+            boostType: purchaseContext.boostType || '',
+            checkoutDataId: checkoutDataId
+          })
         },
-      ],
-      metadata: {
-        userId,
-        source: 'dance-platform',
-        paymentMethod: paymentMethod,
-        // Purchase context
-        ...(purchaseContext && {
-          purchaseType: purchaseContext.type,
-          courseId: purchaseContext.courseId || '',
-          productId: purchaseContext.productId || '',
-          tokenPackageId: purchaseContext.tokenPackageId || '',
-          businessId: purchaseContext.businessId || '',
-          coachId: purchaseContext.coachId || '',
-          referralCode: purchaseContext.referralCode || '',
-          boostType: purchaseContext.boostType || '',
-          checkoutDataId: checkoutDataId
-        })
-      },
-      success_url: `${baseUrl}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}/payment/cancel`,
-      expires_at: Math.floor(Date.now() / 1000) + (30 * 60), // 30 minutes from now
-    });
+        success_url: `${baseUrl}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/payment/cancel`,
+        expires_at: Math.floor(Date.now() / 1000) + (30 * 60), // 30 minutes from now
+      });
+    };
+
+    // Try to create checkout session, fallback to card-only if TWINT fails
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await createSession(payment_method_types);
+    } catch (error: any) {
+      // Check if error is related to TWINT payment method
+      const isTwintError = error?.type === 'StripeInvalidRequestError' && 
+                          (error?.param === 'payment_method_types' || 
+                           error?.message?.toLowerCase().includes('twint') ||
+                           error?.message?.toLowerCase().includes('payment method type'));
+      
+      // If TWINT is requested but fails, and we have both or twint-only, fallback to card
+      if (isTwintError && (paymentMethod === 'twint' || paymentMethod === 'both')) {
+        console.warn('TWINT payment method not available, falling back to card-only:', error.message);
+        
+        // Try with card only
+        try {
+          session = await createSession(['card'], true);
+        } catch (fallbackError: any) {
+          // If card-only also fails, throw the original error
+          throw error;
+        }
+      } else {
+        // Re-throw if it's not a TWINT-specific error or if card-only was already requested
+        throw error;
+      }
+    }
 
     return NextResponse.json({
       sessionId: session.id,
