@@ -246,9 +246,9 @@ export default function PaymentHandlerWithCredits(props: PaymentHandlerWithCredi
           icon: <FiPercent size={24} />,
           isEnabled: true
         });
-      }
-      //aa
-      setPaymentMethods(methods);
+        }
+       
+        setPaymentMethods(methods);
       
       const availableMethods = methods.filter(m => m.isEnabled);
       
