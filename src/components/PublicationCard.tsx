@@ -511,9 +511,9 @@ const renderMediaFlex = () => {
       {/* Engagement Stats */}
       <div className="px-3 pb-1">
         <div className="flex items-center space-x-4 text-sm">
-          <span className="font-semibold text-white">{publication.likes.toLocaleString()} likes</span>
-          <span className="text-gray-400">{publication.comments} comments</span>
-          <span className="text-gray-400">{publication.shares} shares</span>
+          <span className="font-semibold text-white">{publication.likes.toLocaleString()} j'aime</span>
+          <span className="text-gray-400">{publication.comments} commentaires</span>
+          <span className="text-gray-400">{publication.shares} partages</span>
         </div>
       </div>
 
@@ -532,7 +532,7 @@ const renderMediaFlex = () => {
                 onClick={toggleCaption}
                 className="text-gray-400 hover:text-white transition-colors ml-1"
               >
-                {isCaptionExpanded ? 'less' : 'more'}
+                {isCaptionExpanded ? 'moins' : 'plus'}
               </button>
             )}
           </div>
